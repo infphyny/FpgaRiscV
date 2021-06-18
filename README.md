@@ -2,9 +2,7 @@
 
 ## Cloning this repository ##
 
-git clone --recursive https://github.com/infphyny/FpgaRiscV.git
-
-
+git clone --recurse-submodules https://github.com/infphyny/FpgaRiscV.git
 
 ## ** Installing the RiscV toolchain **
   * Clone https://github.com/riscv/riscv-gnu-toolchain.git
@@ -16,14 +14,15 @@ git clone --recursive https://github.com/infphyny/FpgaRiscV.git
    * Install fusesoc
 
 ## ** Deca RiscV soc properties **
-* Vexriscv cpu with Wishbone bus.
+* VexRiscv cpu with Wishbone bus.
 * Pinout in data/Deca/pinmap.tcl
 * Frequency: 75 MHz
 * Ram: 128k
-* Uart RX need to be connected or pull high, otherwise Uart tx will be halted.
+* KEY0 is wired to reset.
+* Uart RX need to be connected or pull high, otherwise Uart tx will be halted (SpinalHDL Uart implementation feature).
 * To modify frequency, go in rtl/Deca/pll, execute quartus then choose pll for MAX10 and overwrite pll.v
 * If frequency is changed, modify the fixed frequency in WbUart.scala and regenerate the WishboneUartCtrl.v to keep 115200 baud rate.        
-
+* To modify the ram size: Modify RAM_SIZE in Makefiles. Adjust gp and sp in crt0.S. Modify mem size in Deca.core.  
 
 ## ** Trying an example **
 * in sw/Deca/"example folder"/
@@ -34,4 +33,5 @@ git clone --recursive https://github.com/infphyny/FpgaRiscV.git
 * To do a simulation: make sim  then ctrl-c after few seconds :  .vcd file grow fast  ~1 GiB/5s
 
 ## ** TODO **
-Quartus: Execute Synthesis and PnR once. Then update BRAM with a .mif from binary generated with the riscv toolchain.     
+* Quartus: Execute Synthesis and PnR once. Then update BRAM with a .mif from binary generated with the riscv toolchain.   
+* Add documentation on how to generate the VexRiscv.v file from Vexriscv repository.   
