@@ -11,7 +11,7 @@ filesets:
       - rtl/peripheral/MachineTimer/WishboneMachineTimer.v : {file_type : verilogSource}
   #    - rtl/Deca/mtimer.v : {file_type : verilogSource}
       - rtl/Deca/UartWishbone/WishboneUartCtrl.v : {file_type : verilogSource}
-      - rtl/Deca/WishboneLedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
+      - rtl/peripheral/Wishbone8LedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/MicroWire/MicroWireWishbone.v : {file_type : verilogSource}
     depend: ["fusesoc:utils:generators",i2c,wb_intercon-1.3.0,gpio,servant,simple_spi]
       

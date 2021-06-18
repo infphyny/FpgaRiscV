@@ -20,10 +20,12 @@ DECA_SRC = ../src
 OBJ =    $(DECA_OBJ) $(BASE_OBJ) main.o
 #
 
-AS = riscv64-unknown-elf-as
-CC = riscv64-unknown-elf-gcc
-OBJCOPY = 	riscv64-unknown-elf-objcopy
-OBJDUMP = 	riscv64-unknown-elf-objdump
+TOOLCHAIN_PREFIX = riscv64-unknown-elf-
+
+AS = $(TOOLCHAIN_PREFIX)as
+CC = $(TOOLCHAIN_PREFIX)gcc
+OBJCOPY = 	$(TOOLCHAIN_PREFIX)objcopy
+OBJDUMP = 	$(TOOLCHAIN_PREFIX)objdump
 OPT = -Os
 ARCH = rv32imc
 

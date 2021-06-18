@@ -1,3 +1,5 @@
 *.hex
 *.vh
+*.elf
+*.map
 
