@@ -1,0 +1,6 @@
+[submodule "rtl/cpu/VexRiscv"]
+	path = rtl/cpu/VexRiscv
+	url = https://github.com/SpinalHDL/VexRiscv.git
+[submodule "wb_intercon"]
+	path = wb_intercon
+	url = https://github.com/olofk/wb_intercon.git
