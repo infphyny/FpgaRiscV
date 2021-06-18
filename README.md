@@ -1,5 +1,11 @@
 # Examples of bare metal RiscV programming with softcore on a fpga
 
+## Cloning this repository ##
+
+git clone --recursive https://github.com/infphyny/FpgaRiscV.git
+
+
+
 ## ** Installing the RiscV toolchain **
   * Clone https://github.com/riscv/riscv-gnu-toolchain.git
   * Then execute
@@ -7,9 +13,10 @@
   * sudo make -j N
   * Add /opt/riscv and quartus in $PATH
 
-  Install fusesoc
+   * Install fusesoc
 
 ## ** Deca RiscV soc properties **
+* Vexriscv cpu with Wishbone bus.
 * Pinout in data/Deca/pinmap.tcl
 * Frequency: 75 MHz
 * Ram: 128k
