@@ -27,4 +27,4 @@
 * To do a simulation: make sim  then ctrl-c after few seconds :  .vcd file grow fast  ~1 GiB/5s
 
 ## ** TODO **
-Quartus: Execute Synthesis and PnR once. Then update BRAM with a .mif file generated from the riscv toolchain.     
+Quartus: Execute Synthesis and PnR once. Then update BRAM with a .mif from binary generated from the riscv toolchain.     
