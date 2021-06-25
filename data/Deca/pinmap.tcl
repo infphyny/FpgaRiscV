@@ -123,6 +123,12 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_0_rx
 set_location_assignment PIN_Y6 -to uart_0_tx
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_0_tx
 
+set_location_assignment PIN_W6 -to i2c_0_scl
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_0_scl
+
+set_location_assignment PIN_W7 -to i2c_0_sda
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_0_sda
+
 
 #AUDIO
 #set_location_assignment PIN_P14 -to AUDIO_MCLK

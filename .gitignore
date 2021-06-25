@@ -1,3 +1,5 @@
-*.o
+
 build
+fusesoc.conf
+fusesoc_libraries/fusesoc-cores
 /sw/__pycache__/

@@ -3,7 +3,7 @@
 #.section .init, "ax"
 #.section .text.startup
 
-.text
+.section .init
 .global _start
 #.type _start, @function
 
@@ -56,14 +56,14 @@ _start:
  .end
 
  # li gp,0x1000 #put global pointer at middle of ram space
- #    la gp, __global_pointer$     
+ #    la gp, __global_pointer$
 #.option pop
 
 #  li sp,0x2000  # initialize stack pointer in hdl code
    #  lw sp,0x4000      # Read RAM size in hw config register and
         #   initialize SP one position past end of RAM
-	
+
      # Should find a way of clearing BSS here...
-	
+
 #   call main
     # tail exit

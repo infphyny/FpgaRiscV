@@ -15,6 +15,15 @@ volatile  uint32_t status;
 }Timer;
 
 
+/*
+typedef struct Chrono
+{
+ Timer* timer;
+ uint32_t freq;
+}Chrono;
+*/
+
+
 void init_timer(Timer** timer,uint32_t address,uint64_t cmp);
 
 #endif

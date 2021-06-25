@@ -8,6 +8,8 @@ inout wire [7:0] gpioB,
 output wire [7:0] LEDS,
 input wire uart_0_rx,
 output wire uart_0_tx,
+inout i2c_0_scl,
+inout i2c_0_sda,
 inout wire CAP_SENSE_I2C_SCL,
 inout wire CAP_SENSE_I2C_SDA,
 inout wire LIGHT_I2C_SCL,
@@ -57,6 +59,15 @@ wire [7:0] o_gpioA;
 wire [7:0] o_gpioA_oe;
 wire [7:0] o_gpioB;
 wire [7:0] o_gpioB_oe;
+
+
+wire i2c_0_scl_oe;
+wire i2c_0_scl_o;
+wire i2c_0_sda_oe;
+wire i2c_0_sda_o;
+
+assign i2c_0_scl = i2c_0_scl_oe ? 1'bz : i2c_0_scl_o;
+assign i2c_0_sda = i2c_0_sda_oe ? 1'bz : i2c_0_sda_o;
 
 
 generate
@@ -145,6 +156,12 @@ DecaSoc #(
     .LEDS(LEDS),
     .uart_0_rx(uart_0_rx),
     .uart_0_tx(uart_0_tx),
+    .i2c_0_scl_i(i2c_0_scl),
+    .i2c_0_scl_o(i2c_0_scl_o),
+    .i2c_0_scl_oe(i2c_0_scl_oe),
+    .i2c_0_sda_i(i2c_0_sda),
+    .i2c_0_sda_o(i2c_0_sda_o),
+    .i2c_0_sda_oe(i2c_0_sda_oe),
     .CAP_SENSE_I2C_SCL_i(CAP_SENSE_I2C_SCL),
     .CAP_SENSE_I2C_SCL_o(CAP_SENSE_I2C_SCL_o),
     .CAP_SENSE_I2C_SCL_oe(CAP_SENSE_I2C_SCL_oe),

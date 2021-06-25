@@ -12,7 +12,12 @@ module DecaSoc
  output wire [7:0] LEDS,
  input wire uart_0_rx,
  output wire uart_0_tx,
-
+ input wire i2c_0_scl_i,
+ output wire i2c_0_scl_o,
+ output wire i2c_0_scl_oe,
+ input wire i2c_0_sda_i,
+ output wire i2c_0_sda_o,
+ output wire i2c_0_sda_oe,
  input wire CAP_SENSE_I2C_SCL_i,
  output wire CAP_SENSE_I2C_SCL_o,
  output wire CAP_SENSE_I2C_SCL_oe,
@@ -212,6 +217,31 @@ WishboneUartCtrl uart_0(
   .io_interrupt(uart_0_int_o),
   .clk(wb_clk),
   .reset(wb_rst));
+
+
+wire i2c_0_inta;
+i2c_master_top i2c_0
+(
+  .wb_clk_i(wb_clk),
+  .wb_rst_i(wb_rst),
+  .arst_i(i_rst),
+  .wb_adr_i(wb_m2s_i2c_0_adr[2:0]),
+  .wb_dat_i(wb_m2s_i2c_0_dat),
+  .wb_dat_o(wb_s2m_i2c_0_dat),
+  .wb_we_i(wb_m2s_i2c_0_we),
+  .wb_stb_i(wb_m2s_i2c_0_stb),
+  .wb_cyc_i(wb_m2s_i2c_0_cyc),
+  .wb_ack_o(wb_s2m_i2c_0_ack),
+  .wb_inta_o(i2c_0_inta),
+  .scl_pad_i(i2c_0_scl_i),
+  .scl_pad_o(i2c_0_scl_o),
+  .scl_padoen_o(i2c_0_scl_oe),
+  .sda_pad_i(i2c_0_sda_i),
+  .sda_pad_o(i2c_0_sda_o),
+  .sda_padoen_o(i2c_0_sda_oe)
+);
+
+
 
 //wire arst_i = 0;
 wire cap_sens_inta;

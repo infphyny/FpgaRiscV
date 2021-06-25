@@ -2,4 +2,7 @@
 *.vh
 *.elf
 *.map
+*.mif
+*.o
+*.txt
 

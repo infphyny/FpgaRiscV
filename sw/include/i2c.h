@@ -29,18 +29,31 @@ typedef struct I2C
   volatile  uint8_t prescaler_lo;
   volatile  uint8_t prescaler_hi;
   volatile  uint8_t ctr;
+  union{
   volatile  uint8_t rxr_txr; //write is transmit register
-  volatile  uint8_t sr_cr; //write is command register
+  volatile uint8_t rxr; //Read
+  volatile uint8_t txr; //Write
+};
+
+  union{
+      volatile  uint8_t sr_cr; //write is command register
+      volatile uint8_t sr; // Read
+      volatile uint8_t cr; //Write
+  };
+
 //  uint8_t txr; //Debug out of TXR
 //  uint8_t cr; //Debug out of control register
 //  uint8_t sladr; //Slave address register
 }I2C;
 
-
-void i2c_enable(I2C* i2c);
+void i2c_init(I2C** i2c,uint32_t BASE_ADDRESS);
+bool i2c_enable(I2C* i2c);
 void i2c_set_prescaler(I2C* i2c,uint32_t freq_in,uint32_t freq_out );
 bool i2c_send(I2C* i2c, uint8_t address,uint8_t reg,uint8_t* data, const uint8_t size,bool reverse,bool stop);
-bool i2c_rcv(I2C* i2c, uint8_t address,uint8_t reg,uint8_t* rcv_data,const uint8_t rcv_size,bool reverse);
+bool i2c_rcv(I2C* i2c, uint8_t address,uint8_t reg,uint8_t* rcv_data,const uint16_t rcv_size,bool reverse);
+
+bool i2c_master_transmit(I2C* i2c,uint16_t adr,const uint8_t *data,uint16_t size,bool stop);
+bool i2c_master_receive(I2C* i2c,uint16_t adr,uint8_t* data,uint16_t size,bool stop);
 
 bool i2c_rcv_delay(I2C* i2c, uint8_t address,uint8_t reg,uint8_t* rcv_data,const uint8_t rcv_size,bool reverse);
 

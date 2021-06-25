@@ -3,7 +3,7 @@ name : ::Deca:0
 
 description: SOC for Deca fpga board
 
-filesets:  
+filesets:
   rtl:
     files:
       - rtl/Deca/DecaSoc.v : {file_type : verilogSource}
@@ -14,7 +14,7 @@ filesets:
       - rtl/peripheral/Wishbone8LedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/MicroWire/MicroWireWishbone.v : {file_type : verilogSource}
     depend: ["fusesoc:utils:generators",i2c,wb_intercon-1.3.0,gpio,servant,simple_spi]
-      
+
   Deca:
     files:
       - data/Deca/deca.sdc 	: {file_type : SDC}
@@ -22,25 +22,25 @@ filesets:
       - rtl/Deca/pll/pll.qip : {file_type : QIP}
       - rtl/Deca/pll/pll.v : {file_type : verilogSource}
       - rtl/Deca/DecaTopLevel.v : {file_type : verilogSource}
-      
-    
-      
-    
+
+
+
+
   Deca_testbench:
     files:
       - bench/Deca/DecaTopLevelSim.v : {file_type : verilogSource}
       - bench/Deca/Deca_tb.cpp : {file_type : cppSource}
-    depend : [vlog_tb_utils]    
-     
+    depend : [vlog_tb_utils]
+
   memfiles:
     files:
-      - sw/Deca/blink/blink.hex   : { copyto : blink.hex} 
+      - sw/Deca/blink/blink.hex   : { copyto : blink.hex}
       - sw/Deca/uart/uart.hex : { copyto : uart.hex }
       - sw/Deca/temp_sensor/temp_sensor.hex : {copyto : temp_sensor.hex}
       - sw/Deca/rh_temp/rh_temp.hex : {copyto : rh_temp.hex}
-      
+
 targets:
-  
+
   Deca:
     default_tool: quartus
     filesets_append: [rtl,Deca]
@@ -49,32 +49,32 @@ targets:
     tools:
       quartus:
         family:  MAX 10
-        device:  10M50DAF484C6GES    
+        device:  10M50DAF484C6GES
     toplevel: DecaTopLevel
-   
+
   Deca_testbench:
     default_tool: verilator
     filesets_append: [rtl,Deca_testbench]
     generate: [wb_intercon]
-    parameters: 
+    parameters:
       - PLL=NONE
       - firmware
       - memsize=0x20000
       - vcd
-      - vcd_start 
+      - vcd_start
     tools:
       verilator:
         verilator_options : [--trace,-Wno-fatal]
     toplevel : DecaTopLevelSim
-     
-   
-    
-parameters: 
+
+
+
+parameters:
   PLL:
     datatype : str
     description : PLL type to use for main clock generation
     paramtype : vlogparam
- 
+
   memfile:
     datatype    : file
     description : Preload RAM with a hex file at compile-time
@@ -99,22 +99,22 @@ parameters:
     datatype    : int
     description : Delay start of VCD dumping until the specified time
     paramtype   : plusarg
-    
-    
+
+
 generate:
-    
+
   wb_intercon:
     generator: wb_intercon_gen
 
     parameters:
       endian: little
-  
+
       masters:
         cpu_ibus:
           slaves: [mem]
-      
-   
-        cpu_dbus: 
+
+
+        cpu_dbus:
           slaves:
             - mem
             - gpioA
@@ -122,6 +122,7 @@ generate:
             - timer
             - leds
             - uart_0
+            - i2c_0
             - cap_sense
             - light
             - rh_temp
@@ -130,64 +131,65 @@ generate:
             - pmonitor
 
       slaves: #size must be a power of 2
-  
+
         mem:
           offset: 0x00000000
           size: 0x00020000
-          
+
         gpioA:
           offset: 0x00040000
           size: 2
           datawidth: 8
-      
+
         gpioB:
-          offset: 0x00040010      
+          offset: 0x00040010
           size: 2
           datawidth: 8
-     
+
         leds:
-          offset: 0x00040020 
+          offset: 0x00040020
           size: 2
           datawidth: 8
-     
+
         timer:
           offset: 0x00040040
           size: 32
- 
+
         uart_0:
           offset: 0x00040100
-          size: 16 
-          
+          size: 16
+        
+        i2c_0:
+          offset: 0x00040120
+          size: 8
+          datawidth: 8
+
         cap_sense:
-          offset: 0x00040800  
+          offset: 0x00040800
           size : 8
           datawidth: 8
-        
+
         light:
-          offset: 0x00040810  
+          offset: 0x00040810
           size : 8
           datawidth: 8
-          
+
         rh_temp:
-          offset: 0x00040820  
+          offset: 0x00040820
           size : 8
-          datawidth: 8  
-          
+          datawidth: 8
+
         board_temp_sensor:
-          offset: 0x00040840  
+          offset: 0x00040840
           size : 4
-          datawidth: 8  
-        
+          datawidth: 8
+
         gsensor:  #gsensor is on spi bus
           offset: 0x00040880
           size: 8
-          datawidth: 8  
-          
-        pmonitor: 
+          datawidth: 8
+
+        pmonitor:
           offset:  0x00040900
           size: 8
-          datawidth: 8  
-          
- 
-       
-
+          datawidth: 8
