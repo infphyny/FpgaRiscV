@@ -131,7 +131,7 @@ Then ctrl-c after few seconds because .vcd file grow fast ~1 GiB/5s
 
 *Pinout
 
- View [pinout diagram] (https://github.com/infphyny/FpgaRiscV/data/Deca/Deca.svg)
+ View [pinout diagram] (data/Deca/Deca.svg)
 
 
  P9:11  GPIO1_D[0]  RX (Green C96 cable)   / P9:12  GPIO1_D[1]   TX  (White C96 cable)
