@@ -1,9 +1,4 @@
 [submodule "rtl/cpu/VexRiscv"]
 	path = rtl/cpu/VexRiscv
 	url = https://github.com/SpinalHDL/VexRiscv.git
-[submodule "wb_intercon"]
-	path = fusesoc_libraries/wb_intercon
-	url = https://github.com/olofk/wb_intercon.git
-[submodule "gpio"]
-	path = fusesoc_libraries/gpio
-	url = https://github.com/infphyny/gpio.git
+
