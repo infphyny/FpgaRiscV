@@ -2,7 +2,9 @@ module DecaSoc
 (
   input wire i_clk,
   input wire i_rst,
-
+  input wire key1,
+  input wire SW0,
+  input wire SW1,
  input wire [7:0] i_gpioA,
  output wire [7:0] o_gpioA,
  output wire [7:0] o_gpioA_oe,
@@ -52,7 +54,20 @@ module DecaSoc
  output wire PMONITOR_I2C_SCL_oe,
  input wire PMONITOR_I2C_SDA_i,
  output wire PMONITOR_I2C_SDA_o,
- output wire PMONITOR_I2C_SDA_oe
+ output wire PMONITOR_I2C_SDA_oe,
+
+ //////////// USB //////////
+
+ input 		          		USB_CLKIN,      //ULPI 60 mhz output clock
+ output		          		USB_CS,         // active high chip select pin
+ input 		      [7:0]		USB_DATA_i,
+ output         [7:0]   USB_DATA_o,
+ input 		          		USB_DIR,        //ULPI dir output signal
+ input 		          		USB_FAULT_n,    //Fault input from usb power switch
+ input 		          		USB_NXT,        //ULPI nxt output signal
+ output		          		USB_RESET_n,    //Reset pin uset to reset all digital registers
+ output		          		USB_STP         //ULPI STP input signal
+
 );
 
 parameter memfile = "blinky.hex";
@@ -92,57 +107,6 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
 endgenerate
 
 
-//
-// generate
-//
-//
-// if(PLL=="NONE") begin
-// reg	     	wb_rst;
-// assign wb_clk = i_clk;
-// reg [19:0] rst_reg = 20'b0;
-//
-//  always @(posedge i_clk or negedge i_rst) begin
-//
-//       if(i_rst == 0) begin
-//        rst_reg <= 0;
-//        wb_rst <= 1;
-//       end else begin
-//
-//    // if(lock == 1 ) begin
-//
-//      if(rst_reg > 8192) begin
-//        wb_rst <= 0;
-//      end else begin
-//       rst_reg <= rst_reg + 1;
-//       wb_rst <= 1;
-//      end
-//
-//       end
-//
-//     // end else begin
-//     // wb_rst <= 0;
-//      //end
-//
-//     end //always
-//
-// end else if (PLL=="PLL") begin  // PLL== "NONE"
-//   wire wb_rst;
-//   wire locked_1;
-//   //wire locked_2;
-//   //wire sdram_clk;
-//   assign wb_rst = !locked_1 /*&& !locked_2 */;
-//   //wire reset = 0;
-//   pll clockgen(
-//   .inclk0(i_clk),
-//   .areset(i_rst),
-//   .c0(wb_clk),
-//   //.c1(sdram_clk),
-//   .locked(locked_1)
-//   );
-//
-// end
-//
-// endgenerate
 
 
 
@@ -186,6 +150,59 @@ wire 	timer_irq;
   			   .gpio_o(o_gpioB),
   			   .gpio_dir_o(o_gpioB_oe)
  );
+
+
+wire key1_interrupt;
+
+WishboneSwitch button1
+(
+  .clk(wb_clk),
+  .reset(wb_rst),
+  .i_wb_stb(wb_m2s_key1_stb),
+  .i_wb_cyc(wb_m2s_key1_cyc),
+  .i_wb_we(wb_m2s_key1_we),
+  .i_wb_dat(wb_m2s_key1_dat),
+  .o_wb_dat(wb_s2m_key1_dat),
+  .o_wb_ack(wb_s2m_key1_ack),
+  .o_wb_rty(wb_s2m_key1_rty),
+  .o_wb_err(wb_s2m_key1_err),
+  .i_switch(key1),
+  .o_int(key1_interrupt)
+);
+
+
+wire sw0_interrupt;
+
+WishboneSwitch sw0(
+  .clk(wb_clk),
+  .reset(wb_rst),
+  .i_wb_stb(wb_m2s_sw0_stb),
+  .i_wb_cyc(wb_m2s_sw0_cyc),
+  .i_wb_dat(wb_m2s_sw0_dat),
+  .o_wb_dat(wb_s2m_sw0_dat),
+  .o_wb_ack(wb_s2m_sw0_ack),
+  .o_wb_rty(wb_s2m_sw0_rty),
+  .o_wb_err(wb_s2m_sw0_err),
+  .i_switch(SW0),
+  .o_int(sw0_interrupt)
+);
+
+
+wire sw1_interrupt;
+
+WishboneSwitch sw1(
+  .clk(wb_clk),
+  .reset(wb_rst),
+  .i_wb_stb(wb_m2s_sw1_stb),
+  .i_wb_cyc(wb_m2s_sw1_cyc),
+  .i_wb_dat(wb_m2s_sw1_dat),
+  .o_wb_dat(wb_s2m_sw1_dat),
+  .o_wb_ack(wb_s2m_sw1_ack),
+  .o_wb_rty(wb_s2m_sw1_rty),
+  .o_wb_err(wb_s2m_sw1_err),
+  .i_switch(SW1),
+  .o_int(sw1_interrupt)
+);
 
 
 WishboneLedsCtrl wb_leds_ctrl(
@@ -375,6 +392,47 @@ i2c_master_top pmonitor(
   );
 
 
+//USB
+
+WishboneTUSB1210 tusb1210(
+  .clk(wb_clk),
+  .reset(wb_rst),
+  .wb_adr_i(wb_m2s_tusb1210_adr[0]),
+  .wb_dat_i(wb_m2s_tusb1210_dat),
+  .wb_dat_o(wb_s2m_tusb1210_dat),
+  .wb_stb_i(wb_m2s_tusb1210_stb),
+  .wb_cyc_i(wb_m2s_tusb1210_cyc),
+  .wb_we_i(wb_m2s_tusb1210_we),
+  .wb_ack_o(wb_s2m_tusb1210_ack),
+  .usb_clk_i(USB_CLKIN),
+  .usb_dat_i(USB_DATA_i),
+  .usb_dat_o(USB_DATA_o),
+  .usb_dir_i(USB_DIR),
+  .usb_fault_n_i(USB_FAULT_n),
+  .usb_nxt_i(USB_NXT),
+  .usb_reset_n_o(USB_RESET_n),
+  .usb_stp_o(USB_STP),
+  .usb_cs_o(USB_CS)
+);
+
+/*
+ assign USB_CS = 1'bz;
+
+ generate
+ genvar i;
+
+ for(i = 0 ; i < 8 ; i = i+1) begin : generate_usb_data_signal
+
+   assign USB_DATA[i] = 1'bz;
+ end
+
+ endgenerate
+
+
+assign USB_RESET_n = 1'bz;
+assign USB_STP = 1'bz;
+*/
+
 
   // generate
   //     if (with_csr) begin
@@ -413,7 +471,28 @@ i2c_master_top pmonitor(
    .wb_rty_o(wb_s2m_timer_rty),
    .irq(timer_irq)
    );
-
+   
+   wire externalInterrupt;
+   wire [11:0] i_brd_ints;
+    
+   assign i_brd_ints[0] = key1_interrupt;
+   assign i_brd_ints[1] = sw0_interrupt;
+   assign i_brd_ints[2] = sw1_interrupt;
+    
+   icontrol ictrl(
+     .i_clk(wb_clk),
+     .i_reset(wb_rst),
+     .i_wb_cyc(wb_m2s_ictrl_cyc),
+     .i_wb_stb(wb_m2s_ictrl_stb),
+     .i_wb_we(wb_m2s_ictrl_we),
+     .i_wb_data(wb_m2s_ictrl_dat),
+     .i_wb_sel(wb_m2s_ictrl_sel),
+     //.o_wb_stall(wb_s2m_ictrl_stall),
+     .o_wb_ack(wb_s2m_ictrl_ack),
+     .o_wb_data(wb_s2m_ictrl_dat),
+     .i_brd_ints(i_brd_ints),
+     .o_interrupt(externalInterrupt)
+   );
 
    servant_ram  #(.memfile (memfile),
        .depth (memsize))
@@ -426,7 +505,7 @@ i2c_master_top pmonitor(
                      .o_wb_rdt(wb_s2m_mem_dat),
                      .o_wb_ack(wb_s2m_mem_ack)
     );
-    wire externalInterrupt = 0;
+    
    wire softwareInterrupt = 0;
    assign wb_m2s_cpu_ibus_adr[1:0] = 0;
  //  assign wb_m2s_cpu_dbus_adr[1:0] = 0;

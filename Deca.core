@@ -8,7 +8,10 @@ filesets:
     files:
       - rtl/Deca/DecaSoc.v : {file_type : verilogSource}
       - rtl/Deca/VexRiscv.v : {file_type : verilogSource}
+      - rtl/Deca/TUSB1210/WishboneTUSB1210.v : {file_type : verilogSource} 
+      - rtl/peripheral/icontrol.v : {file_type : verilogSource}
       - rtl/peripheral/MachineTimer/WishboneMachineTimer.v : {file_type : verilogSource}
+      - rtl/peripheral/Switch/WishboneSwitch.v : {file_type : verilogSource}
   #    - rtl/Deca/mtimer.v : {file_type : verilogSource}
       - rtl/Deca/UartWishbone/WishboneUartCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/Wishbone8LedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
@@ -119,6 +122,9 @@ generate:
             - mem
             - gpioA
             - gpioB
+            - key1
+            - sw0
+            - sw1
             - timer
             - leds
             - uart_0
@@ -129,6 +135,8 @@ generate:
             - board_temp_sensor
             - gsensor
             - pmonitor
+            - tusb1210
+            - ictrl #interrupt controller
 
       slaves: #size must be a power of 2
 
@@ -193,3 +201,28 @@ generate:
           offset:  0x00040900
           size: 8
           datawidth: 8
+          
+        tusb1210:
+          offset:  0x00040910 
+          size: 2
+          datawidth: 8
+
+        key1:
+          offset: 0x00041000
+          size: 1
+          datawidth: 8
+
+        sw0:
+          offset: 0x00041002
+          size: 1
+          datawidth: 8
+
+        sw1:
+          offset: 0x00041004
+          size: 1
+          datawidth: 8
+
+        ictrl:
+          offset: 0x00100000
+          size: 4
+

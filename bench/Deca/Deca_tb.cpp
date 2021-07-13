@@ -120,7 +120,7 @@ int main(int argc, char **argv/*, char **env*/)
 	const char *arg_timeout = Verilated::commandArgsPlusMatch("timeout=");
 	if (arg_timeout[0])
 	  timeout = atoi(arg_timeout+9);
-
+    vluint64_t key1_toggle_time = 100000;
 	vluint64_t vcd_start = 0;
 	const char *arg_vcd_start = Verilated::commandArgsPlusMatch("vcd_start=");
 	if (arg_vcd_start[0])
@@ -131,6 +131,7 @@ int main(int argc, char **argv/*, char **env*/)
    // top->SEN_SDO = 0;
 	bool dump = false;
 	top->i_clk = 1;
+	top->key1 = 0;
 	//bool q = top->q;
 	while (!(done || Verilated::gotFinish())) {
 	  if (tfp && !dump && (main_time > vcd_start)) {
@@ -145,7 +146,12 @@ int main(int argc, char **argv/*, char **env*/)
 	    do_uart(&uart_context, top->q);
 	  else
 	    do_gpio(&gpio_context, top->q);
-*/
+*/ 
+      if(main_time > key1_toggle_time)
+	  { 
+         key1_toggle_time += 100000;
+        top->key1 = (top->key1+1)%2;      
+	  }   
 	  if (timeout && (main_time >= timeout)) {
 	    printf("Timeout: Exiting at time %lu\n", main_time);
 	    done = true;

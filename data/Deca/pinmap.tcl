@@ -32,8 +32,17 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 
 set_location_assignment PIN_M8 -to i_clk
 set_instance_assignment -name IO_STANDARD "2.5 V" -to i_clk
+
+
+#set_location_assignment PIN_P11 -to i_clk_2;
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i_clk_2
+
+
 set_location_assignment PIN_H21 -to i_rst
 set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" -to i_rst
+
+set_location_assignment PIN_H22 -to key1
+set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" -to key1
 
 #CAP SENSE
 set_location_assignment PIN_AB2 -to CAP_SENSE_I2C_SCL
@@ -42,10 +51,10 @@ set_location_assignment PIN_AB3 -to CAP_SENSE_I2C_SDA
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CAP_SENSE_I2C_SDA
 
 #Switch
-#set_location_assignment PIN_J21 -to SW0
-#set_location_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" = to SW0
-#set_location_assignment PIN_J22 -to SW1
-#set_location_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" = to SW1
+set_location_assignment PIN_J21 -to SW0
+set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER"  -to SW0
+set_location_assignment PIN_J22 -to SW1
+set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER"  -to SW1
 
 #LEDS
 set_location_assignment PIN_C7 -to LEDS[0]
@@ -352,3 +361,38 @@ set_location_assignment PIN_T5 -to NET_TX_CLK
 set_instance_assignment -name IO_STANDARD "2.5 V" -to NET_TX_CLK
 set_location_assignment PIN_P3 -to NET_TX_EN
 set_instance_assignment -name IO_STANDARD "2.5 V" -to NET_TX_EN
+
+
+#============================================================
+# USB
+#============================================================
+set_location_assignment PIN_H11 -to USB_CLKIN
+set_instance_assignment -name IO_STANDARD "1.2 V" -to USB_CLKIN
+set_location_assignment PIN_J11 -to USB_CS
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_CS
+set_location_assignment PIN_E12 -to USB_DATA[0]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[0]
+set_location_assignment PIN_E13 -to USB_DATA[1]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[1]
+set_location_assignment PIN_H13 -to USB_DATA[2]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[2]
+set_location_assignment PIN_E14 -to USB_DATA[3]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[3]
+set_location_assignment PIN_H14 -to USB_DATA[4]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[4]
+set_location_assignment PIN_D15 -to USB_DATA[5]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[5]
+set_location_assignment PIN_E15 -to USB_DATA[6]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[6]
+set_location_assignment PIN_F15 -to USB_DATA[7]
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DATA[7]
+set_location_assignment PIN_J13 -to USB_DIR
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_DIR
+set_location_assignment PIN_D8 -to USB_FAULT_n
+set_instance_assignment -name IO_STANDARD "1.2 V" -to USB_FAULT_n
+set_location_assignment PIN_H12 -to USB_NXT
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_NXT
+set_location_assignment PIN_E16 -to USB_RESET_n
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_RESET_n
+set_location_assignment PIN_J12 -to USB_STP
+set_instance_assignment -name IO_STANDARD "1.8 V" -to USB_STP

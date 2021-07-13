@@ -3,6 +3,9 @@
 module DecaTopLevel(
 input wire i_clk,
 input wire i_rst,
+input wire key1,
+input wire SW0,
+input wire SW1,
 inout wire [7:0] gpioA,
 inout wire [7:0] gpioB,
 output wire [7:0] LEDS,
@@ -39,7 +42,16 @@ input 		          		NET_RX_ER,
 input 		     [3:0]		NET_RXD,
 input 		          		NET_TX_CLK,
 output		          		NET_TX_EN,
-output		     [3:0]		NET_TXD
+output		     [3:0]		NET_TXD,
+//////////// USB //////////
+input 		          		USB_CLKIN,
+output		          		USB_CS,
+inout 		     [7:0]		USB_DATA,
+input 		          		USB_DIR,
+input 		          		USB_FAULT_n,
+input 		          		USB_NXT,
+output		          		USB_RESET_n,
+output		          		USB_STP
 //output wire test_temp_sc,
 //output wire test_temp_si,
 //output wire test_temp_so,
@@ -138,6 +150,21 @@ assign NET_TX_EN = 1'bz;
 assign NET_TXD = 4'bzzzz;
 
 
+wire [7:0] USB_DATA_o;
+
+generate
+
+genvar usb_data_index;
+for(usb_data_index = 0 ; usb_data_index < 8 ; usb_data_index=usb_data_index+1) begin :  generate_usb_data_signal
+
+assign USB_DATA[usb_data_index] = USB_DIR ? 1'bz : USB_DATA_o; 
+
+end
+
+endgenerate    
+
+
+
 DecaSoc #(
     .memfile(memfile),
     .memsize(memsize),
@@ -147,6 +174,9 @@ DecaSoc #(
 ) soc(
     .i_clk(i_clk),
     .i_rst(!i_rst),
+    .key1(key1),
+    .SW0(SW0),
+    .SW1(SW1),
     .i_gpioA(gpioA),
     .o_gpioA(o_gpioA),
     .o_gpioA_oe(o_gpioA_oe),
@@ -195,8 +225,16 @@ DecaSoc #(
     .PMONITOR_I2C_SCL_oe(PMONITOR_I2C_SCL_oe),
     .PMONITOR_I2C_SDA_i(PMONITOR_I2C_SDA),
     .PMONITOR_I2C_SDA_o(PMONITOR_I2C_SDA_o),
-    .PMONITOR_I2C_SDA_oe(PMONITOR_I2C_SDA_oe)
-
+    .PMONITOR_I2C_SDA_oe(PMONITOR_I2C_SDA_oe),
+    .USB_CLKIN(USB_CLKIN),
+    .USB_CS(USB_CS),
+    .USB_DATA_i(USB_DATA),
+    .USB_DATA_o(USB_DATA_o),
+    .USB_DIR(USB_DIR),
+    .USB_FAULT_n(USB_FAULT_n),
+    .USB_NXT(USB_NXT),
+    .USB_RESET_n(USB_RESET_n),
+    .USB_STP(USB_STP)
 );
 
 

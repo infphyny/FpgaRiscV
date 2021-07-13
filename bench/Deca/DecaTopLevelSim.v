@@ -3,7 +3,9 @@
 module DecaTopLevelSim(
   input wire i_clk,
   input wire i_rst,
-
+  input wire key1,
+  input wire SW0,
+  input wire SW1,
   input wire [7:0] i_gpioA,
   output wire [7:0] o_gpioA,
   output wire [7:0] o_gpioA_oe,
@@ -53,7 +55,19 @@ module DecaTopLevelSim(
   output wire PMONITOR_I2C_SCL_oe,
   input wire PMONITOR_I2C_SDA_i,
   output wire PMONITOR_I2C_SDA_o,
-  output wire PMONITOR_I2C_SDA_oe
+  output wire PMONITOR_I2C_SDA_oe,
+
+  //////////// USB //////////
+
+ input 		          		USB_CLKIN,      //ULPI 60 mhz output clock
+ output		          		USB_CS,         // active high chip select pin
+ input 		      [7:0]		USB_DATA_i,
+ output         [7:0]   USB_DATA_o,
+ input 		          		USB_DIR,        //ULPI dir output signal
+ input 		          		USB_FAULT_n,    //Fault input from usb power switch
+ input 		          		USB_NXT,        //ULPI nxt output signal
+ output		          		USB_RESET_n,    //Reset pin uset to reset all digital registers
+ output		          		USB_STP         //ULPI STP input signal
 
 );
 
@@ -156,6 +170,9 @@ DecaSoc #(
 ) dut(
     .i_clk(i_clk),
     .i_rst(i_rst),
+    .key1(key1),
+    .SW0(SW0),
+    .SW1(SW1),
     .i_gpioA(i_gpioA),
     .o_gpioA(o_gpioA),
     .o_gpioA_oe(o_gpioA_oe),
@@ -204,8 +221,16 @@ DecaSoc #(
     .PMONITOR_I2C_SCL_oe(PMONITOR_I2C_SCL_oe),
     .PMONITOR_I2C_SDA_i(PMONITOR_I2C_SDA_i),
     .PMONITOR_I2C_SDA_o(PMONITOR_I2C_SDA_o),
-    .PMONITOR_I2C_SDA_oe(PMONITOR_I2C_SDA_oe)
-
+    .PMONITOR_I2C_SDA_oe(PMONITOR_I2C_SDA_oe),
+    .USB_CLKIN(USB_CLKIN),
+    .USB_CS(USB_CS),
+    .USB_DATA_i(USB_DATA_i),
+    .USB_DATA_o(USB_DATA_o),
+    .USB_DIR(USB_DIR),
+    .USB_FAULT_n(USB_FAULT_n),
+    .USB_NXT(USB_NXT),
+    .USB_RESET_n(USB_RESET_n),
+    .USB_STP(USB_STP)
 );
 
 

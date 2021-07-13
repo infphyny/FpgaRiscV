@@ -1,3 +1,19 @@
+
+/*
+ 
+ Description: Library that initialize and monitor the status of the the two capacitive button sensors
+
+ Example:
+
+ 
+
+
+
+*/
+
+
+
+
 #ifndef CY8CMBR3102_H
 #define CY8CMBR3102_H
 
