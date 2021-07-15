@@ -129,6 +129,7 @@ generate:
             - leds
             - uart_0
             - i2c_0
+            - spi_0
             - cap_sense
             - light
             - rh_temp
@@ -169,6 +170,11 @@ generate:
         
         i2c_0:
           offset: 0x00040120
+          size: 8
+          datawidth: 8
+
+        spi_0:
+          offset: 0x00040140
           size: 8
           datawidth: 8
 
@@ -213,12 +219,12 @@ generate:
           datawidth: 8
 
         sw0:
-          offset: 0x00041002
+          offset: 0x00041010
           size: 1
           datawidth: 8
 
         sw1:
-          offset: 0x00041004
+          offset: 0x00041020
           size: 1
           datawidth: 8
 

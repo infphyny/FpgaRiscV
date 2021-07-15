@@ -20,6 +20,10 @@ module DecaSoc
  input wire i2c_0_sda_i,
  output wire i2c_0_sda_o,
  output wire i2c_0_sda_oe,
+ output wire spi_0_mosi,
+ input wire spi_0_miso,
+ output wire spi_0_sclk,
+ output wire spi_0_cs_n,
  input wire CAP_SENSE_I2C_SCL_i,
  output wire CAP_SENSE_I2C_SCL_o,
  output wire CAP_SENSE_I2C_SCL_oe,
@@ -178,6 +182,7 @@ WishboneSwitch sw0(
   .reset(wb_rst),
   .i_wb_stb(wb_m2s_sw0_stb),
   .i_wb_cyc(wb_m2s_sw0_cyc),
+  .i_wb_we(wb_m2s_sw0_we),
   .i_wb_dat(wb_m2s_sw0_dat),
   .o_wb_dat(wb_s2m_sw0_dat),
   .o_wb_ack(wb_s2m_sw0_ack),
@@ -195,6 +200,7 @@ WishboneSwitch sw1(
   .reset(wb_rst),
   .i_wb_stb(wb_m2s_sw1_stb),
   .i_wb_cyc(wb_m2s_sw1_cyc),
+  .i_wb_we(wb_m2s_sw0_we),
   .i_wb_dat(wb_m2s_sw1_dat),
   .o_wb_dat(wb_s2m_sw1_dat),
   .o_wb_ack(wb_s2m_sw1_ack),
@@ -257,6 +263,22 @@ i2c_master_top i2c_0
   .sda_pad_o(i2c_0_sda_o),
   .sda_padoen_o(i2c_0_sda_oe)
 );
+
+simple_spi spi_0(
+  .clk_i(wb_clk),
+  .rst_i(wb_rst),
+  .cyc_i(wb_m2s_spi_0_cyc),
+  .stb_i(wb_m2s_spi_0_stb),
+  .adr_i(wb_m2s_spi_0_adr[2:0]),
+  .we_i(wb_m2s_spi_0_we),
+  .dat_i(wb_m2s_spi_0_dat),
+  .dat_o(wb_s2m_spi_0_dat),
+  .ack_o(wb_s2m_spi_0_ack),
+  .sck_o(spi_0_sclk),
+  .ss_o(spi_0_cs_n),
+  .mosi_o(spi_0_mosi),
+  .miso_i(spi_0_miso)
+  );
 
 
 

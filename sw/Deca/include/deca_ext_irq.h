@@ -7,6 +7,7 @@ typedef void(*zipcpu_irq)(void);
 
 extern ICtrl* ictrl; 
 extern  zipcpu_irq external_irq[12];
+extern uint32_t ictrl_flags; 
 void deca_external_irq(void);
 void deca_external_irq_init(void);
 

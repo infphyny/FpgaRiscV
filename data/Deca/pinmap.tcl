@@ -39,10 +39,10 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to i_clk
 
 
 set_location_assignment PIN_H21 -to i_rst
-set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" -to i_rst
+set_instance_assignment -name IO_STANDARD "1.5 V" -to i_rst
 
 set_location_assignment PIN_H22 -to key1
-set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" -to key1
+set_instance_assignment -name IO_STANDARD "1.5 V" -to key1
 
 #CAP SENSE
 set_location_assignment PIN_AB2 -to CAP_SENSE_I2C_SCL
@@ -52,10 +52,10 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CAP_SENSE_I2C_SDA
 
 #Switch
 set_location_assignment PIN_J21 -to SW0
-set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER"  -to SW0
+set_instance_assignment -name IO_STANDARD "1.5 V"  -to SW0
 set_location_assignment PIN_J22 -to SW1
-set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER"  -to SW1
-
+set_instance_assignment -name IO_STANDARD "1.5 V"  -to SW1
+#1.5 V SCHMITT TRIGGER
 #LEDS
 set_location_assignment PIN_C7 -to LEDS[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to LEDS[0]
@@ -132,12 +132,26 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_0_rx
 set_location_assignment PIN_Y6 -to uart_0_tx
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_0_tx
 
+# i2c_0
 set_location_assignment PIN_W6 -to i2c_0_scl
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_0_scl
 
 set_location_assignment PIN_W7 -to i2c_0_sda
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_0_sda
 
+#spi_0
+
+set_location_assignment PIN_W8 -to spi_0_miso
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_0_miso
+
+set_location_assignment PIN_V8 -to spi_0_mosi
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_0_mosi
+
+set_location_assignment PIN_AB8 -to spi_0_sclk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_0_sclk
+
+set_location_assignment PIN_V7 -to spi_0_cs_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_0_cs_n
 
 #AUDIO
 #set_location_assignment PIN_P14 -to AUDIO_MCLK

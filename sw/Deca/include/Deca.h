@@ -16,8 +16,8 @@ static const uint32_t GSENSOR_BASE_ADDRESS = 0x00040880;
 static const uint32_t PMONITOR_BASE_ADDRESS = 0x00040900;
 static const uint32_t TUSB1210_BASE_ADDRESS = 0x00040910;
 static const uint32_t KEY1_BASE_ADDRESS = 0x00041000;
-static const uint32_t SW0_BASE_ADDRESS = 0x00041002;
-static const uint32_t SW1_BASE_ADDRESS = 0x00041004;
+static const uint32_t SW0_BASE_ADDRESS = 0x00041010;
+static const uint32_t SW1_BASE_ADDRESS = 0x00041020;
 
 static const uint32_t ICTRL_BASE_ADDRESS = 0x00100000;
 

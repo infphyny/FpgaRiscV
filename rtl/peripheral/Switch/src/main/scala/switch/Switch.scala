@@ -30,7 +30,7 @@ class Switch extends Component {
     val o_int = out Bool
   }
   //val counter = Reg(UInt(8 bits)) init(0)
- val SLOW_CLOCK_COUNTER_MAX = 75000/2
+ val SLOW_CLOCK_COUNTER_MAX = 187500/2
 
  val slow_clock = Reg(Bool) init(False)
  val counter = Reg(UInt(log2Up(SLOW_CLOCK_COUNTER_MAX)bits)) init(0)
@@ -43,7 +43,7 @@ class Switch extends Component {
    slow_clock := ~slow_clock
  }
 
- 
+ //val switch_input = RegNext(io.i_switch) init(io.i_switch)
  val status = Reg(Bits(8 bits)) init(0) addTag(crossClockDomain)
  //status(0) := io.i_switch
  //val switch_prev = status(0) //Buton value//Reg(Bool) init(switch)
@@ -88,8 +88,8 @@ class Switch extends Component {
  {
 
 
-
-   val s_switch_buf = RegNext(io.i_switch) init(False) addTag(crossClockDomain)
+   val switch_input = RegNext(io.i_switch) init(False) 
+   val s_switch_buf = RegNext(switch_input) init(False) 
    val s_switch_buf2 = RegNext( s_switch_buf) init(False)
     cc_switch_buf2 := s_switch_buf2
 
@@ -145,7 +145,8 @@ class Switch extends Component {
     status(0) := o_cc_switch_buf2
  val o_cc_int_buf = RegNext(cc_int) init(False) addTag(crossClockDomain)
  val o_cc_int_buf2 = RegNext(o_cc_int_buf) init(False)
-    int := o_cc_int_buf2
+    int :=  o_cc_int_buf & !o_cc_int_buf2
+   
 
 }
 

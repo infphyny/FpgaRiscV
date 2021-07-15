@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.5.0    git head : 83a031922866b078c411ec5529e00f1b6e79f8e7
 // Component : WishboneSwitch
-// Git hash  : 666dcbba79181659d0c736eb931d19ec1dc17a25
+// Git hash  : 75f814516d82ca8fa98782d364c73df390f489b5
 
 
 
@@ -90,7 +90,7 @@ module Switch (
   input               reset
 );
   reg                 slow_clock;
-  reg        [15:0]   counter;
+  reg        [16:0]   counter;
   wire                when_Switch_l41;
   (* async_reg = "true" *) reg        [7:0]    status;
   wire                int_1;
@@ -99,7 +99,8 @@ module Switch (
   wire                cc_int;
   wire                cc_switch_buf2;
   wire                when_Switch_l64;
-  (* async_reg = "true" *) reg                 slow_clock_area_s_switch_buf;
+  reg                 slow_clock_area_switch_input;
+  reg                 slow_clock_area_s_switch_buf;
   reg                 slow_clock_area_s_switch_buf2;
   reg                 slow_clock_area_o_int;
   (* async_reg = "true" *) reg                 o_cc_switch_buf;
@@ -107,7 +108,7 @@ module Switch (
   (* async_reg = "true" *) reg                 o_cc_int_buf;
   reg                 o_cc_int_buf2;
 
-  assign when_Switch_l41 = (counter == 16'h927b);
+  assign when_Switch_l41 = (counter == 17'h16e35);
   assign int_1 = status[3];
   assign clear_interrupt = status[4];
   assign interrupt_select = status[2 : 1];
@@ -119,16 +120,16 @@ module Switch (
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       slow_clock <= 1'b0;
-      counter <= 16'h0;
+      counter <= 17'h0;
       status <= 8'h0;
       o_cc_switch_buf <= 1'b0;
       o_cc_switch_buf2 <= 1'b0;
       o_cc_int_buf <= 1'b0;
       o_cc_int_buf2 <= 1'b0;
     end else begin
-      counter <= (counter + 16'h0001);
+      counter <= (counter + 17'h00001);
       if(when_Switch_l41) begin
-        counter <= 16'h0;
+        counter <= 17'h0;
         slow_clock <= (! slow_clock);
       end
       if(when_Switch_l64) begin
@@ -144,17 +145,19 @@ module Switch (
       status[0] <= o_cc_switch_buf2;
       o_cc_int_buf <= cc_int;
       o_cc_int_buf2 <= o_cc_int_buf;
-      status[3] <= o_cc_int_buf2;
+      status[3] <= (o_cc_int_buf && (! o_cc_int_buf2));
     end
   end
 
   always @(posedge slow_clock or posedge reset) begin
     if(reset) begin
+      slow_clock_area_switch_input <= 1'b0;
       slow_clock_area_s_switch_buf <= 1'b0;
       slow_clock_area_s_switch_buf2 <= 1'b0;
       slow_clock_area_o_int <= 1'b0;
     end else begin
-      slow_clock_area_s_switch_buf <= io_i_switch;
+      slow_clock_area_switch_input <= io_i_switch;
+      slow_clock_area_s_switch_buf <= slow_clock_area_switch_input;
       slow_clock_area_s_switch_buf2 <= slow_clock_area_s_switch_buf;
       case(interrupt_select)
         2'b00 : begin

@@ -1,6 +1,7 @@
 #include "vtable.h"
 #include <stddef.h>
 #include <stdint.h>
+#include "deca_ext_irq.h"
  irq vtable[32];
 
 void dummy_irq(void){}
@@ -21,7 +22,13 @@ void init_vtable(void)
 }
 
 void handle_trap(){
-   //riscv_disable_interrupt();
+  
+   ictrl_flags =  ictrl->flags;
+   ictrl->flags = (0x00000FFF);//Clear external interrupt flags
+
+ // csr_clear(mstatus,MSTATUS_MIE);
+ // csr_clear(mie, MIE_MTIE | MIE_MEIE);
+  // riscv_disable_interrupt();
    int32_t mcause = csr_read(mcause);
    int32_t irq = mcause < 0;
    char sint[16];
@@ -29,11 +36,16 @@ void handle_trap(){
 //   itoa((int)(mcause&0x7FFFFFFF),sint,16);
 //    spinal_uart_print(uart,"mcause value: ");
 //spinal_uart_print_line(uart,sint);
+
+
+
  if(irq && (mcause_val<32) )
  {
    (*vtable[mcause_val])();
  }
-//riscv_enable_interrupt();
+// csr_set(mstatus,MSTATUS_MIE);
+// csr_set(mie, MIE_MTIE | MIE_MEIE);
+ //riscv_enable_interrupt();
 //   spinal_uart_print_line(uart,"end vtable call");
 /*
   if(mcause & MCAUSE_INT)

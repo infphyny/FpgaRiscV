@@ -132,6 +132,8 @@ int main(int argc, char **argv/*, char **env*/)
 	bool dump = false;
 	top->i_clk = 1;
 	top->key1 = 0;
+	top->SW0 = 0;
+	top->SW1 = 0;
 	//bool q = top->q;
 	while (!(done || Verilated::gotFinish())) {
 	  if (tfp && !dump && (main_time > vcd_start)) {
@@ -149,8 +151,10 @@ int main(int argc, char **argv/*, char **env*/)
 */ 
       if(main_time > key1_toggle_time)
 	  { 
-         key1_toggle_time += 100000;
-        top->key1 = (top->key1+1)%2;      
+         key1_toggle_time += 10000000;
+        top->key1 = (top->key1+1) % 2;  
+	//	top->SW0 =  (top->SW0+1) % 2;
+	//	top->SW1 = (top->SW1+1) % 2;    
 	  }   
 	  if (timeout && (main_time >= timeout)) {
 	    printf("Timeout: Exiting at time %lu\n", main_time);
@@ -158,7 +162,7 @@ int main(int argc, char **argv/*, char **env*/)
 	  }
       
 	  top->i_clk = !top->i_clk;
-	  main_time+=31.25;
+	  main_time+=6.666;//75MHz clock
 
 	}
 	if (tfp)
