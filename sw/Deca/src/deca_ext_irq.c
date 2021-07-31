@@ -41,14 +41,14 @@ void deca_external_irq(void)
   // spinal_uart_print_line(uart,sint);
   for(uint8_t i = 0 ; i < 12 ; i++)
   {
-      if( ( (ictrl_flags>>i) & 0x01)==0x01)
+      if( ( (ictrl->flags>>i) & 0x01)==0x01)
       {
         //ictrl->flags =  0x01<<i;  
         external_irq[i]();
       }
   }
   
-  
+  ictrl->flags = (0x00000FFF);//Clear external interrupt flags
   
  // spinal_uart_print_line(uart,"External interrupt");
 // csr_val = csr_val | (MIE_MEIE);

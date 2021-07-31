@@ -1,3 +1,17 @@
+/*
+  ZipCpu hardware implementation of the interrupt controller icontrol.v 
+
+  Description: Interrupt handler for the ZipCpu interrupt controller
+  
+  This interrupt controller have 12 input interrupt and one output interrupt lines 
+  and can be chained to support more than 12 interrupts. 
+
+
+*/
+
+
+
+
 #ifndef ICTRL_H
 #define ICTRL_H
 
@@ -13,7 +27,7 @@ typedef struct ICtrl
  volatile uint32_t flags;
 }ICtrl;
 
-
+void ictrl_int_en(ICtrl* ictrl,uint16_t ints);
 
 
 #endif

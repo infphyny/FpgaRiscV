@@ -42,7 +42,7 @@ set_location_assignment PIN_H21 -to i_rst
 set_instance_assignment -name IO_STANDARD "1.5 V" -to i_rst
 
 set_location_assignment PIN_H22 -to key1
-set_instance_assignment -name IO_STANDARD "1.5 V" -to key1
+set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" -to key1
 
 #CAP SENSE
 set_location_assignment PIN_AB2 -to CAP_SENSE_I2C_SCL
@@ -52,9 +52,9 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CAP_SENSE_I2C_SDA
 
 #Switch
 set_location_assignment PIN_J21 -to SW0
-set_instance_assignment -name IO_STANDARD "1.5 V"  -to SW0
+set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER"  -to SW0
 set_location_assignment PIN_J22 -to SW1
-set_instance_assignment -name IO_STANDARD "1.5 V"  -to SW1
+set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER"  -to SW1
 #1.5 V SCHMITT TRIGGER
 #LEDS
 set_location_assignment PIN_C7 -to LEDS[0]

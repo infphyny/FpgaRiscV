@@ -131,6 +131,8 @@ int main(int argc, char **argv/*, char **env*/)
    // top->SEN_SDO = 0;
 	bool dump = false;
 	top->i_clk = 1;
+	top->USB_CLKIN = 1;
+	top->USB_DATA_i = 0xA5;
 	top->key1 = 0;
 	top->SW0 = 0;
 	top->SW1 = 0;
@@ -162,6 +164,7 @@ int main(int argc, char **argv/*, char **env*/)
 	  }
       
 	  top->i_clk = !top->i_clk;
+	  top->USB_CLKIN = !top->i_clk;
 	  main_time+=6.666;//75MHz clock
 
 	}

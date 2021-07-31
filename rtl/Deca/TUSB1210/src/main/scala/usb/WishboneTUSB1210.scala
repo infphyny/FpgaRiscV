@@ -20,29 +20,29 @@ class WishboneTUSB1210 extends Component
     
     val clk = in Bool
     val reset = in Bool
-    val wb_stb_i = in Bool
-    val wb_cyc_i = in Bool
+    val i_wb_stb = in Bool
+    val i_wb_cyc = in Bool
 
-    val wb_we_i = in Bool
-    val wb_ack_o = out Bool
+    val i_wb_we = in Bool
+    val o_wb_ack = out Bool
    
-    val wb_adr_i = in UInt(1 bits)
+    val i_wb_adr = in UInt(2 bits)
      
-    val wb_dat_i = in Bits(8 bits) //input from cpu
-    val wb_dat_o = out Bits(8 bits) //output to cpu
+    val i_wb_dat = in Bits(8 bits) //input from cpu
+    val o_wb_dat = out Bits(8 bits) //output to cpu
 
-    val usb_clk_i = in Bool
+    val i_usb_clk = in Bool
 
-    val usb_dat_i = in Bits(8 bits) //input from phy
-    val usb_dat_o = out Bits(8 bits) //output to phy
+    val i_ulpi_dat = in Bits(8 bits) //input from phy
+    val o_ulpi_dat = out Bits(8 bits) //output to phy
     
-    val usb_dir_i = in Bool
-    val usb_fault_n_i = in Bool
-    val usb_nxt_i = in Bool
+    val i_ulpi_dir = in Bool
+    val i_usb_fault_n = in Bool
+    val i_ulpi_nxt = in Bool
     
-    val usb_reset_n_o = out Bool
-    val usb_stp_o = out Bool
-    val usb_cs_o = out Bool
+    val o_ulpi_reset_n = out Bool
+    val o_ulpi_stp = out Bool
+    val o_ulpi_cs = out Bool
     }
 
   noIoPrefix
@@ -61,7 +61,7 @@ class WishboneTUSB1210 extends Component
   {
 
    val ack = Reg(Bool) init(False)
-   io.wb_ack_o := ack
+   io.o_wb_ack := ack
 
    when(ack === True)
    {
@@ -74,33 +74,33 @@ class WishboneTUSB1210 extends Component
    tusb1210.io.clk   := ClockDomain.current.clock
    tusb1210.io.reset := ClockDomain.current.reset
     
-   tusb1210.io.cpu_we_i  := False
-   tusb1210.io.cpu_adr_i := io.wb_adr_i
-   tusb1210.io.cpu_dat_i := io.wb_dat_i
+   tusb1210.io.i_cpu_we  := False
+   tusb1210.io.i_cpu_adr := io.i_wb_adr
+   tusb1210.io.i_cpu_dat := io.i_wb_dat
   // tusb1210.io.cpu_stb_i := io.wb_stb_i
    //tusb1210.io.cpu_cyc_i := io.wb_cyc_i
 
-   io.wb_dat_o           := tusb1210.io.cpu_dat_o
+   io.o_wb_dat           := tusb1210.io.o_cpu_dat
   
-   tusb1210.io.usb_clk_i := io.usb_clk_i
-   tusb1210.io.usb_dat_i := io.usb_dat_i
+   tusb1210.io.i_usb_clk := io.i_usb_clk
+   tusb1210.io.i_ulpi_dat := io.i_ulpi_dat
 
-   tusb1210.io.usb_dir_i := io.usb_dir_i
-   tusb1210.io.usb_fault_n_i := io.usb_fault_n_i
-   tusb1210.io.usb_nxt_i := io.usb_nxt_i
-
-
-   io.usb_dat_o     := tusb1210.io.usb_dat_o
-   io.usb_reset_n_o := tusb1210.io.usb_reset_n_o
-   io.usb_stp_o     := tusb1210.io.usb_reset_n_o
-   io.usb_cs_o      := tusb1210.io.usb_cs_o
+   tusb1210.io.i_ulpi_dir := io.i_ulpi_dir
+   tusb1210.io.i_usb_fault_n := io.i_usb_fault_n
+   tusb1210.io.i_ulpi_nxt := io.i_ulpi_nxt
 
 
+   io.o_ulpi_dat     := tusb1210.io.o_ulpi_dat
+   io.o_ulpi_reset_n := tusb1210.io.o_ulpi_reset_n
+   io.o_ulpi_stp     := tusb1210.io.o_ulpi_stp
+   io.o_ulpi_cs      := tusb1210.io.o_ulpi_cs
 
-   when( (io.wb_stb_i === True) && (io.wb_cyc_i === True) && (ack === False) )
+
+
+   when( (io.i_wb_stb === True) && (io.i_wb_cyc === True) && (ack === False) )
    {
-       tusb1210.io.cpu_we_i  := io.wb_we_i
-       ack := True
+       tusb1210.io.i_cpu_we  := io.i_wb_we
+       ack := True 
    } 
 
 
@@ -111,6 +111,6 @@ class WishboneTUSB1210 extends Component
 
 object WishboneTUSB1210TopLevelVerilog {
   def main(args: Array[String]) {
-    SpinalVerilog(new WishboneTUSB1210)
+    SpinalVerilog(new WishboneTUSB1210).printPruned()
   }
 }

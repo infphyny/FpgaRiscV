@@ -8,14 +8,11 @@
 
 #include "Leds.h"
 #include "SpinalUart.h"
+#include "Switch.h"
 #include "ictrl.h"
 
 SpinalUart* uart;
 
-typedef struct Switch
-{
-    volatile uint8_t status;
-}Switch;
 
 
 volatile bool key1_event = false;
@@ -60,11 +57,12 @@ void main(void)
  sw1 = (Switch*)SW1_BASE_ADDRESS;
 
  key1->status = 0x06;//Auto clear interrupt, interrupt on rising and falling egde of switch signal
- sw0->status = 0x06;
- sw1->status = 0x06;
+ sw0->status = SWITCH_BOTH_EDGE_INTERRUPT;
+ sw1->status = SWITCH_BOTH_EDGE_INTERRUPT;
   
  //Enable interrupt for the interrupt controller and interrupt 0 to 2
- ictrl->flags = 0x80000000 | ICTRL_INT_EN | 0x00070000;//0xFFFFFFFF;//(ICTRL_ANY_INT)/*|(ICTRL_INT_EN_0)*/;
+ ictrl_int_en(ictrl,7);
+ //ictrl->flags = 0x80000000 | ICTRL_INT_EN | 0x00070000;//0xFFFFFFFF;//(ICTRL_ANY_INT)/*|(ICTRL_INT_EN_0)*/;
 
  //ictrl->flags |= (ICTRL_INT_EN_0<<1);
  //ictrl->flags |= (ICTRL_INT_EN_0<<2); 

@@ -24,6 +24,8 @@ filesets:
       - data/Deca/pinmap.tcl	: {file_type: tclSource}
       - rtl/Deca/pll/pll.qip : {file_type : QIP}
       - rtl/Deca/pll/pll.v : {file_type : verilogSource}
+      - rtl/Deca/usbpll/usbpll.v : {file_type : verilogSource}
+      - rtl/Deca/usbpll/usbpll.qip : {file_type : QIP}
       - rtl/Deca/DecaTopLevel.v : {file_type : verilogSource}
 
 
@@ -35,12 +37,12 @@ filesets:
       - bench/Deca/Deca_tb.cpp : {file_type : cppSource}
     depend : [vlog_tb_utils]
 
-  memfiles:
-    files:
-      - sw/Deca/blink/blink.hex   : { copyto : blink.hex}
-      - sw/Deca/uart/uart.hex : { copyto : uart.hex }
-      - sw/Deca/temp_sensor/temp_sensor.hex : {copyto : temp_sensor.hex}
-      - sw/Deca/rh_temp/rh_temp.hex : {copyto : rh_temp.hex}
+ # memfiles:
+ #   files:
+ #     - sw/Deca/blink/blink.hex   : { copyto : blink.hex}
+ #     - sw/Deca/uart/uart.hex : { copyto : uart.hex }
+ #     - sw/Deca/temp_sensor/temp_sensor.hex : {copyto : temp_sensor.hex}
+ #     - sw/Deca/rh_temp/rh_temp.hex : {copyto : rh_temp.hex}
 
 targets:
 

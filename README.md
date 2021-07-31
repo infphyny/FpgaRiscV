@@ -1,14 +1,16 @@
 # Examples of bare metal RiscV programming with a softcore on a fpga #
 
-This is a work in progress.
-
-
+This is a work in progress. 
+ 
 Bought a Deca board a few month ago to learn RiscV with a VexriscV cpu and wishbone bus to interface peripherals.
 For now my project is just programming RiscV bare metal, just basic stuff.
 
 In summary, I use fusesoc wishbone bus generator and VexriscV wishbone ibus and dbus. But VexriscV wishbone dbus need a little modification to make it compatible with fusesoc wishbone bus implementation.
 
 I have added support to modify .mif file from Tom Verbeure tutorial. No need to recompile hardware each time.
+
+Started to work on usb. When building hardware, the timing requirements are not met because of TUSB1210 hardware controller but other peripherals still works.   
+
 
 
 ## Package required
@@ -152,7 +154,7 @@ or open Arduino IDE then choose serial monitor.
 
 * [VexRiscV cpu](https://github.com/SpinalHDL/VexRiscv.git) 
 * [Hardware libraries](https://github.com/fusesoc/fusesoc-cores.git) provided by fusesoc
-* ZipCpu [interrupt controller](https://github.com/ZipCPU/zipcpu/blob/master/rtl/peripherals/icontrol.v) 
+
 
 ## Documentation
 * How to generate a [linker script](sw/doc/linker_script.md) and https://twilco.github.io/riscv-from-scratch/2019/04/27/riscv-from-scratch-2.html.

@@ -23,8 +23,8 @@ void init_vtable(void)
 
 void handle_trap(){
   
-   ictrl_flags =  ictrl->flags;
-   ictrl->flags = (0x00000FFF);//Clear external interrupt flags
+  // ictrl_flags =  ictrl->flags;
+  // ictrl->flags = (0x00000FFF);//Clear external interrupt flags
 
  // csr_clear(mstatus,MSTATUS_MIE);
  // csr_clear(mie, MIE_MTIE | MIE_MEIE);

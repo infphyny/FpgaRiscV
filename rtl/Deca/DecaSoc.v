@@ -79,22 +79,26 @@ parameter memsize = 8192;
 parameter PLL = "NONE";
 parameter sim = 0;
 parameter with_csr = 1;
+parameter ICONTROL_IUSED = 15;
 
   wire        wb_rst;
   wire        wb_clk;
+  wire        usb_clk;
 
 generate
 
 if(PLL=="NONE") begin
 assign      	wb_clk = i_clk;
+assign        usb_clk = USB_CLKIN;
 assign wb_rst = i_rst;
 
 end else if (PLL=="PLL") begin  // PLL== "NONE"
   //  wire wb_rst;
     wire locked_1;
+    wire pll_usb_locked;
     //wire locked_2;
     //wire sdram_clk;
-    assign wb_rst = !locked_1 /*&& !locked_2 */;
+    assign wb_rst = !locked_1 && !pll_usb_locked;
     //wire reset = 0;
     pll clockgen(
     .inclk0(i_clk),
@@ -103,6 +107,16 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
     //.c1(sdram_clk),
     .locked(locked_1)
     );
+   
+    usbpll usbclock(
+      .inclk0(USB_CLKIN),
+      .areset(i_rst),
+      .c0(usb_clk),
+      .locked(pll_usb_locked)
+    );
+
+   //Create an 60 Mhz USB pll with -120 degree phase shift from  60 MHz USB_CLKIN
+   
 
   end
 
@@ -419,22 +433,22 @@ i2c_master_top pmonitor(
 WishboneTUSB1210 tusb1210(
   .clk(wb_clk),
   .reset(wb_rst),
-  .wb_adr_i(wb_m2s_tusb1210_adr[0]),
-  .wb_dat_i(wb_m2s_tusb1210_dat),
-  .wb_dat_o(wb_s2m_tusb1210_dat),
-  .wb_stb_i(wb_m2s_tusb1210_stb),
-  .wb_cyc_i(wb_m2s_tusb1210_cyc),
-  .wb_we_i(wb_m2s_tusb1210_we),
-  .wb_ack_o(wb_s2m_tusb1210_ack),
-  .usb_clk_i(USB_CLKIN),
-  .usb_dat_i(USB_DATA_i),
-  .usb_dat_o(USB_DATA_o),
-  .usb_dir_i(USB_DIR),
-  .usb_fault_n_i(USB_FAULT_n),
-  .usb_nxt_i(USB_NXT),
-  .usb_reset_n_o(USB_RESET_n),
-  .usb_stp_o(USB_STP),
-  .usb_cs_o(USB_CS)
+  .i_wb_adr(wb_m2s_tusb1210_adr[1:0]),
+  .i_wb_dat(wb_m2s_tusb1210_dat),
+  .o_wb_dat(wb_s2m_tusb1210_dat),
+  .i_wb_stb(wb_m2s_tusb1210_stb),
+  .i_wb_cyc(wb_m2s_tusb1210_cyc),
+  .i_wb_we(wb_m2s_tusb1210_we),
+  .o_wb_ack(wb_s2m_tusb1210_ack),
+  .i_usb_clk(usb_clk),
+  .i_ulpi_dat(USB_DATA_i),
+  .o_ulpi_dat(USB_DATA_o),
+  .i_ulpi_dir(USB_DIR),
+  .i_usb_fault_n(USB_FAULT_n),
+  .i_ulpi_nxt(USB_NXT),
+  .o_ulpi_reset_n(USB_RESET_n),
+  .o_ulpi_stp(USB_STP),
+  .o_ulpi_cs(USB_CS)
 );
 
 /*
@@ -495,13 +509,16 @@ assign USB_STP = 1'bz;
    );
    
    wire externalInterrupt;
-   wire [11:0] i_brd_ints;
+   wire [ICONTROL_IUSED-1:0] i_brd_ints;
     
    assign i_brd_ints[0] = key1_interrupt;
    assign i_brd_ints[1] = sw0_interrupt;
    assign i_brd_ints[2] = sw1_interrupt;
     
-   icontrol ictrl(
+   icontrol #(
+     .IUSED(ICONTROL_IUSED)
+   ) 
+    ictrl(
      .i_clk(wb_clk),
      .i_reset(wb_rst),
      .i_wb_cyc(wb_m2s_ictrl_cyc),
