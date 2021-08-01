@@ -15,10 +15,19 @@ Started to work on usb. When building hardware, the timing requirements are not 
 
 ## Package required
 
+* python 3
+
+```console
+sudo apt install python-is-python3
+```
+
+* python pip 
+```console
+ sudo apt install python3-pip
+```
 * pyyaml
 ```console
   pip install pyyaml
-
 ```
 * python-yaml
 ```

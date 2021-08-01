@@ -5,12 +5,12 @@
 #include <stdlib.h>
 #include "riscv.h"
 
-extern SpinalUart* uart;
+//extern SpinalUart* uart;
 ICtrl *ictrl;
 uint32_t ictrl_flags;
 zipcpu_irq external_irq[12];
 void empty_irq(void){
-    spinal_uart_print_line(uart,"Empty irq called");
+  //  spinal_uart_print_line(uart,"Empty irq called");
      
     }
 
