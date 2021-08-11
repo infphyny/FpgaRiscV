@@ -77,6 +77,22 @@ TODO: add instruction to build verilator from source
 
 My FuseSoc workspace folder is ~/Documents/bin/fusesoc.  Adapt to your own folder. Also adapt paths to quartus binary and riscv toolchain.
 
+## To be able to program Deca board
+See [usb blaster udev](https://www.intel.com/content/dam/www/programmable/us/en/pdfs/literature/ug/ug_usb_blstr.pdf) chapter 3.2.2. Installing on Red Hat Enterprise 5 and 6
+
+execute
+``` console
+sudo nano /etc/udev/rules.d/51-usbblaster.rules
+```
+Copy inside that file
+```
+BUS=="usb", SYSFS{idVendor}=="09fb", SYSFS{idProduct}=="6010", 
+MODE="0666"
+BUS=="usb", SYSFS{idVendor}=="09fb", SYSFS{idProduct}=="6810", 
+MODE="0666"
+```
+
+
 ## Getting project files ##
 
 ```
