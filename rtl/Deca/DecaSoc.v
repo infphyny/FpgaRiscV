@@ -1,5 +1,6 @@
 module DecaSoc
 (
+ // input wire DDR3_CLK_50,
   input wire i_clk,
   input wire i_rst,
   input wire key1,
@@ -62,15 +63,32 @@ module DecaSoc
 
  //////////// USB //////////
 
- input 		          		USB_CLKIN,      //ULPI 60 mhz output clock
- output		          		USB_CS,         // active high chip select pin
- input 		      [7:0]		USB_DATA_i,
- output         [7:0]   USB_DATA_o,
- input 		          		USB_DIR,        //ULPI dir output signal
- input 		          		USB_FAULT_n,    //Fault input from usb power switch
- input 		          		USB_NXT,        //ULPI nxt output signal
- output		          		USB_RESET_n,    //Reset pin uset to reset all digital registers
- output		          		USB_STP         //ULPI STP input signal
+ input wire        		USB_CLKIN,      //ULPI 60 mhz output clock
+ output wire		          		USB_CS,         // active high chip select pin
+ input wire		      [7:0]		USB_DATA_i,
+ output wire        [7:0]   USB_DATA_o,
+ input wire		          		USB_DIR,        //ULPI dir output signal
+ input wire		          		USB_FAULT_n,    //Fault input from usb power switch
+ input wire		          		USB_NXT,        //ULPI nxt output signal
+ output	wire	          		USB_RESET_n,    //Reset pin uset to reset all digital registers
+ output	wire	          		USB_STP,        //ULPI STP input signal
+ //////////// SDRAM //////////
+	output		    [14:0]		DDR3_A,
+	output		     [2:0]		DDR3_BA,
+	output		          		DDR3_CAS_n,
+	inout 		          		DDR3_CK_n,
+	inout 		          		DDR3_CK_p,
+	output		          		DDR3_CKE,
+	input 		          		DDR3_CLK_50,
+	output		          		DDR3_CS_n,
+	output		     [1:0]		DDR3_DM,
+	inout 		    [15:0]		DDR3_DQ,
+	inout 		     [1:0]		DDR3_DQS_n,
+	inout 		     [1:0]		DDR3_DQS_p,
+	output		          		DDR3_ODT,
+	output		          		DDR3_RAS_n,
+	output		          		DDR3_RESET_n,
+	output		          		DDR3_WE_n
 
 );
 
@@ -107,7 +125,8 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
     //.c1(sdram_clk),
     .locked(locked_1)
     );
-   
+
+   //Create an 60 Mhz USB pll with -120 degree phase shift from  60 MHz USB_CLKIN
     usbpll usbclock(
       .inclk0(USB_CLKIN),
       .areset(i_rst),
@@ -115,7 +134,7 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
       .locked(pll_usb_locked)
     );
 
-   //Create an 60 Mhz USB pll with -120 degree phase shift from  60 MHz USB_CLKIN
+   
    
 
   end
@@ -508,6 +527,114 @@ assign USB_STP = 1'bz;
    .irq(timer_irq)
    );
    
+
+// Wire between wb_avalon bridge and ddr3 memory ctrl
+   wire [31:0] o_av_adr;
+   wire [7:0] o_av_be;
+   wire o_av_read_req;
+   wire o_av_write_req;
+   wire [63:0] i_av_readdata;
+   wire [7:0] o_av_burstcount;
+   wire [63:0] o_av_writedata;
+   wire avl_ready;
+   wire i_av_waitrequest;
+   assign i_av_waitrequest = !avl_ready;
+   wire i_av_readdatavalid;
+   wire avl_burstbegin;
+   assign avl_burstbegin =  o_av_read_req & o_av_write_req;
+
+   
+
+
+   wire ddr3_reset;
+   assign ddr3_reset = !wb_rst;
+
+
+   generate
+
+    if(sim ==0) begin 
+
+   
+
+   //50 MHZ
+   ddr3 ddr3_mem(
+    .pll_ref_clk(DDR3_CLK_50),
+    .global_reset_n(ddr3_reset),
+    .soft_reset_n(ddr3_reset),
+    .mem_a(DDR3_A),
+    .mem_ba(DDR3_BA),
+    .mem_ck(DDR3_CK_p),
+    .mem_ck_n(DDR3_CK_n),
+    .mem_cke(DDR3_CKE),
+    .mem_cs_n(DDR3_CS_n),
+    .mem_dm(DDR3_DM),
+    .mem_ras_n(DDR3_RAS_n),
+    .mem_cas_n(DDR3_CAS_n),
+    .mem_we_n(DDR3_WE_n),
+    .mem_reset_n(DDR3_RESET_n),
+    .mem_dq(DDR3_DQ),
+    .mem_dqs(DDR3_DQS_p),
+    .mem_dqs_n(DDR3_DQS_n),
+    .mem_odt(DDR3_ODT),
+    .avl_ready(avl_ready),
+    .avl_burstbegin(avl_burstbegin),
+    .avl_addr(o_av_adr[28:3]),
+    .avl_rdata_valid(i_av_readdatavalid),
+    .avl_rdata(i_av_readdata),
+    .avl_wdata(o_av_writedata),
+    .avl_be(o_av_be),
+    .avl_read_req(o_av_read_req),
+    .avl_write_req(o_av_write_req),
+    .avl_size(o_av_burstcount[2:0]),
+    //.pll_mem_clk(DDR3_)
+    
+  );
+    end
+
+   endgenerate
+   //stub
+   wire [7:0] wb_av_bridge_sel = {4'b0000,wb_m2s_wb_av_bridge_sel};
+   wire [63:0] wb_av_bridge_dat_i = {32'h0000,wb_m2s_wb_av_bridge_dat};
+   wire [63:0] wb_av_bridge_dat_o = {32'h0000,wb_s2m_wb_av_bridge_dat};
+
+   wire [2:0] wb_av_bridge_cti = 3'b000;
+   wire [1:0] wb_av_bridge_bte = 2'b00;
+   
+   // 75 MHZ
+   wb_to_avalon_bridge #(
+     .DW(64),
+     .AW(32)
+   ) wb_av_bridge(
+    //Wishbone slave input
+    .wb_clk_i(wb_clk),
+    .wb_rst_i(wb_rst),
+    .wb_adr_i(wb_m2s_wb_av_bridge_adr),
+    .wb_dat_i(wb_av_bridge_dat_i),
+    .wb_sel_i(wb_av_bridge_sel),
+    .wb_we_i(wb_m2s_wb_av_bridge_we),
+    .wb_cyc_i(wb_m2s_wb_av_bridge_cyc),
+    .wb_stb_i(wb_m2s_wb_av_bridge_stb),
+    .wb_cti_i(wb_av_bridge_cti),
+    .wb_bte_i(wb_av_bridge_bte),
+    .wb_dat_o(wb_av_bridge_dat_o),
+    .wb_ack_o(wb_s2m_wb_av_bridge_ack),
+    .wb_err_o(wb_s2m_wb_av_bridge_err),
+    .wb_rty_o(wb_s2m_wb_av_bridge_rty),
+   //Avalon master output
+    .m_av_address_o(o_av_adr),
+    .m_av_byteenable_o(o_av_be),
+    .m_av_read_o(o_av_read_req),
+    .m_av_readdata_i(i_av_readdata),
+    .m_av_burstcount_o(o_av_burstcount),
+    .m_av_write_o(o_av_write_req),
+    .m_av_writedata_o(o_av_writedata),
+    .m_av_waitrequest_i(i_av_waitrequest),
+    .m_av_readdatavalid_i(i_av_readdatavalid)
+   );
+
+   
+
+
    wire externalInterrupt;
    wire [ICONTROL_IUSED-1:0] i_brd_ints;
     

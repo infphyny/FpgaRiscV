@@ -1,30 +1,30 @@
-// Generator : SpinalHDL v1.5.0    git head : 83a031922866b078c411ec5529e00f1b6e79f8e7
+// Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : WishboneUartCtrl
-// Git hash  : e03a66e8f94607b5b85df824187b35e3c8c2028f
+// Git hash  : f4ffec70be40e3b61ec3e2fb6f93141dfe883ca1
 
 
-`define UartStopType_defaultEncoding_type [0:0]
-`define UartStopType_defaultEncoding_ONE 1'b0
-`define UartStopType_defaultEncoding_TWO 1'b1
+`define UartStopType_binary_sequential_type [0:0]
+`define UartStopType_binary_sequential_ONE 1'b0
+`define UartStopType_binary_sequential_TWO 1'b1
 
-`define UartParityType_defaultEncoding_type [1:0]
-`define UartParityType_defaultEncoding_NONE 2'b00
-`define UartParityType_defaultEncoding_EVEN 2'b01
-`define UartParityType_defaultEncoding_ODD 2'b10
+`define UartParityType_binary_sequential_type [1:0]
+`define UartParityType_binary_sequential_NONE 2'b00
+`define UartParityType_binary_sequential_EVEN 2'b01
+`define UartParityType_binary_sequential_ODD 2'b10
 
-`define UartCtrlTxState_defaultEncoding_type [2:0]
-`define UartCtrlTxState_defaultEncoding_IDLE 3'b000
-`define UartCtrlTxState_defaultEncoding_START 3'b001
-`define UartCtrlTxState_defaultEncoding_DATA 3'b010
-`define UartCtrlTxState_defaultEncoding_PARITY 3'b011
-`define UartCtrlTxState_defaultEncoding_STOP 3'b100
+`define UartCtrlTxState_binary_sequential_type [2:0]
+`define UartCtrlTxState_binary_sequential_IDLE 3'b000
+`define UartCtrlTxState_binary_sequential_START 3'b001
+`define UartCtrlTxState_binary_sequential_DATA 3'b010
+`define UartCtrlTxState_binary_sequential_PARITY 3'b011
+`define UartCtrlTxState_binary_sequential_STOP 3'b100
 
-`define UartCtrlRxState_defaultEncoding_type [2:0]
-`define UartCtrlRxState_defaultEncoding_IDLE 3'b000
-`define UartCtrlRxState_defaultEncoding_START 3'b001
-`define UartCtrlRxState_defaultEncoding_DATA 3'b010
-`define UartCtrlRxState_defaultEncoding_PARITY 3'b011
-`define UartCtrlRxState_defaultEncoding_STOP 3'b100
+`define UartCtrlRxState_binary_sequential_type [2:0]
+`define UartCtrlRxState_binary_sequential_IDLE 3'b000
+`define UartCtrlRxState_binary_sequential_START 3'b001
+`define UartCtrlRxState_binary_sequential_DATA 3'b010
+`define UartCtrlRxState_binary_sequential_PARITY 3'b011
+`define UartCtrlRxState_binary_sequential_STOP 3'b100
 
 
 module WishboneUartCtrl (
@@ -71,8 +71,8 @@ module WishboneUartCtrl (
   reg                 _zz_io_bus_ACK;
   wire       [5:0]    busCtrl_byteAddress;
   wire       [2:0]    bridge_uartConfigReg_frame_dataLength;
-  wire       `UartStopType_defaultEncoding_type bridge_uartConfigReg_frame_stop;
-  wire       `UartParityType_defaultEncoding_type bridge_uartConfigReg_frame_parity;
+  wire       `UartStopType_binary_sequential_type bridge_uartConfigReg_frame_stop;
+  wire       `UartParityType_binary_sequential_type bridge_uartConfigReg_frame_parity;
   reg        [11:0]   bridge_uartConfigReg_clockDivider;
   reg                 _zz_bridge_write_streamUnbuffered_valid;
   wire                bridge_write_streamUnbuffered_valid;
@@ -87,22 +87,22 @@ module WishboneUartCtrl (
   wire                bridge_interruptCtrl_writeInt;
   wire                bridge_interruptCtrl_interrupt;
   reg                 bridge_misc_readError;
-  reg                 when_BusSlaveFactory_l332;
-  wire                when_BusSlaveFactory_l334;
+  reg                 when_BusSlaveFactory_l335;
+  wire                when_BusSlaveFactory_l337;
   reg                 bridge_misc_readOverflowError;
-  reg                 when_BusSlaveFactory_l332_1;
-  wire                when_BusSlaveFactory_l334_1;
-  wire                when_UartCtrl_l152;
+  reg                 when_BusSlaveFactory_l335_1;
+  wire                when_BusSlaveFactory_l337_1;
+  wire                uartCtrl_1_io_read_isStall;
   reg                 bridge_misc_breakDetected;
   reg                 uartCtrl_1_io_readBreak_regNext;
   wire                when_UartCtrl_l154;
-  reg                 when_BusSlaveFactory_l332_2;
-  wire                when_BusSlaveFactory_l334_2;
+  reg                 when_BusSlaveFactory_l335_2;
+  wire                when_BusSlaveFactory_l337_2;
   reg                 bridge_misc_doBreak;
-  reg                 when_BusSlaveFactory_l363;
-  wire                when_BusSlaveFactory_l365;
-  reg                 when_BusSlaveFactory_l332_3;
-  wire                when_BusSlaveFactory_l334_3;
+  reg                 when_BusSlaveFactory_l366;
+  wire                when_BusSlaveFactory_l368;
+  reg                 when_BusSlaveFactory_l335_3;
+  wire                when_BusSlaveFactory_l337_3;
   `ifndef SYNTHESIS
   reg [23:0] bridge_uartConfigReg_frame_stop_string;
   reg [31:0] bridge_uartConfigReg_frame_parity_string;
@@ -111,7 +111,7 @@ module WishboneUartCtrl (
   function [11:0] zz_bridge_uartConfigReg_clockDivider(input dummy);
     begin
       zz_bridge_uartConfigReg_clockDivider = 12'h0;
-      zz_bridge_uartConfigReg_clockDivider = 12'h081;
+      zz_bridge_uartConfigReg_clockDivider = 12'h055;
     end
   endfunction
   wire [11:0] _zz_1;
@@ -170,16 +170,16 @@ module WishboneUartCtrl (
   `ifndef SYNTHESIS
   always @(*) begin
     case(bridge_uartConfigReg_frame_stop)
-      `UartStopType_defaultEncoding_ONE : bridge_uartConfigReg_frame_stop_string = "ONE";
-      `UartStopType_defaultEncoding_TWO : bridge_uartConfigReg_frame_stop_string = "TWO";
+      `UartStopType_binary_sequential_ONE : bridge_uartConfigReg_frame_stop_string = "ONE";
+      `UartStopType_binary_sequential_TWO : bridge_uartConfigReg_frame_stop_string = "TWO";
       default : bridge_uartConfigReg_frame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(bridge_uartConfigReg_frame_parity)
-      `UartParityType_defaultEncoding_NONE : bridge_uartConfigReg_frame_parity_string = "NONE";
-      `UartParityType_defaultEncoding_EVEN : bridge_uartConfigReg_frame_parity_string = "EVEN";
-      `UartParityType_defaultEncoding_ODD : bridge_uartConfigReg_frame_parity_string = "ODD ";
+      `UartParityType_binary_sequential_NONE : bridge_uartConfigReg_frame_parity_string = "NONE";
+      `UartParityType_binary_sequential_EVEN : bridge_uartConfigReg_frame_parity_string = "EVEN";
+      `UartParityType_binary_sequential_ODD : bridge_uartConfigReg_frame_parity_string = "ODD ";
       default : bridge_uartConfigReg_frame_parity_string = "????";
     endcase
   end
@@ -222,8 +222,8 @@ module WishboneUartCtrl (
   assign _zz_1 = zz_bridge_uartConfigReg_clockDivider(1'b0);
   always @(*) bridge_uartConfigReg_clockDivider = _zz_1;
   assign bridge_uartConfigReg_frame_dataLength = 3'b111;
-  assign bridge_uartConfigReg_frame_parity = `UartParityType_defaultEncoding_NONE;
-  assign bridge_uartConfigReg_frame_stop = `UartStopType_defaultEncoding_ONE;
+  assign bridge_uartConfigReg_frame_parity = `UartParityType_binary_sequential_NONE;
+  assign bridge_uartConfigReg_frame_stop = `UartStopType_binary_sequential_ONE;
   always @(*) begin
     _zz_bridge_write_streamUnbuffered_valid = 1'b0;
     case(busCtrl_byteAddress)
@@ -272,11 +272,11 @@ module WishboneUartCtrl (
   assign bridge_interruptCtrl_writeInt = (bridge_interruptCtrl_writeIntEnable && (! bridge_write_streamUnbuffered_queueWithOccupancy_io_pop_valid));
   assign bridge_interruptCtrl_interrupt = (bridge_interruptCtrl_readInt || bridge_interruptCtrl_writeInt);
   always @(*) begin
-    when_BusSlaveFactory_l332 = 1'b0;
+    when_BusSlaveFactory_l335 = 1'b0;
     case(busCtrl_byteAddress)
       6'h10 : begin
         if(busCtrl_doWrite) begin
-          when_BusSlaveFactory_l332 = 1'b1;
+          when_BusSlaveFactory_l335 = 1'b1;
         end
       end
       default : begin
@@ -284,13 +284,13 @@ module WishboneUartCtrl (
     endcase
   end
 
-  assign when_BusSlaveFactory_l334 = io_bus_DAT_MOSI[0];
+  assign when_BusSlaveFactory_l337 = io_bus_DAT_MOSI[0];
   always @(*) begin
-    when_BusSlaveFactory_l332_1 = 1'b0;
+    when_BusSlaveFactory_l335_1 = 1'b0;
     case(busCtrl_byteAddress)
       6'h10 : begin
         if(busCtrl_doWrite) begin
-          when_BusSlaveFactory_l332_1 = 1'b1;
+          when_BusSlaveFactory_l335_1 = 1'b1;
         end
       end
       default : begin
@@ -298,15 +298,15 @@ module WishboneUartCtrl (
     endcase
   end
 
-  assign when_BusSlaveFactory_l334_1 = io_bus_DAT_MOSI[1];
-  assign when_UartCtrl_l152 = (uartCtrl_1_io_read_valid && (! uartCtrl_1_io_read_queueWithOccupancy_io_push_ready));
+  assign when_BusSlaveFactory_l337_1 = io_bus_DAT_MOSI[1];
+  assign uartCtrl_1_io_read_isStall = (uartCtrl_1_io_read_valid && (! uartCtrl_1_io_read_queueWithOccupancy_io_push_ready));
   assign when_UartCtrl_l154 = (uartCtrl_1_io_readBreak && (! uartCtrl_1_io_readBreak_regNext));
   always @(*) begin
-    when_BusSlaveFactory_l332_2 = 1'b0;
+    when_BusSlaveFactory_l335_2 = 1'b0;
     case(busCtrl_byteAddress)
       6'h10 : begin
         if(busCtrl_doWrite) begin
-          when_BusSlaveFactory_l332_2 = 1'b1;
+          when_BusSlaveFactory_l335_2 = 1'b1;
         end
       end
       default : begin
@@ -314,13 +314,13 @@ module WishboneUartCtrl (
     endcase
   end
 
-  assign when_BusSlaveFactory_l334_2 = io_bus_DAT_MOSI[9];
+  assign when_BusSlaveFactory_l337_2 = io_bus_DAT_MOSI[9];
   always @(*) begin
-    when_BusSlaveFactory_l363 = 1'b0;
+    when_BusSlaveFactory_l366 = 1'b0;
     case(busCtrl_byteAddress)
       6'h10 : begin
         if(busCtrl_doWrite) begin
-          when_BusSlaveFactory_l363 = 1'b1;
+          when_BusSlaveFactory_l366 = 1'b1;
         end
       end
       default : begin
@@ -328,13 +328,13 @@ module WishboneUartCtrl (
     endcase
   end
 
-  assign when_BusSlaveFactory_l365 = io_bus_DAT_MOSI[10];
+  assign when_BusSlaveFactory_l368 = io_bus_DAT_MOSI[10];
   always @(*) begin
-    when_BusSlaveFactory_l332_3 = 1'b0;
+    when_BusSlaveFactory_l335_3 = 1'b0;
     case(busCtrl_byteAddress)
       6'h10 : begin
         if(busCtrl_doWrite) begin
-          when_BusSlaveFactory_l332_3 = 1'b1;
+          when_BusSlaveFactory_l335_3 = 1'b1;
         end
       end
       default : begin
@@ -342,7 +342,7 @@ module WishboneUartCtrl (
     endcase
   end
 
-  assign when_BusSlaveFactory_l334_3 = io_bus_DAT_MOSI[11];
+  assign when_BusSlaveFactory_l337_3 = io_bus_DAT_MOSI[11];
   assign io_interrupt = bridge_interruptCtrl_interrupt;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
@@ -355,37 +355,37 @@ module WishboneUartCtrl (
       bridge_misc_doBreak <= 1'b0;
     end else begin
       _zz_io_bus_ACK <= (io_bus_STB && io_bus_CYC);
-      if(when_BusSlaveFactory_l332) begin
-        if(when_BusSlaveFactory_l334) begin
+      if(when_BusSlaveFactory_l335) begin
+        if(when_BusSlaveFactory_l337) begin
           bridge_misc_readError <= _zz_bridge_misc_readError[0];
         end
       end
       if(uartCtrl_1_io_readError) begin
         bridge_misc_readError <= 1'b1;
       end
-      if(when_BusSlaveFactory_l332_1) begin
-        if(when_BusSlaveFactory_l334_1) begin
+      if(when_BusSlaveFactory_l335_1) begin
+        if(when_BusSlaveFactory_l337_1) begin
           bridge_misc_readOverflowError <= _zz_bridge_misc_readOverflowError[0];
         end
       end
-      if(when_UartCtrl_l152) begin
+      if(uartCtrl_1_io_read_isStall) begin
         bridge_misc_readOverflowError <= 1'b1;
       end
       if(when_UartCtrl_l154) begin
         bridge_misc_breakDetected <= 1'b1;
       end
-      if(when_BusSlaveFactory_l332_2) begin
-        if(when_BusSlaveFactory_l334_2) begin
+      if(when_BusSlaveFactory_l335_2) begin
+        if(when_BusSlaveFactory_l337_2) begin
           bridge_misc_breakDetected <= _zz_bridge_misc_breakDetected[0];
         end
       end
-      if(when_BusSlaveFactory_l363) begin
-        if(when_BusSlaveFactory_l365) begin
+      if(when_BusSlaveFactory_l366) begin
+        if(when_BusSlaveFactory_l368) begin
           bridge_misc_doBreak <= _zz_bridge_misc_doBreak[0];
         end
       end
-      if(when_BusSlaveFactory_l332_3) begin
-        if(when_BusSlaveFactory_l334_3) begin
+      if(when_BusSlaveFactory_l335_3) begin
+        if(when_BusSlaveFactory_l337_3) begin
           bridge_misc_doBreak <= _zz_bridge_misc_doBreak_1[0];
         end
       end
@@ -452,7 +452,7 @@ module StreamFifo (
   wire                logic_empty;
   wire                logic_full;
   reg                 _zz_io_pop_valid;
-  wire                when_Stream_l955;
+  wire                when_Stream_l933;
   wire       [3:0]    logic_ptrDif;
   reg [7:0] logic_ram [0:15];
 
@@ -535,7 +535,7 @@ module StreamFifo (
   assign io_push_ready = (! logic_full);
   assign io_pop_valid = ((! logic_empty) && (! (_zz_io_pop_valid && (! logic_full))));
   assign io_pop_payload = _zz_logic_ram_port0;
-  assign when_Stream_l955 = (logic_pushing != logic_popping);
+  assign when_Stream_l933 = (logic_pushing != logic_popping);
   assign logic_ptrDif = (logic_pushPtr_value - logic_popPtr_value);
   assign io_occupancy = {(logic_risingOccupancy && logic_ptrMatch),logic_ptrDif};
   assign io_availability = {((! logic_risingOccupancy) && logic_ptrMatch),_zz_io_availability};
@@ -549,7 +549,7 @@ module StreamFifo (
       logic_pushPtr_value <= logic_pushPtr_valueNext;
       logic_popPtr_value <= logic_popPtr_valueNext;
       _zz_io_pop_valid <= (logic_popPtr_valueNext == logic_pushPtr_value);
-      if(when_Stream_l955) begin
+      if(when_Stream_l933) begin
         logic_risingOccupancy <= logic_pushing;
       end
       if(io_flush) begin
@@ -563,8 +563,8 @@ endmodule
 
 module UartCtrl (
   input      [2:0]    io_config_frame_dataLength,
-  input      `UartStopType_defaultEncoding_type io_config_frame_stop,
-  input      `UartParityType_defaultEncoding_type io_config_frame_parity,
+  input      `UartStopType_binary_sequential_type io_config_frame_stop,
+  input      `UartParityType_binary_sequential_type io_config_frame_parity,
   input      [11:0]   io_config_clockDivider,
   input               io_write_valid,
   output reg          io_write_ready,
@@ -630,16 +630,16 @@ module UartCtrl (
   `ifndef SYNTHESIS
   always @(*) begin
     case(io_config_frame_stop)
-      `UartStopType_defaultEncoding_ONE : io_config_frame_stop_string = "ONE";
-      `UartStopType_defaultEncoding_TWO : io_config_frame_stop_string = "TWO";
+      `UartStopType_binary_sequential_ONE : io_config_frame_stop_string = "ONE";
+      `UartStopType_binary_sequential_TWO : io_config_frame_stop_string = "TWO";
       default : io_config_frame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(io_config_frame_parity)
-      `UartParityType_defaultEncoding_NONE : io_config_frame_parity_string = "NONE";
-      `UartParityType_defaultEncoding_EVEN : io_config_frame_parity_string = "EVEN";
-      `UartParityType_defaultEncoding_ODD : io_config_frame_parity_string = "ODD ";
+      `UartParityType_binary_sequential_NONE : io_config_frame_parity_string = "NONE";
+      `UartParityType_binary_sequential_EVEN : io_config_frame_parity_string = "EVEN";
+      `UartParityType_binary_sequential_ODD : io_config_frame_parity_string = "ODD ";
       default : io_config_frame_parity_string = "????";
     endcase
   end
@@ -683,8 +683,8 @@ endmodule
 
 module UartCtrlRx (
   input      [2:0]    io_configFrame_dataLength,
-  input      `UartStopType_defaultEncoding_type io_configFrame_stop,
-  input      `UartParityType_defaultEncoding_type io_configFrame_parity,
+  input      `UartStopType_binary_sequential_type io_configFrame_stop,
+  input      `UartParityType_binary_sequential_type io_configFrame_parity,
   input               io_samplingTick,
   output              io_read_valid,
   input               io_read_ready,
@@ -713,7 +713,7 @@ module UartCtrlRx (
   reg        [6:0]    break_counter;
   wire                break_valid;
   wire                when_UartCtrlRx_l69;
-  reg        `UartCtrlRxState_defaultEncoding_type stateMachine_state;
+  reg        `UartCtrlRxState_binary_sequential_type stateMachine_state;
   reg                 stateMachine_parity;
   reg        [7:0]    stateMachine_shifter;
   reg                 stateMachine_validReg;
@@ -731,7 +731,7 @@ module UartCtrlRx (
   `endif
 
 
-  assign _zz_when_UartCtrlRx_l139_1 = ((io_configFrame_stop == `UartStopType_defaultEncoding_ONE) ? 1'b0 : 1'b1);
+  assign _zz_when_UartCtrlRx_l139_1 = ((io_configFrame_stop == `UartStopType_binary_sequential_ONE) ? 1'b0 : 1'b1);
   assign _zz_when_UartCtrlRx_l139 = {2'd0, _zz_when_UartCtrlRx_l139_1};
   BufferCC io_rxd_buffercc (
     .io_dataIn     (io_rxd                      ), //i
@@ -742,26 +742,26 @@ module UartCtrlRx (
   `ifndef SYNTHESIS
   always @(*) begin
     case(io_configFrame_stop)
-      `UartStopType_defaultEncoding_ONE : io_configFrame_stop_string = "ONE";
-      `UartStopType_defaultEncoding_TWO : io_configFrame_stop_string = "TWO";
+      `UartStopType_binary_sequential_ONE : io_configFrame_stop_string = "ONE";
+      `UartStopType_binary_sequential_TWO : io_configFrame_stop_string = "TWO";
       default : io_configFrame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(io_configFrame_parity)
-      `UartParityType_defaultEncoding_NONE : io_configFrame_parity_string = "NONE";
-      `UartParityType_defaultEncoding_EVEN : io_configFrame_parity_string = "EVEN";
-      `UartParityType_defaultEncoding_ODD : io_configFrame_parity_string = "ODD ";
+      `UartParityType_binary_sequential_NONE : io_configFrame_parity_string = "NONE";
+      `UartParityType_binary_sequential_EVEN : io_configFrame_parity_string = "EVEN";
+      `UartParityType_binary_sequential_ODD : io_configFrame_parity_string = "ODD ";
       default : io_configFrame_parity_string = "????";
     endcase
   end
   always @(*) begin
     case(stateMachine_state)
-      `UartCtrlRxState_defaultEncoding_IDLE : stateMachine_state_string = "IDLE  ";
-      `UartCtrlRxState_defaultEncoding_START : stateMachine_state_string = "START ";
-      `UartCtrlRxState_defaultEncoding_DATA : stateMachine_state_string = "DATA  ";
-      `UartCtrlRxState_defaultEncoding_PARITY : stateMachine_state_string = "PARITY";
-      `UartCtrlRxState_defaultEncoding_STOP : stateMachine_state_string = "STOP  ";
+      `UartCtrlRxState_binary_sequential_IDLE : stateMachine_state_string = "IDLE  ";
+      `UartCtrlRxState_binary_sequential_START : stateMachine_state_string = "START ";
+      `UartCtrlRxState_binary_sequential_DATA : stateMachine_state_string = "DATA  ";
+      `UartCtrlRxState_binary_sequential_PARITY : stateMachine_state_string = "PARITY";
+      `UartCtrlRxState_binary_sequential_STOP : stateMachine_state_string = "STOP  ";
       default : stateMachine_state_string = "??????";
     endcase
   end
@@ -770,13 +770,13 @@ module UartCtrlRx (
   always @(*) begin
     io_error = 1'b0;
     case(stateMachine_state)
-      `UartCtrlRxState_defaultEncoding_IDLE : begin
+      `UartCtrlRxState_binary_sequential_IDLE : begin
       end
-      `UartCtrlRxState_defaultEncoding_START : begin
+      `UartCtrlRxState_binary_sequential_START : begin
       end
-      `UartCtrlRxState_defaultEncoding_DATA : begin
+      `UartCtrlRxState_binary_sequential_DATA : begin
       end
-      `UartCtrlRxState_defaultEncoding_PARITY : begin
+      `UartCtrlRxState_binary_sequential_PARITY : begin
         if(bitTimer_tick) begin
           if(!when_UartCtrlRx_l125) begin
             io_error = 1'b1;
@@ -813,7 +813,7 @@ module UartCtrlRx (
   assign when_UartCtrlRx_l93 = ((sampler_tick && (! sampler_value)) && (! break_valid));
   assign when_UartCtrlRx_l103 = (sampler_value == 1'b1);
   assign when_UartCtrlRx_l111 = (bitCounter_value == io_configFrame_dataLength);
-  assign when_UartCtrlRx_l113 = (io_configFrame_parity == `UartParityType_defaultEncoding_NONE);
+  assign when_UartCtrlRx_l113 = (io_configFrame_parity == `UartParityType_binary_sequential_NONE);
   assign when_UartCtrlRx_l125 = (stateMachine_parity == sampler_value);
   assign when_UartCtrlRx_l136 = (! sampler_value);
   assign when_UartCtrlRx_l139 = (bitCounter_value == _zz_when_UartCtrlRx_l139);
@@ -826,7 +826,7 @@ module UartCtrlRx (
       sampler_value <= 1'b1;
       sampler_tick <= 1'b0;
       break_counter <= 7'h0;
-      stateMachine_state <= `UartCtrlRxState_defaultEncoding_IDLE;
+      stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
       stateMachine_validReg <= 1'b0;
     end else begin
       _zz_io_rts <= (! io_read_ready);
@@ -847,48 +847,48 @@ module UartCtrlRx (
       end
       stateMachine_validReg <= 1'b0;
       case(stateMachine_state)
-        `UartCtrlRxState_defaultEncoding_IDLE : begin
+        `UartCtrlRxState_binary_sequential_IDLE : begin
           if(when_UartCtrlRx_l93) begin
-            stateMachine_state <= `UartCtrlRxState_defaultEncoding_START;
+            stateMachine_state <= `UartCtrlRxState_binary_sequential_START;
           end
         end
-        `UartCtrlRxState_defaultEncoding_START : begin
+        `UartCtrlRxState_binary_sequential_START : begin
           if(bitTimer_tick) begin
-            stateMachine_state <= `UartCtrlRxState_defaultEncoding_DATA;
+            stateMachine_state <= `UartCtrlRxState_binary_sequential_DATA;
             if(when_UartCtrlRx_l103) begin
-              stateMachine_state <= `UartCtrlRxState_defaultEncoding_IDLE;
+              stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
             end
           end
         end
-        `UartCtrlRxState_defaultEncoding_DATA : begin
+        `UartCtrlRxState_binary_sequential_DATA : begin
           if(bitTimer_tick) begin
             if(when_UartCtrlRx_l111) begin
               if(when_UartCtrlRx_l113) begin
-                stateMachine_state <= `UartCtrlRxState_defaultEncoding_STOP;
+                stateMachine_state <= `UartCtrlRxState_binary_sequential_STOP;
                 stateMachine_validReg <= 1'b1;
               end else begin
-                stateMachine_state <= `UartCtrlRxState_defaultEncoding_PARITY;
+                stateMachine_state <= `UartCtrlRxState_binary_sequential_PARITY;
               end
             end
           end
         end
-        `UartCtrlRxState_defaultEncoding_PARITY : begin
+        `UartCtrlRxState_binary_sequential_PARITY : begin
           if(bitTimer_tick) begin
             if(when_UartCtrlRx_l125) begin
-              stateMachine_state <= `UartCtrlRxState_defaultEncoding_STOP;
+              stateMachine_state <= `UartCtrlRxState_binary_sequential_STOP;
               stateMachine_validReg <= 1'b1;
             end else begin
-              stateMachine_state <= `UartCtrlRxState_defaultEncoding_IDLE;
+              stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
             end
           end
         end
         default : begin
           if(bitTimer_tick) begin
             if(when_UartCtrlRx_l136) begin
-              stateMachine_state <= `UartCtrlRxState_defaultEncoding_IDLE;
+              stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
             end else begin
               if(when_UartCtrlRx_l139) begin
-                stateMachine_state <= `UartCtrlRxState_defaultEncoding_IDLE;
+                stateMachine_state <= `UartCtrlRxState_binary_sequential_IDLE;
               end
             end
           end
@@ -911,18 +911,18 @@ module UartCtrlRx (
       stateMachine_parity <= (stateMachine_parity ^ sampler_value);
     end
     case(stateMachine_state)
-      `UartCtrlRxState_defaultEncoding_IDLE : begin
+      `UartCtrlRxState_binary_sequential_IDLE : begin
         if(when_UartCtrlRx_l93) begin
           bitTimer_counter <= 3'b001;
         end
       end
-      `UartCtrlRxState_defaultEncoding_START : begin
+      `UartCtrlRxState_binary_sequential_START : begin
         if(bitTimer_tick) begin
           bitCounter_value <= 3'b000;
-          stateMachine_parity <= (io_configFrame_parity == `UartParityType_defaultEncoding_ODD);
+          stateMachine_parity <= (io_configFrame_parity == `UartParityType_binary_sequential_ODD);
         end
       end
-      `UartCtrlRxState_defaultEncoding_DATA : begin
+      `UartCtrlRxState_binary_sequential_DATA : begin
         if(bitTimer_tick) begin
           stateMachine_shifter[bitCounter_value] <= sampler_value;
           if(when_UartCtrlRx_l111) begin
@@ -930,7 +930,7 @@ module UartCtrlRx (
           end
         end
       end
-      `UartCtrlRxState_defaultEncoding_PARITY : begin
+      `UartCtrlRxState_binary_sequential_PARITY : begin
         if(bitTimer_tick) begin
           bitCounter_value <= 3'b000;
         end
@@ -945,8 +945,8 @@ endmodule
 
 module UartCtrlTx (
   input      [2:0]    io_configFrame_dataLength,
-  input      `UartStopType_defaultEncoding_type io_configFrame_stop,
-  input      `UartParityType_defaultEncoding_type io_configFrame_parity,
+  input      `UartStopType_binary_sequential_type io_configFrame_stop,
+  input      `UartParityType_binary_sequential_type io_configFrame_parity,
   input               io_samplingTick,
   input               io_write_valid,
   output reg          io_write_ready,
@@ -968,7 +968,7 @@ module UartCtrlTx (
   wire                clockDivider_counter_willOverflowIfInc;
   wire                clockDivider_counter_willOverflow;
   reg        [2:0]    tickCounter_value;
-  reg        `UartCtrlTxState_defaultEncoding_type stateMachine_state;
+  reg        `UartCtrlTxState_binary_sequential_type stateMachine_state;
   reg                 stateMachine_parity;
   reg                 stateMachine_txd;
   wire                when_UartCtrlTx_l58;
@@ -985,31 +985,31 @@ module UartCtrlTx (
 
   assign _zz_clockDivider_counter_valueNext_1 = clockDivider_counter_willIncrement;
   assign _zz_clockDivider_counter_valueNext = {2'd0, _zz_clockDivider_counter_valueNext_1};
-  assign _zz_when_UartCtrlTx_l93_1 = ((io_configFrame_stop == `UartStopType_defaultEncoding_ONE) ? 1'b0 : 1'b1);
+  assign _zz_when_UartCtrlTx_l93_1 = ((io_configFrame_stop == `UartStopType_binary_sequential_ONE) ? 1'b0 : 1'b1);
   assign _zz_when_UartCtrlTx_l93 = {2'd0, _zz_when_UartCtrlTx_l93_1};
   `ifndef SYNTHESIS
   always @(*) begin
     case(io_configFrame_stop)
-      `UartStopType_defaultEncoding_ONE : io_configFrame_stop_string = "ONE";
-      `UartStopType_defaultEncoding_TWO : io_configFrame_stop_string = "TWO";
+      `UartStopType_binary_sequential_ONE : io_configFrame_stop_string = "ONE";
+      `UartStopType_binary_sequential_TWO : io_configFrame_stop_string = "TWO";
       default : io_configFrame_stop_string = "???";
     endcase
   end
   always @(*) begin
     case(io_configFrame_parity)
-      `UartParityType_defaultEncoding_NONE : io_configFrame_parity_string = "NONE";
-      `UartParityType_defaultEncoding_EVEN : io_configFrame_parity_string = "EVEN";
-      `UartParityType_defaultEncoding_ODD : io_configFrame_parity_string = "ODD ";
+      `UartParityType_binary_sequential_NONE : io_configFrame_parity_string = "NONE";
+      `UartParityType_binary_sequential_EVEN : io_configFrame_parity_string = "EVEN";
+      `UartParityType_binary_sequential_ODD : io_configFrame_parity_string = "ODD ";
       default : io_configFrame_parity_string = "????";
     endcase
   end
   always @(*) begin
     case(stateMachine_state)
-      `UartCtrlTxState_defaultEncoding_IDLE : stateMachine_state_string = "IDLE  ";
-      `UartCtrlTxState_defaultEncoding_START : stateMachine_state_string = "START ";
-      `UartCtrlTxState_defaultEncoding_DATA : stateMachine_state_string = "DATA  ";
-      `UartCtrlTxState_defaultEncoding_PARITY : stateMachine_state_string = "PARITY";
-      `UartCtrlTxState_defaultEncoding_STOP : stateMachine_state_string = "STOP  ";
+      `UartCtrlTxState_binary_sequential_IDLE : stateMachine_state_string = "IDLE  ";
+      `UartCtrlTxState_binary_sequential_START : stateMachine_state_string = "START ";
+      `UartCtrlTxState_binary_sequential_DATA : stateMachine_state_string = "DATA  ";
+      `UartCtrlTxState_binary_sequential_PARITY : stateMachine_state_string = "PARITY";
+      `UartCtrlTxState_binary_sequential_STOP : stateMachine_state_string = "STOP  ";
       default : stateMachine_state_string = "??????";
     endcase
   end
@@ -1039,15 +1039,15 @@ module UartCtrlTx (
   always @(*) begin
     stateMachine_txd = 1'b1;
     case(stateMachine_state)
-      `UartCtrlTxState_defaultEncoding_IDLE : begin
+      `UartCtrlTxState_binary_sequential_IDLE : begin
       end
-      `UartCtrlTxState_defaultEncoding_START : begin
+      `UartCtrlTxState_binary_sequential_START : begin
         stateMachine_txd = 1'b0;
       end
-      `UartCtrlTxState_defaultEncoding_DATA : begin
+      `UartCtrlTxState_binary_sequential_DATA : begin
         stateMachine_txd = io_write_payload[tickCounter_value];
       end
-      `UartCtrlTxState_defaultEncoding_PARITY : begin
+      `UartCtrlTxState_binary_sequential_PARITY : begin
         stateMachine_txd = stateMachine_parity;
       end
       default : begin
@@ -1058,18 +1058,18 @@ module UartCtrlTx (
   always @(*) begin
     io_write_ready = io_break;
     case(stateMachine_state)
-      `UartCtrlTxState_defaultEncoding_IDLE : begin
+      `UartCtrlTxState_binary_sequential_IDLE : begin
       end
-      `UartCtrlTxState_defaultEncoding_START : begin
+      `UartCtrlTxState_binary_sequential_START : begin
       end
-      `UartCtrlTxState_defaultEncoding_DATA : begin
+      `UartCtrlTxState_binary_sequential_DATA : begin
         if(clockDivider_counter_willOverflow) begin
           if(when_UartCtrlTx_l73) begin
             io_write_ready = 1'b1;
           end
         end
       end
-      `UartCtrlTxState_defaultEncoding_PARITY : begin
+      `UartCtrlTxState_binary_sequential_PARITY : begin
       end
       default : begin
       end
@@ -1078,47 +1078,47 @@ module UartCtrlTx (
 
   assign when_UartCtrlTx_l58 = ((io_write_valid && (! io_cts)) && clockDivider_counter_willOverflow);
   assign when_UartCtrlTx_l73 = (tickCounter_value == io_configFrame_dataLength);
-  assign when_UartCtrlTx_l76 = (io_configFrame_parity == `UartParityType_defaultEncoding_NONE);
+  assign when_UartCtrlTx_l76 = (io_configFrame_parity == `UartParityType_binary_sequential_NONE);
   assign when_UartCtrlTx_l93 = (tickCounter_value == _zz_when_UartCtrlTx_l93);
   assign io_txd = _zz_io_txd;
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       clockDivider_counter_value <= 3'b000;
-      stateMachine_state <= `UartCtrlTxState_defaultEncoding_IDLE;
+      stateMachine_state <= `UartCtrlTxState_binary_sequential_IDLE;
       _zz_io_txd <= 1'b1;
     end else begin
       clockDivider_counter_value <= clockDivider_counter_valueNext;
       case(stateMachine_state)
-        `UartCtrlTxState_defaultEncoding_IDLE : begin
+        `UartCtrlTxState_binary_sequential_IDLE : begin
           if(when_UartCtrlTx_l58) begin
-            stateMachine_state <= `UartCtrlTxState_defaultEncoding_START;
+            stateMachine_state <= `UartCtrlTxState_binary_sequential_START;
           end
         end
-        `UartCtrlTxState_defaultEncoding_START : begin
+        `UartCtrlTxState_binary_sequential_START : begin
           if(clockDivider_counter_willOverflow) begin
-            stateMachine_state <= `UartCtrlTxState_defaultEncoding_DATA;
+            stateMachine_state <= `UartCtrlTxState_binary_sequential_DATA;
           end
         end
-        `UartCtrlTxState_defaultEncoding_DATA : begin
+        `UartCtrlTxState_binary_sequential_DATA : begin
           if(clockDivider_counter_willOverflow) begin
             if(when_UartCtrlTx_l73) begin
               if(when_UartCtrlTx_l76) begin
-                stateMachine_state <= `UartCtrlTxState_defaultEncoding_STOP;
+                stateMachine_state <= `UartCtrlTxState_binary_sequential_STOP;
               end else begin
-                stateMachine_state <= `UartCtrlTxState_defaultEncoding_PARITY;
+                stateMachine_state <= `UartCtrlTxState_binary_sequential_PARITY;
               end
             end
           end
         end
-        `UartCtrlTxState_defaultEncoding_PARITY : begin
+        `UartCtrlTxState_binary_sequential_PARITY : begin
           if(clockDivider_counter_willOverflow) begin
-            stateMachine_state <= `UartCtrlTxState_defaultEncoding_STOP;
+            stateMachine_state <= `UartCtrlTxState_binary_sequential_STOP;
           end
         end
         default : begin
           if(clockDivider_counter_willOverflow) begin
             if(when_UartCtrlTx_l93) begin
-              stateMachine_state <= (io_write_valid ? `UartCtrlTxState_defaultEncoding_START : `UartCtrlTxState_defaultEncoding_IDLE);
+              stateMachine_state <= (io_write_valid ? `UartCtrlTxState_binary_sequential_START : `UartCtrlTxState_binary_sequential_IDLE);
             end
           end
         end
@@ -1135,22 +1135,22 @@ module UartCtrlTx (
       stateMachine_parity <= (stateMachine_parity ^ stateMachine_txd);
     end
     case(stateMachine_state)
-      `UartCtrlTxState_defaultEncoding_IDLE : begin
+      `UartCtrlTxState_binary_sequential_IDLE : begin
       end
-      `UartCtrlTxState_defaultEncoding_START : begin
+      `UartCtrlTxState_binary_sequential_START : begin
         if(clockDivider_counter_willOverflow) begin
-          stateMachine_parity <= (io_configFrame_parity == `UartParityType_defaultEncoding_ODD);
+          stateMachine_parity <= (io_configFrame_parity == `UartParityType_binary_sequential_ODD);
           tickCounter_value <= 3'b000;
         end
       end
-      `UartCtrlTxState_defaultEncoding_DATA : begin
+      `UartCtrlTxState_binary_sequential_DATA : begin
         if(clockDivider_counter_willOverflow) begin
           if(when_UartCtrlTx_l73) begin
             tickCounter_value <= 3'b000;
           end
         end
       end
-      `UartCtrlTxState_defaultEncoding_PARITY : begin
+      `UartCtrlTxState_binary_sequential_PARITY : begin
         if(clockDivider_counter_willOverflow) begin
           tickCounter_value <= 3'b000;
         end

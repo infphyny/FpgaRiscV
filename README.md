@@ -16,7 +16,7 @@ Started to work on usb. When building hardware, the timing requirements are not 
 ## Package required
 
 * python 3
-
+  
 ```console
 sudo apt install python-is-python3
 ```
@@ -78,6 +78,7 @@ Inside the cloned directory
 ```
  fusesoc library add fusesoc_cores https://github.com/fusesoc/fusesoc-cores
  fusesoc library add gpio https://github.com/infphyny/gpio
+ fusesoc library add wb_avalon_bridge https://github.com/infphyny/wb_avalon_bridge
 ```
 Check inside fusesoc_cores/wb_intercon directory. If version number is lower than 1.3, get latest version
 
@@ -143,7 +144,7 @@ or open Arduino IDE then choose serial monitor.
 
 ##  Deca RiscV soc properties ##
 * VexRiscv cpu that implement RiscV 32 imc instructions set with a Wishbone bus.
-* Frequency: 75 MHz
+* Frequency: 50 MHz
 * Ram: 128k
 * Interupt controller from Dan Gisselquist ZipCpu 
 * KEY0 is wired to reset.

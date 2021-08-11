@@ -70,7 +70,7 @@ class WishboneUartCtrl(config : UartCtrlMemoryMappedConfig) extends Component{
   val io = new Bundle{
     val bus =  slave(Wishbone(WishboneUartCtrl.getWishboneConfig))
     val uart = master(Uart())
-    val interrupt = out Bool
+    val interrupt = out Bool()
   }
 
   val uartCtrl = new UartCtrl(config.uartCtrlConfig)
@@ -88,7 +88,7 @@ object MyTopLevelVerilog {
 
     SpinalConfig(
       mode = Verilog,
-      defaultClockDomainFrequency=FixedFrequency(75 MHz)).generate(
+      defaultClockDomainFrequency=FixedFrequency(50 MHz)).generate(
         new  WishboneUartCtrl(config = UartCtrlMemoryMappedConfig(baudrate = 115200,
           txFifoDepth = 16,
           rxFifoDepth = 16

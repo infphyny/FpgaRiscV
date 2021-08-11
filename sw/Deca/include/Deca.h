@@ -21,6 +21,8 @@ static const uint32_t SW1_BASE_ADDRESS = 0x00041020;
 
 static const uint32_t ICTRL_BASE_ADDRESS = 0x00100000;
 
+static const uint32_t DDR3_BASE_ADDRESS = 0x80000000;
+
 
 
 

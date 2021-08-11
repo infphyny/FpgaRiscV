@@ -1,8 +1,9 @@
 //`default_nettype none
 
 module DecaTopLevel(
+//input wire DDR3_CLK_50,    
 input wire i_clk,
-input wire i_rst,
+input wire i_rst_n,
 input wire key1,
 input wire SW0,
 input wire SW1,
@@ -55,7 +56,25 @@ input 		          		USB_DIR,
 input 		          		USB_FAULT_n,
 input 		          		USB_NXT,
 output		          		USB_RESET_n,
-output		          		USB_STP
+output		          		USB_STP,
+/////////// DDR3 ////////////////////
+output wire     [14:0]      DDR3_A,
+output wire     [2:0]       DDR3_BA,
+output wire                 DDR3_CAS_n,
+inout 		          		DDR3_CK_n,
+inout 		          		DDR3_CK_p,
+output		          		DDR3_CKE,
+input 		          		DDR3_CLK_50,
+output		          		DDR3_CS_n,
+output		     [1:0]		DDR3_DM,
+inout 		    [15:0]		DDR3_DQ,
+inout 		     [1:0]		DDR3_DQS_n,
+inout 		     [1:0]		DDR3_DQS_p,
+output		          		DDR3_ODT,
+output		          		DDR3_RAS_n,
+output		          		DDR3_RESET_n,
+output		          		DDR3_WE_n
+
 //output wire test_temp_sc,
 //output wire test_temp_si,
 //output wire test_temp_so,
@@ -177,8 +196,9 @@ DecaSoc #(
     .sim(0),
     .with_csr(with_csr)
 ) soc(
+   // .DDR3_CLK_50(DDR3_CLK_50),
     .i_clk(i_clk),
-    .i_rst(!i_rst),
+    .i_rst(!i_rst_n),
     .key1(key1),
     .SW0(SW0),
     .SW1(SW1),
@@ -187,7 +207,7 @@ DecaSoc #(
     .o_gpioA_oe(o_gpioA_oe),
     .i_gpioB(gpioB),
     .o_gpioB(o_gpioB),
-    .o_gpioB_oe(o_gpioB_oe),
+    . o_gpioB_oe(o_gpioB_oe),
     .LEDS(LEDS),
     .uart_0_rx(uart_0_rx),
     .uart_0_tx(uart_0_tx),
@@ -243,7 +263,23 @@ DecaSoc #(
     .USB_FAULT_n(USB_FAULT_n),
     .USB_NXT(USB_NXT),
     .USB_RESET_n(USB_RESET_n),
-    .USB_STP(USB_STP)
+    .USB_STP(USB_STP),
+    .DDR3_A(DDR3_A),
+    .DDR3_BA(DDR3_BA),
+    .DDR3_CAS_n(DDR3_CAS_n),
+    .DDR3_CK_n(DDR3_CK_n),
+    .DDR3_CK_p(DDR3_CK_p),
+    .DDR3_CKE(DDR3_CKE),
+    .DDR3_CLK_50(DDR3_CLK_50),
+    .DDR3_CS_n(DDR3_CS_n),
+    .DDR3_DM(DDR3_DM),
+    .DDR3_DQ(DDR3_DQ),
+    .DDR3_DQS_n(DDR3_DQS_n),
+    .DDR3_DQS_p(DDR3_DQS_p),
+    .DDR3_ODT(DDR3_ODT),
+    .DDR3_RAS_n(DDR3_RAS_n),
+    .DDR3_RESET_n(DDR3_RESET_n),
+    .DDR3_WE_n(DDR3_WE_n)
 );
 
 

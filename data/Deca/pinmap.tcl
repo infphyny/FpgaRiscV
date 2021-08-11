@@ -38,8 +38,9 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to i_clk
 #set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i_clk_2
 
 
-set_location_assignment PIN_H21 -to i_rst
-set_instance_assignment -name IO_STANDARD "1.5 V" -to i_rst
+
+set_location_assignment PIN_H21 -to i_rst_n
+set_instance_assignment -name IO_STANDARD "1.5 V" -to i_rst_n
 
 set_location_assignment PIN_H22 -to key1
 set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER" -to key1
@@ -76,12 +77,12 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to LEDS[7]
 
 
 #PMONITOR
-#set_location_assignment PIN_Y3 -to PMONITOR_I2C_SCL
-#set_location_assignment -name IO_STANDARD "3.3-V LVTTL" = to PMONITOR_I2C_SCL
-#set_location_assignment PIN_Y1 -to PMONITOR_I2C_SDA
-#set_location_assignment -name IO_STANDARD "3.3-V LVTTL" = to PMONITOR_I2C_SDA
-#set_location_assignment PIN_Y4 -to PMONITOR_ALERT
-#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" = to PMONITOR_ALERT
+set_location_assignment PIN_Y3 -to PMONITOR_I2C_SCL
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PMONITOR_I2C_SCL
+set_location_assignment PIN_Y1 -to PMONITOR_I2C_SDA
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PMONITOR_I2C_SDA
+set_location_assignment PIN_Y4 -to PMONITOR_ALERT
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to PMONITOR_ALERT
 
 
 #GPIO A
@@ -191,51 +192,279 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_0_cs_n
 #set_location_assignment PIN_M22 -to AUDIO_GPIO_MFP5
 #set_location_assignment -name IO_STANDARD "1.5-V" = to PIN_M22
 
-#DDR3
-#set_location_assignment PIN_E21 -to DDR3_A[0]
-#set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[0]
-#set_location_assignment PIN_V20 -to DDR3_A[1]
-#set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[1]
-#set_location_assignment PIN_V21 -to DDR3_A[2]
-#set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[2]
-#set_location_assignment PIN_C20 -to DDR3_A[3]
-#set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[3]
+#============================================================
+# SDRAM
+#============================================================
+set_location_assignment PIN_E21 -to DDR3_A[0]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[0]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[0]
 
-# set_location_assignment PIN_Y21 -to DDR3_A[4]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[4]
-# set_location_assignment PIN_J14 -to DDR3_A[5]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[5]
-# set_location_assignment PIN_V18 -to DDR3_A[6]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[6]
-# set_location_assignment PIN_U20 -to DDR3_A[7]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[7]
+set_location_assignment PIN_V20 -to DDR3_A[1]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[1]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[1]
 
-# set_location_assignment PIN_Y20 -to DDR3_A[8]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[8]
-# set_location_assignment PIN_W22 -to DDR3_A[9]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[9]
-# set_location_assignment PIN_C22 -to DDR3_A[10]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[10]
-# set_location_assignment PIN_Y22 -to DDR3_A[11]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[11]
-
-# set_location_assignment PIN_N18 -to DDR3_A[12]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[12]
-# set_location_assignment PIN_V22 -to DDR3_A[13]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[13]
-# set_location_assignment PIN_W20 -to DDR3_A[14]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to DDR3_A[14]
-
-# set_location_assignment PIN_D19 -to BA[0]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to BA[0]
-# set_location_assignment PIN_W19 -to BA[1]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to BA[1]
-# set_location_assignment PIN_F19 -to BA[2]
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to BA[2]
+#set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_A[1]
+set_location_assignment PIN_V21 -to DDR3_A[2]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[2]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[2]
 
 
-# set_location_assignment PIN_E20 -to CAS_n
-# set_location_assignment -name IO_STANDARD "SSTL-15 CLASS I" = to CAS_n
+set_location_assignment PIN_C20 -to DDR3_A[3]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[3]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[3]
+
+
+set_location_assignment PIN_Y21 -to DDR3_A[4]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[4]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[4]
+
+set_location_assignment PIN_J14 -to DDR3_A[5]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[5]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[5]
+
+set_location_assignment PIN_V18 -to DDR3_A[6]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[6]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[6]
+
+set_location_assignment PIN_U20 -to DDR3_A[7]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[7]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[7]
+
+set_location_assignment PIN_Y20 -to DDR3_A[8]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[8]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[8]
+
+set_location_assignment PIN_W22 -to DDR3_A[9]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[9]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[9]
+
+set_location_assignment PIN_C22 -to DDR3_A[10]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[10]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[10]
+
+set_location_assignment PIN_Y22 -to DDR3_A[11]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[11]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[11]
+
+set_location_assignment PIN_N18 -to DDR3_A[12]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[12]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[12]
+
+set_location_assignment PIN_V22 -to DDR3_A[13]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[13]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[13]
+
+set_location_assignment PIN_W20 -to DDR3_A[14]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_A[14]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[14]
+
+set_location_assignment PIN_D19 -to DDR3_BA[0]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_BA[0]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_A[1]
+
+set_location_assignment PIN_W19 -to DDR3_BA[1]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_BA[1]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_BA[1]
+
+set_location_assignment PIN_F19 -to DDR3_BA[2]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_BA[2]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_BA[2]
+
+set_location_assignment PIN_E20 -to DDR3_CAS_n
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_CAS_n
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_CAS_n
+
+set_location_assignment PIN_B22 -to DDR3_CKE
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_CKE
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_CKE
+
+set_location_assignment PIN_E18 -to DDR3_CK_n
+set_instance_assignment -name IO_STANDARD "Differential 1.5-V SSTL" -to DDR3_CK_n
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_CK_n
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_CK_n
+
+
+set_location_assignment PIN_D18 -to DDR3_CK_p
+set_instance_assignment -name IO_STANDARD "Differential 1.5-V SSTL" -to DDR3_CK_p
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_CK_p
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_CK_p
+
+set_instance_assignment -name CKN_CK_PAIR ON -from DDR3_CK_n -to DDR3_CK_p
+
+
+set_location_assignment PIN_N15 -to DDR3_CLK_50
+set_instance_assignment -name IO_STANDARD "1.5 V" -to DDR3_CLK_50
+
+set_location_assignment PIN_F22 -to DDR3_CS_n
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_CS_n
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_CS_n
+
+set_location_assignment PIN_N19 -to DDR3_DM[0]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DM[0]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DM[0]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DM[0]
+set_instance_assignment -name DM_PIN ON -to DDR3_DM[0] 
+
+set_location_assignment PIN_J15 -to DDR3_DM[1]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DM[1]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DM[1]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DM[1]
+set_instance_assignment -name DM_PIN ON -to DDR3_DM[1] 
+
+set_location_assignment PIN_L20 -to DDR3_DQ[0]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[0]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[0]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[0] 
+
+set_location_assignment PIN_L19 -to DDR3_DQ[1]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[1]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[1]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[1]
+
+
+set_location_assignment PIN_L18 -to DDR3_DQ[2]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[2]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[2]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[2]
+
+
+set_location_assignment PIN_M15 -to DDR3_DQ[3]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[3]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[3]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[3]
+
+set_location_assignment PIN_M18 -to DDR3_DQ[4]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[4]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[4]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[4]
+
+set_location_assignment PIN_M14 -to DDR3_DQ[5]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[5]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[5]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[5]
+
+
+set_location_assignment PIN_M20 -to DDR3_DQ[6]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[6]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[6]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[6]
+
+
+set_location_assignment PIN_N20 -to DDR3_DQ[7]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[7]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[7]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[7]
+
+
+set_location_assignment PIN_K19 -to DDR3_DQ[8]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[8]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[8]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[8]
+
+set_location_assignment PIN_K18 -to DDR3_DQ[9]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[9]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[9]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[9]
+
+set_location_assignment PIN_J18 -to DDR3_DQ[10]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[10]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[10]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[10]
+
+set_location_assignment PIN_K20 -to DDR3_DQ[11]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[11]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[11]
+
+set_location_assignment PIN_H18 -to DDR3_DQ[12]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[12]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[12]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[12]
+
+set_location_assignment PIN_J20 -to DDR3_DQ[13]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[13]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[13]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[13]
+
+set_location_assignment PIN_H20 -to DDR3_DQ[14]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[14]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[14]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[14]
+
+set_location_assignment PIN_H19 -to DDR3_DQ[15]
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[15]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[15]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[15]
+
+set_location_assignment PIN_L15 -to DDR3_DQS_n[0] -disable
+set_instance_assignment -name IO_STANDARD "Differential 1.5-V SSTL" -to DDR3_DQS_n[0]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQS_n[0]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQS_n[0]
+
+set_location_assignment PIN_K15 -to DDR3_DQS_n[1] -disable
+set_instance_assignment -name IO_STANDARD "Differential 1.5-V SSTL" -to DDR3_DQS_n[1]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQS_n[1]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQS_n[1]
+
+set_location_assignment PIN_L14 -to DDR3_DQS_p[0]
+set_instance_assignment -name IO_STANDARD "Differential 1.5-V SSTL" -to DDR3_DQS_p[0]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQS_p[0]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQS_p[0]
+
+
+set_location_assignment PIN_K14 -to DDR3_DQS_p[1]
+set_instance_assignment -name IO_STANDARD "Differential 1.5-V SSTL" -to DDR3_DQS_p[1]
+set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQS_p[1]
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQS_p[1]
+
+set_location_assignment PIN_G22 -to DDR3_ODT
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_ODT
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_ODT
+
+set_location_assignment PIN_D22 -to DDR3_RAS_n
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_RAS_n
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_RAS_n
+
+set_location_assignment PIN_U19 -to DDR3_RESET_n
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_RESET_n
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_RESET_n
+
+
+set_location_assignment PIN_E22 -to DDR3_WE_n
+set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_WE_n
+set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_WE_n
+
+
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[0]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[1]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[2]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[3]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[4]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[5]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[6]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DQ[7]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[8]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[9]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[10]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[11]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[12]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[13]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[14]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DQ[15]
+
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DM[0]
+set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DM[1]
+
+
+#set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON 
+#set_instance_assignment -name GLOBAL_SIGNAL OFF -to if0|p0|umemphy|ureset|phy_reset_n -tag __nios_system_ddr3_p0
+#set_instance_assignment -name GLOBAL_SIGNAL OFF -to if0|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] -tag __nios_system_ddr3_p0
+#set_instance_assignment -name GLOBAL_SIGNAL OFF -to if0|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] -tag __nios_system_ddr3_p0
+#set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON -to if0 -tag __nios_system_ddr3_p0
+#set_instance_assignment -name GLOBAL_SIGNAL OFF -to "dut_example_if0:if0|dut_example_if0_p0:p0|dut_example_if0_p0___nios_system_ddr3_p0_m10:umemphy|dut_example_if0_p0_dqdqs_pads_m10:dq_ddio[*].ubidir_dq_dqs|altera_gpio_lite:dq_ddio_io|altgpio_one_bit:gpio_one_bit.i_loop[*].altgpio_bit_i|fr_clock"
+set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
+set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
+set_global_assignment -name UNIPHY_TEMP_VER_CODE 2136146133
+set_global_assignment -name ECO_REGENERATE_REPORT ON
 
 
 # set_location_assignment PIN_B22 -to CKE

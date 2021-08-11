@@ -71,7 +71,25 @@ module DecaTopLevelSim(
  input 		          		USB_FAULT_n,    //Fault input from usb power switch
  input 		          		USB_NXT,        //ULPI nxt output signal
  output		          		USB_RESET_n,    //Reset pin uset to reset all digital registers
- output		          		USB_STP         //ULPI STP input signal
+ output		          		USB_STP,         //ULPI STP input signal
+
+ /////////// DDR3 ////////////////////
+output wire     [14:0]      DDR3_A,
+output wire     [2:0]       DDR3_BA,
+output wire                 DDR3_CAS_n,
+inout 		          		DDR3_CK_n,
+inout 		          		DDR3_CK_p,
+output		          		DDR3_CKE,
+input 		          		DDR3_CLK_50,
+output		          		DDR3_CS_n,
+output		     [1:0]		DDR3_DM,
+inout 		    [15:0]		DDR3_DQ,
+inout 		     [1:0]		DDR3_DQS_n,
+inout 		     [1:0]		DDR3_DQS_p,
+output		          		DDR3_ODT,
+output		          		DDR3_RAS_n,
+output		          		DDR3_RESET_n,
+output		          		DDR3_WE_n
 
 );
 
@@ -164,7 +182,23 @@ DecaSoc #(
     .USB_FAULT_n(USB_FAULT_n),
     .USB_NXT(USB_NXT),
     .USB_RESET_n(USB_RESET_n),
-    .USB_STP(USB_STP)
+    .USB_STP(USB_STP),
+     .DDR3_A(DDR3_A),
+    .DDR3_BA(DDR3_BA),
+    .DDR3_CAS_n(DDR3_CAS_n),
+    .DDR3_CK_n(DDR3_CK_n),
+    .DDR3_CK_p(DDR3_CK_p),
+    .DDR3_CKE(DDR3_CKE),
+    .DDR3_CLK_50(DDR3_CLK_50),
+    .DDR3_CS_n(DDR3_CS_n),
+    .DDR3_DM(DDR3_DM),
+    .DDR3_DQ(DDR3_DQ),
+    .DDR3_DQS_n(DDR3_DQS_n),
+    .DDR3_DQS_p(DDR3_DQS_p),
+    .DDR3_ODT(DDR3_ODT),
+    .DDR3_RAS_n(DDR3_RAS_n),
+    .DDR3_RESET_n(DDR3_RESET_n),
+    .DDR3_WE_n(DDR3_WE_n)
 );
 
 
