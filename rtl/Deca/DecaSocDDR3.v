@@ -111,26 +111,7 @@ parameter ICONTROL_IUSED = 15;
 
 
 
-// Wire between wb_avalon bridge and cdc 
-/*
-   wire [31:0] o_av_adr;
-   wire [7:0] o_av_be;
-   wire o_av_read_req;
-   wire o_av_write_req;
-   wire [63:0] i_av_readdata;
-   wire [7:0] o_av_burstcount;
-   wire [63:0] o_av_writedata;
-   wire avl_ready;
-   wire i_av_waitrequest;
-   assign i_av_waitrequest = !avl_ready;
-   wire i_av_readdatavalid;
-   
-   wire o_av_burstbegin;
-   */
-   //reg avl_prevburstbegin;
-   //reg avl_burstbegin;
-   
-  //Wire between cdc and ddr3 memory controller
+
 
 
   wire [31:0] o_cdc2ddr_adr;

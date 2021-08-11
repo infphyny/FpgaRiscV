@@ -156,9 +156,9 @@ make objdump
 
 Execute program
 ```
-picocom -b 115200 /dev/ttyUSB0   
+picocom /dev/ttyUSBX --baud 115200 --imap lfcrlf 
 ```
-or open Arduino IDE then choose serial monitor.
+where X is usb port number or open Arduino IDE then choose serial monitor.
 
 - Pinout
 
