@@ -9,6 +9,10 @@ In summary, I use fusesoc wishbone bus generator and VexriscV wishbone ibus and 
 
 I have added support to modify .mif file from Tom Verbeure tutorial. No need to recompile hardware each time.
 
+Started to work on DDR3 memory support, but signals have some glitches that prevent the ddr3 example to run reliably. Still investigating on that problem, 
+Run time vary from 0s to 30 minutes. Need to push Key0 on the board (reset button of the soc) a couple of times to be able to make it run. 
+
+
 Started to work on usb. When building hardware, the timing requirements are not met because of TUSB1210 hardware controller but other peripherals still works.   
 
 
@@ -65,6 +69,11 @@ At the end of .bashrc file add
 ```
 export PATH=/opt/riscv/bin:$PATH
 ```
+
+* Recent version of [verilator](https://github.com/verilator/verilator) to be able to do simulation.
+
+TODO: add instruction to build verilator from source
+
 
 My FuseSoc workspace folder is ~/Documents/bin/fusesoc.  Adapt to your own folder. Also adapt paths to quartus binary and riscv toolchain.
 
