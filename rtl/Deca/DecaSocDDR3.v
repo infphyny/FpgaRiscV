@@ -202,7 +202,25 @@ parameter ICONTROL_IUSED = 15;
     .local_init_done(ddr3_local_init_done),
     .local_cal_success(ddr3_local_cal_success)
   );
+    end else if(sim == 1) begin
+    
+    DDR3Sim ddr3_sim(
+      .clk(wb_clk),
+      .reset(wb_rst),
+      .avl_ready(avl_ready),
+      .avl_burst_begin(o_cdc2ddr_burstbegin),
+      .avl_addr(o_cdc2ddr_adr[28:3]),
+      .avl_rdata_valid(i_ddr2cdc_readdatavalid),
+      .avl_rdata(i_ddr2cdc_readdata),
+      .avl_wdata(o_cdc2ddr_writedata),
+      .avl_be(o_cdc2ddr_be),
+      .avl_read_req(o_cdc2ddr_read_req),
+      .avl_write_req(o_cdc2ddr_write_req),
+      .avl_size(o_cdc2ddr_burstcount[2:0])
+    );
+
     end
+
 
    endgenerate
 
@@ -679,7 +697,8 @@ assign USB_STP = 1'bz;
    //stub
    wire [7:0] wb_av_bridge_sel = {4'b0000,wb_m2s_wb_av_bridge_sel};
    wire [63:0] wb_av_bridge_dat_i = {32'h0000,wb_m2s_wb_av_bridge_dat};
-   wire [63:0] wb_av_bridge_dat_o = {32'h0000,wb_s2m_wb_av_bridge_dat};
+   wire [63:0] wb_av_bridge_dat_o;// = {32'h0000,wb_s2m_wb_av_bridge_dat}; 
+   assign wb_s2m_wb_av_bridge_dat = wb_av_bridge_dat_o[31:0];
 
    wire [2:0] wb_av_bridge_cti = wb_m2s_wb_av_bridge_cti;//3'b000;
    wire [1:0] wb_av_bridge_bte = wb_m2s_wb_av_bridge_bte;//2'b00;

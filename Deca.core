@@ -139,6 +139,7 @@ filesets:
 
   Deca_testbench:
     files:
+      - rtl/sim/DDR3/DDR3Sim.v : {file_type : verilogSource}
       - bench/Deca/DecaTopLevelSim.v : {file_type : verilogSource}
       - bench/Deca/Deca_tb.cpp : {file_type : cppSource}
     depend : [vlog_tb_utils]

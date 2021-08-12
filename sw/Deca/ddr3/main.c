@@ -12,11 +12,14 @@ SpinalUart* uart;
 
 void main(void)
 {
+
+   //deca_init();
+
     char sint[33];
     uint32_t *mem = (uint32_t*)DDR3_BASE_ADDRESS;
 
-    deca_init();
-    delay(10);
+    
+    //delay(10);
     spinal_uart_init(&uart,UART_0_BASE_ADDRESS);
 
     init_leds(&leds,LEDS_BASE_ADDRESS);
@@ -30,18 +33,18 @@ void main(void)
    {
       uint32_t i = 0;
        spinal_uart_print_line(uart,"DDR3 write");
-       for(uint32_t j = 0 ; j < 8192 ; j++)
+       for(uint32_t j = 0 ; j < 8 ; j++)
        {
        mem[j*2] = i; 
        i++;
        }
       // delay(1); 
       // spinal_uart_print_line(uart,"DDR3 read");
-       for(uint32_t j = 0 ; j < 8192 ; j++ )
+       for(uint32_t j = 0 ; j < 8 ; j++ )
        { 
         utoa(mem[j*2],sint,10);
         //delay(1);
-        spinal_uart_print(uart,"DDR3 mem value ");
+       // spinal_uart_print(uart,"DDR3 mem value ");
         spinal_uart_print_line(uart,sint);
        }
       
