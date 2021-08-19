@@ -6,16 +6,19 @@ description: SOC for Deca fpga board
 filesets:
   rtl:
     files:
+      - rtl/RisingEdgePulse/RisingEdgePulse.v : { file_type : verilogSource }
       - rtl/Deca/DecaSocDDR3.v : {file_type : verilogSource}
       - rtl/Deca/VexRiscv.v : {file_type : verilogSource}
       - rtl/Deca/TUSB1210/WishboneTUSB1210.v : {file_type : verilogSource}
-      - rtl/Deca/AvalonClockCrossingBridge/AvalonClockDomainCrossingBridge.v : {file_type : verilogSource} 
+      - rtl/Deca/AvalonClockCrossingBridge/AvalonClockDomainCrossingBridge.v : {file_type : verilogSource}
+      - rtl/Deca/BusMemClockDomainCrossing.v : {file_type : verilogSource}
       - rtl/peripheral/icontrol.v : {file_type : verilogSource}
       - rtl/peripheral/MachineTimer/WishboneMachineTimer.v : {file_type : verilogSource}
       - rtl/peripheral/Switch/WishboneSwitch.v : {file_type : verilogSource}
       - rtl/Deca/UartWishbone/WishboneUartCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/Wishbone8LedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/MicroWire/MicroWireWishbone.v : {file_type : verilogSource}
+      - rtl/afifo.v : {file_type : verilogSource }
     depend: ["fusesoc:utils:generators",i2c,wb_intercon-1.3.0,gpio,servant,simple_spi,wb_avalon_bridge]
 
   Deca:
@@ -136,6 +139,7 @@ filesets:
       - rtl/Deca/ddr/ddr3/altera_gpio_lite.sv : { is_include_file : true} 
       - rtl/Deca/ddr/ddr3/ddr3_pll0.sv : { is_include_file : true} 
       - rtl/Deca/ddr/ddr3/alt_mem_ddrx_define.iv : {is_include_file : true}
+       
 
   Deca_testbench:
     files:

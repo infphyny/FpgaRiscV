@@ -28,31 +28,33 @@ class DDR3Sim extends Component {
   }
  
   noIoPrefix
-
+val ram = Mem(Bits(64 bits),WORDS_COUNT)
  val rdata_valid = Reg(Bool()) init False
  //val rdata = Reg(Bits(64 bits)) init 0
- //io.avl_rdata := rdata
+// val wdata = RegNext(io.avl_wdata) init 0
+// io.avl_rdata := rdata
  io.avl_rdata_valid := rdata_valid
  rdata_valid := False
 
  io.avl_ready := True
 
- 
- io.avl_rdata := 0
- 
+ //io.avl_rdata_valid := False
 
- val ram = Mem(Bits(64 bits),WORDS_COUNT)
-
-  
+ //readAsync, since is only for simulation this is okay, otherwise not inferred as bram on fpga
+ //need to check timing of signals with wb_avl_bridge
+ //io.avl_rdata := ram.readAsync(io.avl_addr) 
+  io.avl_rdata := ram.readSync(io.avl_addr,io.avl_read_req)
   when(io.avl_write_req === True)
   {
-    ram.write(io.avl_addr,io.avl_wdata)
+    ram(io.avl_addr) := io.avl_wdata
   }
    
   when(io.avl_read_req === True)
   {
     rdata_valid := True
-    io.avl_rdata := ram.readSync(io.avl_addr,io.avl_read_req)
+     //io.avl_rdata_valid := True
+    //io.avl_rdata := ram.readAsync(io.avl_addr)
+ //  rdata := ram.readSync(io.avl_addr,io.avl_read_req)
   }
 
 

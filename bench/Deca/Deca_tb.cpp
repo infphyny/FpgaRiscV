@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <signal.h>
 
+#include <random>
 #include "verilated_vcd_c.h"
 #include "VDecaTopLevelSim.h"
 
@@ -85,10 +86,15 @@ void do_uart(uart_context_t *context, bool rx) {
 
 int main(int argc, char **argv/*, char **env*/)
 {
+  std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<vluint64_t> distrib(-10,10);
+  //vluint64_t clock_jitter; 	
   vluint64_t sample_time = 0;
 	uint32_t insn = 0;
 	uint32_t ex_pc = 0;
 	//int baud_rate = 0;
+  vluint64_t clock_count = 0; 
 
 //	gpio_context_t gpio_context;
 //	uart_context_t uart_context;
@@ -130,6 +136,7 @@ int main(int argc, char **argv/*, char **env*/)
   //  top->uart_1_rx = 1; 
    // top->SEN_SDO = 0;
 	bool dump = false;
+	top->DDR3_CLK_50 = 1;
 	top->i_clk = 1;
 	top->USB_CLKIN = 1;
 	top->USB_DATA_i = 0xA5;
@@ -141,10 +148,22 @@ int main(int argc, char **argv/*, char **env*/)
 	  if (tfp && !dump && (main_time > vcd_start)) {
 	    dump = true;
 	  }
-	  top->i_rst = main_time < 100;
-	  top->eval();
-	  if (dump)
+	  top->i_rst = main_time < 200;
+	 // if( (clock_count % 3) == 0)
+ // if( (clock_count%17) == 0 )
+   //  if( (clock_count % 15) == 0)
+//	  { 
+	 	top->i_clk = !top->i_clk;
+	  	top->USB_CLKIN = !top->USB_CLKIN;
+		top->DDR3_CLK_50 = !top->DDR3_CLK_50;
+	 
+ 		top->eval();
+	  	if (dump)
 	    tfp->dump(main_time);
+//	  }
+    
+
+
 	    /*
 	  if (baud_rate)
 	    do_uart(&uart_context, top->q);
@@ -162,11 +181,20 @@ int main(int argc, char **argv/*, char **env*/)
 	    printf("Timeout: Exiting at time %lu\n", main_time);
 	    done = true;
 	  }
-      
-	  top->i_clk = !top->i_clk;
-	  top->USB_CLKIN = !top->i_clk;
-	  main_time+=6.666;//75MHz clock
+       main_time+=(1);  
+       
+	  {
+		 
+		//    top->DDR3_CLK_50 = !top->DDR3_CLK_50;
+      	 	
+	//  	 top->eval();
+//		if (dump)
+//	    tfp->dump(main_time);
+	  }
+	
+	  main_time+=(9);
 
+      clock_count++;
 	}
 	if (tfp)
 	  tfp->close();

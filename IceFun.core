@@ -1,0 +1,31 @@
+CAPI=2:
+name : ::IceFun:0
+
+description: SOC for IceFun fpga board
+
+filesets:
+  rtl:
+    files:
+      - rtl/IceFun/MuraxIceFunSoc.v : {file_type : verilogSource}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.bin : { is_include_file : true}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.bin : { is_include_file : true}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.bin : { is_include_file : true}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.bin : { is_include_file : true}
+  MuraxIceFun:
+    files:
+      - data/IceFun/io.pcf : {file_type : PCF}
+      - rtl/IceFun/ice40pll.v : {file_type : verilogSource}
+
+
+targets:
+
+  MuraxIceFun: 
+    default_tool: icestorm
+    filesets: [rtl,MuraxIceFun]
+    tools:
+      icestorm:
+        nextpnr_options : [--hx8k, --package, cb132, --freq, 48 ,--opt-timing,--pcf-allow-unconstrained]
+        pnr: next
+    toplevel : MuraxIceFunSoc	
+
+

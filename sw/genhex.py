@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-
-
+# Generate a .bin file from a .vh file
+#
 
 from sys import argv
 vhfile = argv[1]

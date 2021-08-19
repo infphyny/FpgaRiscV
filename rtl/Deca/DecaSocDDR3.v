@@ -98,6 +98,7 @@ parameter PLL = "NONE";
 parameter sim = 0;
 parameter with_csr = 1;
 parameter ICONTROL_IUSED = 15;
+parameter with_bus_mem_cdc = 1;
 
   wire        wb_rst;
   wire        wb_clk;
@@ -205,7 +206,7 @@ parameter ICONTROL_IUSED = 15;
     end else if(sim == 1) begin
     
     DDR3Sim ddr3_sim(
-      .clk(wb_clk),
+      .clk(DDR3_CLK_50),
       .reset(wb_rst),
       .avl_ready(avl_ready),
       .avl_burst_begin(o_cdc2ddr_burstbegin),
@@ -234,6 +235,8 @@ if(PLL=="NONE") begin
 assign      	wb_clk = i_clk;
 assign        usb_clk = USB_CLKIN;
 assign wb_rst = i_rst;
+assign afi_clk = i_clk;
+assign afi_rst_n = !i_rst;
 
 end else if (PLL=="PLL") begin  // PLL== "NONE"
   //  wire wb_rst;
@@ -270,7 +273,7 @@ end else if (PLL=="DDR3") begin
  
  wire pll_usb_locked;
   assign wb_rst = !ddr3_pll_locked && !pll_usb_locked; //&& ddr3_local_cal_success && ddr3_local_init_done;
-  assign wb_clk = DDR3_CLK_50;
+  assign wb_clk = DDR3_CLK_50 /*i_clk*/;
   usbpll usbclock(
       .inclk0(USB_CLKIN),
       .areset(!ddr3_reset_n),
@@ -284,9 +287,6 @@ end
 
 
 endgenerate
-
-
-
 
 
 wire 	timer_irq;
@@ -683,6 +683,42 @@ assign USB_STP = 1'bz;
    wire i_cdc2av_readdatavalid;
    wire o_av2cdc_burstbegin;
 
+ 
+ BusMemClockDomainCrossing #(.CDC_ENABLE(with_bus_mem_cdc)) 
+ bmcdc(
+   
+   .i_bus_clock(wb_clk),
+   .i_bus_reset(wb_rst),
+   .i_mem_clock(afi_clk),
+   .i_mem_reset(afi_rst),
+   //Bus to/from cdc signals 
+   .i_bus_address(o_av2cdc_adr),
+   .i_bus_be(o_av2cdc_be),
+   .i_bus_read_req(o_av2cdc_read_req),
+   .o_bus_read_data(i_cdc2av_readdata),
+   .o_bus_read_data_valid(i_cdc2av_readdatavalid),
+   .i_bus_burst_count(o_av2cdc_burstcount),
+   .i_bus_burst_begin(o_av2cdc_burstbegin),
+   .i_bus_write_req(o_av2cdc_write_req),
+   .i_bus_write_data(o_av2cdc_writedata),
+   .o_bus_wait_request(i_cdc2av_waitrequest),
+ // Mem to/from cdc signals
+   
+   .o_mem_address(o_cdc2ddr_adr),
+   .o_mem_be(o_cdc2ddr_be),
+   .o_mem_read_req(o_cdc2ddr_read_req),
+   .i_mem_read_data(i_ddr2cdc_readdata),
+   .i_mem_read_data_valid(i_ddr2cdc_readdatavalid),
+   .o_mem_burst_count(o_cdc2ddr_burstcount),
+   .o_mem_burst_begin(o_cdc2ddr_burstbegin),
+   .o_mem_write_req(o_cdc2ddr_write_req),
+   .o_mem_write_data(o_cdc2ddr_writedata),
+   .i_mem_wait_request(i_ddr2cdc_waitrequest)
+ );
+
+
+  //if(ddr3_cdc == 1) begin 
+    /*
   assign o_cdc2ddr_adr = o_av2cdc_adr;
   assign o_cdc2ddr_be = o_av2cdc_be;
   assign o_cdc2ddr_read_req = o_av2cdc_read_req;
@@ -693,6 +729,11 @@ assign USB_STP = 1'bz;
   assign i_cdc2av_readdata = i_ddr2cdc_readdata;
   assign i_cdc2av_readdatavalid = i_ddr2cdc_readdatavalid;
   assign i_cdc2av_waitrequest = i_ddr2cdc_waitrequest; 
+*/
+  //end 
+
+
+  //endgenerate
 
    //stub
    wire [7:0] wb_av_bridge_sel = {4'b0000,wb_m2s_wb_av_bridge_sel};
@@ -736,7 +777,17 @@ assign USB_STP = 1'bz;
     .m_av_burstbegin_o(o_av2cdc_burstbegin)
    );
    
-   
+   /*
+   afifo #(.DW(26))
+    cdc_adr(
+      .i_wclk(wb_clk),
+      .i_wrst_n(!wb_rst),
+      .i_wr(o_av2cdc_write_req || o_av2cdc_read_req),
+      .i_wdata(o_av2cdc_adr)
+    )
+    */
+
+
    /*
    wire s0_valid;
    reg prev_av_read;
