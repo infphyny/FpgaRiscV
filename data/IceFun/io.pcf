@@ -1,0 +1,103 @@
+set_io  io_mainClk		P7
+
+#Button
+
+#set_io SW1	C11
+#set_io SW2	C6
+#set_io SW3	A11
+#set_io	SW4	A5
+
+#LED matrix connection 
+set_io io_leds[7]	        C4
+set_io io_leds[6]	        A4
+set_io	io_leds[5]		C7
+set_io	io_leds[4]		A7
+set_io	io_leds[3]		D6
+set_io	io_leds[2]		D7
+set_io	io_leds[1]		A10
+set_io	io_leds[0]		C10
+
+#led row from top to bottom	
+set_io	io_ledCols[0]	C5
+set_io	io_ledCols[1]	A6
+set_io	io_ledCols[2]	D10
+set_io	io_ledCols[3]	A12
+
+
+#Connect to PIC16 for AD
+#set_io AD_TX		P4
+#set_io AD_RX		P5
+
+#left side io
+
+
+set_io	io_gpioA[0]		A3
+set_io	io_gpioA[1]		A2
+set_io	io_gpioA[2]		A1
+set_io	io_gpioA[3]		C3
+set_io	io_gpioA[4]		D3
+set_io	io_gpioA[5]		B1
+set_io  io_gpioA[6]          C1
+set_io	io_gpioA[7]          D1
+set_io	io_gpioA[8]		E1
+set_io	io_gpioA[9]		F3
+set_io	io_gpioA[10]		G3
+set_io	io_gpioA[11]		H3
+set_io	io_gpioA[12]		J3
+set_io	io_gpioA[13]		K3
+set_io	io_gpioA[14]		M3
+set_io	io_jtag_tck		G1
+set_io	io_jtag_tdi		H1
+set_io	io_jtag_tdo		J1
+set_io	io_jtag_tms		L1
+set_io	io_gpioA[15]	N1
+set_io	io_uart_txd		P1
+set_io  io_uart_rxd		P2
+#set_io	PIN_P3		P3
+		
+	
+# right side io
+
+set_io	io_i2c_sda	B14
+set_io	io_i2c_scl	C12
+
+#set_io	PIN_C14		C14
+#set_io	PIN_D12		D12
+
+#set_io	PIN_D14		D14
+#set_io	PIN_E12		E12
+
+#set_io	PIN_E14		E14
+#set_io	PIN_F12		F12
+
+#set_io	PIN_F14		F14
+#set_io	PIN_G12		G12
+
+#set_io	PIN_G14		G14
+#set_io	PIN_H12		H12
+
+#set_io	PIN_J12		J12
+#set_io	PIN_K12		K12
+
+#set_io	PIN_K14		K14
+#set_io	PIN_H11		H11
+
+#set_io	PIN_L12		L12
+#set_io	PIN_L14		L14	#For 12V RGB led strip
+
+#set_io	PIN_N14		N14	#For 12V RGB led strip
+#set_io	PIN_P14		P14	#For 12V RGB led strip
+
+#set_io	PIN_P10		P10
+#set_io	PIN_M9		M9
+
+#set_io	PIN_P9		P9
+#set_io	PIN_P8		P8
+
+
+#flash first 3 64kb sector for fpga
+
+#set_io flash_cs	P13
+#set_io flash_sck	P12
+#set_io	flash_sdi	P11
+#set_io	flash_sdo	M11 

@@ -98,7 +98,7 @@ parameter PLL = "NONE";
 parameter sim = 0;
 parameter with_csr = 1;
 parameter ICONTROL_IUSED = 15;
-parameter with_bus_mem_cdc = 1;
+parameter with_bus_mem_cdc = 0;
 
   wire        wb_rst;
   wire        wb_clk;
