@@ -11,6 +11,14 @@ filesets:
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.bin : { is_include_file : true}
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.bin : { is_include_file : true}
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.bin : { is_include_file : true}
+#      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.hex : { copyto : MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.bin}
+#      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.hex : { copyto : MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.bin}
+#      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.hex : { copyto : MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.bin}
+#      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.hex : { copyto : MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.bin}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.hex : { copyto : IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.hex}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.hex : { copyto : IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.hex}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.hex : { copyto : IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.hex}
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.hex : { copyto : IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.hex}
   MuraxIceFun:
     files:
       - data/IceFun/io.pcf : {file_type : PCF}

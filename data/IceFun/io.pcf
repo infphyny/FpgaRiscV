@@ -51,8 +51,8 @@ set_io	io_jtag_tdi		H1
 set_io	io_jtag_tdo		J1
 set_io	io_jtag_tms		L1
 set_io	io_gpioA[15]	N1
-set_io	io_uart_txd		P1
-set_io  io_uart_rxd		P2
+set_io  io_uart_rxd		P1
+set_io	io_uart_txd		P2
 #set_io	PIN_P3		P3
 		
 	

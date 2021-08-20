@@ -133,6 +133,9 @@ module MuraxIceFunSoc (
   wire       [0:0]    murax_io_spi_ss;
   wire       [7:0]    murax_io_leds;
   wire       [3:0]    murax_io_ledCols;
+  wire                pll_clock_out;
+  wire                pll_locked;
+  wire                bufferCC_7_io_dataOut;
   wire       [0:0]    _zz_when_InOutWrapper_l48_2;
   wire       [0:0]    _zz_when_InOutWrapper_l48_1_1;
   wire       [0:0]    _zz_io_i2c_scl_1;
@@ -162,6 +165,8 @@ module MuraxIceFunSoc (
   wire       [15:0]   _zz_io_gpioA_read;
   wire       [15:0]   _zz_io_gpioA_16;
   wire       [15:0]   _zz_when_InOutWrapper_l65;
+  wire                core_clk;
+  wire                core_resetn;
   wire                when_InOutWrapper_l48;
   wire                when_InOutWrapper_l48_1;
   wire                when_InOutWrapper_l65;
@@ -186,8 +191,8 @@ module MuraxIceFunSoc (
   assign _zz_io_i2c_scl_1 = 1'b0;
   assign _zz_io_i2c_sda_1 = 1'b0;
   IceFunSoc murax (
-    .io_asyncReset           (1'b0                        ), //i
-    .io_mainClk              (io_mainClk                  ), //i
+    .io_asyncReset           (core_resetn                 ), //i
+    .io_mainClk              (core_clk                    ), //i
     .io_jtag_tms             (io_jtag_tms                 ), //i
     .io_jtag_tdi             (io_jtag_tdi                 ), //i
     .io_jtag_tdo             (murax_io_jtag_tdo           ), //o
@@ -207,6 +212,17 @@ module MuraxIceFunSoc (
     .io_spi_miso             (io_spi_miso                 ), //i
     .io_leds                 (murax_io_leds               ), //o
     .io_ledCols              (murax_io_ledCols            )  //o
+  );
+  Ice40PLL pll (
+    .clock_in     (io_mainClk     ), //i
+    .clock_out    (pll_clock_out  ), //o
+    .locked       (pll_locked     )  //o
+  );
+  BufferCC_6 bufferCC_7 (
+    .io_dataIn     (1'b1                   ), //i
+    .io_dataOut    (bufferCC_7_io_dataOut  ), //o
+    .core_clk      (core_clk               ), //i
+    .locked        (pll_locked             )  //i
   );
   assign io_i2c_scl = _zz_io_i2c_scl ? _zz_io_i2c_scl_1[0] : 1'bz;
   assign io_i2c_sda = _zz_io_i2c_sda ? _zz_io_i2c_sda_1[0] : 1'bz;
@@ -352,6 +368,8 @@ module MuraxIceFunSoc (
     end
   end
 
+  assign core_clk = pll_clock_out;
+  assign core_resetn = bufferCC_7_io_dataOut;
   assign io_jtag_tdo = murax_io_jtag_tdo;
   assign _zz_io_gpioA_16 = murax_io_gpioA_write;
   assign _zz_when_InOutWrapper_l65 = murax_io_gpioA_writeEnable;
@@ -384,6 +402,29 @@ module MuraxIceFunSoc (
   assign when_InOutWrapper_l65_13 = _zz_when_InOutWrapper_l65[13];
   assign when_InOutWrapper_l65_14 = _zz_when_InOutWrapper_l65[14];
   assign when_InOutWrapper_l65_15 = _zz_when_InOutWrapper_l65[15];
+
+endmodule
+
+module BufferCC_6 (
+  input               io_dataIn,
+  output              io_dataOut,
+  input               core_clk,
+  input               locked
+);
+  (* async_reg = "true" *) reg                 buffers_0;
+  (* async_reg = "true" *) reg                 buffers_1;
+
+  assign io_dataOut = buffers_1;
+  always @(posedge core_clk or posedge locked) begin
+    if(locked) begin
+      buffers_0 <= 1'b0;
+      buffers_1 <= 1'b0;
+    end else begin
+      buffers_0 <= io_dataIn;
+      buffers_1 <= buffers_0;
+    end
+  end
+
 
 endmodule
 
@@ -543,9 +584,9 @@ module IceFunSoc (
   reg        [31:0]   _zz_system_mainBusDecoder_logic_masterPipelined_rsp_payload_data;
   reg                 resetCtrl_mainClkResetUnbuffered;
   reg        [5:0]    resetCtrl_systemClkResetCounter = 6'h0;
-  wire       [5:0]    _zz_when_IceFunSoc_l176;
-  wire                when_IceFunSoc_l176;
-  wire                when_IceFunSoc_l180;
+  wire       [5:0]    _zz_when_IceFunSoc_l179;
+  wire                when_IceFunSoc_l179;
+  wire                when_IceFunSoc_l183;
   reg                 resetCtrl_mainClkReset;
   reg                 resetCtrl_systemReset;
   reg                 system_timerInterrupt;
@@ -896,14 +937,14 @@ module IceFunSoc (
 
   always @(*) begin
     resetCtrl_mainClkResetUnbuffered = 1'b0;
-    if(when_IceFunSoc_l176) begin
+    if(when_IceFunSoc_l179) begin
       resetCtrl_mainClkResetUnbuffered = 1'b1;
     end
   end
 
-  assign _zz_when_IceFunSoc_l176[5 : 0] = 6'h3f;
-  assign when_IceFunSoc_l176 = (resetCtrl_systemClkResetCounter != _zz_when_IceFunSoc_l176);
-  assign when_IceFunSoc_l180 = io_asyncReset_buffercc_io_dataOut;
+  assign _zz_when_IceFunSoc_l179[5 : 0] = 6'h3f;
+  assign when_IceFunSoc_l179 = (resetCtrl_systemClkResetCounter != _zz_when_IceFunSoc_l179);
+  assign when_IceFunSoc_l183 = io_asyncReset_buffercc_io_dataOut;
   always @(*) begin
     system_timerInterrupt = 1'b0;
     if(system_timer_io_interrupt) begin
@@ -983,10 +1024,10 @@ module IceFunSoc (
   assign system_mainBusDecoder_logic_masterPipelined_rsp_payload_data = _zz_system_mainBusDecoder_logic_masterPipelined_rsp_payload_data;
   assign when_MuraxUtiles_l133 = (system_mainBusDecoder_logic_rspPending && (! system_mainBusDecoder_logic_masterPipelined_rsp_valid));
   always @(posedge io_mainClk) begin
-    if(when_IceFunSoc_l176) begin
+    if(when_IceFunSoc_l179) begin
       resetCtrl_systemClkResetCounter <= (resetCtrl_systemClkResetCounter + 6'h01);
     end
-    if(when_IceFunSoc_l180) begin
+    if(when_IceFunSoc_l183) begin
       resetCtrl_systemClkResetCounter <= 6'h0;
     end
   end
@@ -3597,6 +3638,8 @@ module VexRiscv (
   wire       [0:0]    _zz_IBusSimplePlugin_pending_next_4;
   wire       [2:0]    _zz_IBusSimplePlugin_rspJoin_rspBuffer_discardCounter;
   wire       [0:0]    _zz_IBusSimplePlugin_rspJoin_rspBuffer_discardCounter_1;
+  wire       [29:0]   _zz_CsrPlugin_jumpInterface_payload;
+  wire       [29:0]   _zz_CsrPlugin_jumpInterface_payload_1;
   wire       [31:0]   _zz__zz_decode_BRANCH_CTRL_2;
   wire                _zz__zz_decode_BRANCH_CTRL_2_1;
   wire                _zz__zz_decode_BRANCH_CTRL_2_2;
@@ -4135,8 +4178,8 @@ module VexRiscv (
   wire                when_DBusSimplePlugin_l558;
   wire       [1:0]    CsrPlugin_misa_base;
   wire       [25:0]   CsrPlugin_misa_extensions;
-  wire       [1:0]    CsrPlugin_mtvec_mode;
-  wire       [29:0]   CsrPlugin_mtvec_base;
+  reg        [1:0]    CsrPlugin_mtvec_mode;
+  reg        [29:0]   CsrPlugin_mtvec_base;
   reg        [31:0]   CsrPlugin_mepc;
   reg                 CsrPlugin_mstatus_MIE;
   reg                 CsrPlugin_mstatus_MPIE;
@@ -4416,6 +4459,8 @@ module VexRiscv (
   wire                when_CsrPlugin_l1264_2;
   reg                 execute_CsrPlugin_csr_772;
   wire                when_CsrPlugin_l1264_3;
+  reg                 execute_CsrPlugin_csr_773;
+  wire                when_CsrPlugin_l1264_4;
   reg                 execute_CsrPlugin_csr_834;
   reg        [31:0]   _zz_CsrPlugin_csrMapping_readDataInit;
   reg        [31:0]   _zz_CsrPlugin_csrMapping_readDataInit_1;
@@ -4517,6 +4562,8 @@ module VexRiscv (
   assign _zz_IBusSimplePlugin_pending_next_3 = {2'd0, _zz_IBusSimplePlugin_pending_next_4};
   assign _zz_IBusSimplePlugin_rspJoin_rspBuffer_discardCounter_1 = (IBusSimplePlugin_rspJoin_rspBuffer_c_io_pop_valid && (IBusSimplePlugin_rspJoin_rspBuffer_discardCounter != 3'b000));
   assign _zz_IBusSimplePlugin_rspJoin_rspBuffer_discardCounter = {2'd0, _zz_IBusSimplePlugin_rspJoin_rspBuffer_discardCounter_1};
+  assign _zz_CsrPlugin_jumpInterface_payload = (CsrPlugin_xtvec_base + _zz_CsrPlugin_jumpInterface_payload_1);
+  assign _zz_CsrPlugin_jumpInterface_payload_1 = {26'd0, CsrPlugin_trapCause};
   assign _zz__zz_execute_REGFILE_WRITE_DATA = execute_SRC_LESS;
   assign _zz__zz_decode_SRC1_1 = (decode_IS_RVC ? 3'b010 : 3'b100);
   assign _zz__zz_decode_SRC1_1_1 = decode_INSTRUCTION[19 : 15];
@@ -5567,7 +5614,7 @@ module VexRiscv (
   always @(*) begin
     CsrPlugin_jumpInterface_payload = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
     if(when_CsrPlugin_l1019) begin
-      CsrPlugin_jumpInterface_payload = {CsrPlugin_xtvec_base,2'b00};
+      CsrPlugin_jumpInterface_payload = (((CsrPlugin_xtvec_mode == 2'b00) || CsrPlugin_hadException) ? {CsrPlugin_xtvec_base,2'b00} : {_zz_CsrPlugin_jumpInterface_payload,2'b00});
     end
     if(when_CsrPlugin_l1064) begin
       case(switch_CsrPlugin_l1068)
@@ -6136,8 +6183,6 @@ module VexRiscv (
 
   assign CsrPlugin_misa_base = 2'b01;
   assign CsrPlugin_misa_extensions = 26'h0000042;
-  assign CsrPlugin_mtvec_mode = 2'b00;
-  assign CsrPlugin_mtvec_base = 30'h20000008;
   assign _zz_when_CsrPlugin_l952 = (CsrPlugin_mip_MTIP && CsrPlugin_mie_MTIE);
   assign _zz_when_CsrPlugin_l952_1 = (CsrPlugin_mip_MSIP && CsrPlugin_mie_MSIE);
   assign _zz_when_CsrPlugin_l952_2 = (CsrPlugin_mip_MEIP && CsrPlugin_mie_MEIE);
@@ -6200,6 +6245,11 @@ module VexRiscv (
     end
     if(execute_CsrPlugin_csr_772) begin
       execute_CsrPlugin_illegalAccess = 1'b0;
+    end
+    if(execute_CsrPlugin_csr_773) begin
+      if(execute_CSR_WRITE_OPCODE) begin
+        execute_CsrPlugin_illegalAccess = 1'b0;
+      end
     end
     if(execute_CsrPlugin_csr_834) begin
       if(execute_CSR_READ_OPCODE) begin
@@ -6874,6 +6924,7 @@ module VexRiscv (
   assign when_CsrPlugin_l1264_1 = (! execute_arbitration_isStuck);
   assign when_CsrPlugin_l1264_2 = (! execute_arbitration_isStuck);
   assign when_CsrPlugin_l1264_3 = (! execute_arbitration_isStuck);
+  assign when_CsrPlugin_l1264_4 = (! execute_arbitration_isStuck);
   always @(*) begin
     _zz_CsrPlugin_csrMapping_readDataInit = 32'h0;
     if(execute_CsrPlugin_csr_768) begin
@@ -6914,11 +6965,11 @@ module VexRiscv (
   assign when_CsrPlugin_l1302 = ((! execute_arbitration_isValid) || (! execute_IS_CSR));
   always @(posedge io_mainClk or posedge resetCtrl_systemReset) begin
     if(resetCtrl_systemReset) begin
-      IBusSimplePlugin_fetchPc_pcReg <= 32'h80000000;
+      IBusSimplePlugin_fetchPc_pcReg <= 32'h0;
       IBusSimplePlugin_fetchPc_correctionReg <= 1'b0;
       IBusSimplePlugin_fetchPc_booted <= 1'b0;
       IBusSimplePlugin_fetchPc_inc <= 1'b0;
-      IBusSimplePlugin_decodePc_pcReg <= 32'h80000000;
+      IBusSimplePlugin_decodePc_pcReg <= 32'h0;
       _zz_IBusSimplePlugin_iBusRsp_stages_0_output_ready_2 <= 1'b0;
       _zz_IBusSimplePlugin_iBusRsp_stages_1_output_m2sPipe_valid <= 1'b0;
       IBusSimplePlugin_decompressor_bufferValid <= 1'b0;
@@ -6930,6 +6981,8 @@ module VexRiscv (
       IBusSimplePlugin_injector_nextPcCalc_valids_3 <= 1'b0;
       IBusSimplePlugin_pending_value <= 3'b000;
       IBusSimplePlugin_rspJoin_rspBuffer_discardCounter <= 3'b000;
+      CsrPlugin_mtvec_mode <= 2'b00;
+      CsrPlugin_mtvec_base <= 30'h00000008;
       CsrPlugin_mstatus_MIE <= 1'b0;
       CsrPlugin_mstatus_MPIE <= 1'b0;
       CsrPlugin_mstatus_MPP <= 2'b11;
@@ -7168,6 +7221,12 @@ module VexRiscv (
           CsrPlugin_mie_MSIE <= CsrPlugin_csrMapping_writeDataSignal[3];
         end
       end
+      if(execute_CsrPlugin_csr_773) begin
+        if(execute_CsrPlugin_writeEnable) begin
+          CsrPlugin_mtvec_base <= CsrPlugin_csrMapping_writeDataSignal[31 : 2];
+          CsrPlugin_mtvec_mode <= CsrPlugin_csrMapping_writeDataSignal[1 : 0];
+        end
+      end
     end
   end
 
@@ -7384,6 +7443,9 @@ module VexRiscv (
       execute_CsrPlugin_csr_772 <= (decode_INSTRUCTION[31 : 20] == 12'h304);
     end
     if(when_CsrPlugin_l1264_3) begin
+      execute_CsrPlugin_csr_773 <= (decode_INSTRUCTION[31 : 20] == 12'h305);
+    end
+    if(when_CsrPlugin_l1264_4) begin
       execute_CsrPlugin_csr_834 <= (decode_INSTRUCTION[31 : 20] == 12'h342);
     end
     if(execute_CsrPlugin_csr_836) begin

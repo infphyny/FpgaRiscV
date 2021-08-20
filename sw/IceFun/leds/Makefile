@@ -1,5 +1,4 @@
-
-PROJECT_NAME := uart
+PROJECT_NAME := leds
 
 FUSESOC_CORE_PATH := $(abspath $(lastword $(MAKEFILE_LIST))/../../../)
 FUSESOC_CORE_DIR := $(dir $(FUSESOC_CORE_PATH))

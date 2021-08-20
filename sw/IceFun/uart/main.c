@@ -10,7 +10,7 @@ SpinalUart *uart;
 void main(void)
 {
 
-  spinal_uart_init(&uart,UART_BASE_ADDRESS);
+  spinal_uart_init(&uart,UART_0);
 
     for(;;)
     {
