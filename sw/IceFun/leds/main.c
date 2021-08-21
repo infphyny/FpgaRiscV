@@ -38,7 +38,7 @@ prescaler = (Prescaler*)TIMER_PRESCALER;
 timer_a = (Timer*)TIMER_A;
 
 uint8_t i = 0;
-  const int nloops = /*20*/2000000;
+ 
  
 //    Uart_Config config;
    
@@ -48,36 +48,29 @@ uint8_t i = 0;
 //    config.clockDivider = 115200 /*12000000/(5*115200)*/; //baudrate = 12000000/(rxsampling*clockdivider)
   
     interruptCtrl_init(interrupt_ctrl);
-	//prescaler_init(prescaler);
 	timer_init(timer_a);
 
   prescaler->limit = 48000-1; //1 ms rate
-
   timer_a->limit = 1000-1;  //1 second rate
   timer_a->clear_ticks = 0x00010002;
-
   interrupt_ctrl->pendings = 0xF;
   interrupt_ctrl->masks = 0x1;
   csr_write(mstatus,MSTATUS_MIE);
   csr_set(mie, MIE_MTIE | MIE_MEIE); //Enable machine timer and external interrupts
+
   spinal_uart_print_line(uart,"IceFunLedCtrl demo");
- // delay(1000);
+ 
  //  uart_applyConfig(UART,&config);
    
-uint32_t j = 0;
+
 
    led_ctrl->data = 0;
    led_ctrl->divider = 12000-1;
- //   GPIO_A->OUTPUT_ENABLE = 0x00000003;
-//	GPIO_A->OUTPUT =    0x00000000;
-	
-//delay(nloops);	
-    
+ 
     const int nleds = 1;
-	char j_value[16];
+	
     while(1){
-    	//for(unsigned int i=0;i<nleds-1;i++){
-    	//uart_applyConfig(UART,&config);
+    
     	
     	 if(change_char == true)
     	 {
@@ -107,16 +100,9 @@ uint32_t j = 0;
  void irqCallback()
 {
 	if(interrupt_ctrl->pendings & 1){  //Timer A interrupt
-		 //println("Timer interrupt");
 		 change_char = true;
-		//GPIO_A->OUTPUT ^= 0x80; //Toogle led 7
 		interrupt_ctrl->pendings = 1;
 	}
-	/*
-	while(UART->STATUS & (1 << 9)){ //UART RX interrupt
-		UART->DATA = (UART->DATA) & 0xFF;
-	}
-	*/
 }
 
 void trap_entry()

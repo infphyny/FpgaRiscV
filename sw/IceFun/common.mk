@@ -37,10 +37,6 @@ OBJDUMP = 	$(TOOLCHAIN_PREFIX)objdump
 OPT = -Os
 ARCH = rv32ic
 
-
-
-
-
 LD_SCRIPT = riscv.ld
 LDFLAGS += --print-memory-usage
 
@@ -83,8 +79,8 @@ $(PROJECT_NAME).elf : $(OBJ)
 clean_hw:
 	cd $(ICEFUN_HW_DIR); rm *.bin *.hex
 
-clean:
-	rm -f *.elf *.hex *.vh *.asc *.bin *.map
+clean: 
+	rm -f *.elf *.hex *.vh *.asc *.bin *.map $(PROJECT_OBJ)
 
 hw:
 	cd $(ICEFUN_HW_DIR); icebram -g -s 194 8 2048 > $(BRAM_NAME_BASE)0.hex
