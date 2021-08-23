@@ -3,9 +3,9 @@
 #include <stdlib.h>
 
 #include "../include/Deca.h"
-#include "../../include/SpinalUart.h"
+#include "SpinalUart.h"
 
-#include "deca_bsp.h"
+#include "../include/deca_bsp.h"
 
 void main(void)
 {

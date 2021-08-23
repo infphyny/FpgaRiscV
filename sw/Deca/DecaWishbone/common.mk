@@ -1,5 +1,5 @@
 
-MEMFILE = sw/Deca/$(PROJ)/$(PROJ).hex
+MEMFILE = sw/Deca/DecaWishbone/$(PROJ)/$(PROJ).hex
 
 
 DECA_OBJ = $(DECA_DIR)/src/crt0.o $(DECA_DIR)/src/vtable.o $(DECA_DIR)/src/Leds.o $(DECA_DIR)/src/deca_bsp.o \
@@ -44,7 +44,7 @@ GENMIF = $(SW_DIR)/genmif.py
 
 LDFLAGS += --print-memory-usage
 
-DECA_INCLUDES = -I../include/ -I../../include/
+DECA_INCLUDES = -I../include/ -I../../../include/
 
 
 

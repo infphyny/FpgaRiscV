@@ -7,8 +7,8 @@
 PROJ = tusb1210
 #Set path relative to current path
 DECA_DIR := ..
-SW_DIR := ../..
+SW_DIR := ../../..
 #
-FUSESOC_CORE_PATH := $(abspath $(lastword $(MAKEFILE_LIST))/../../../)
+FUSESOC_CORE_PATH := $(abspath $(lastword $(MAKEFILE_LIST))/../../../..)
 FUSESOC_CORE_DIR := $(dir $(FUSESOC_CORE_PATH))
 include ../common.mk
