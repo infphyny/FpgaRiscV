@@ -1,6 +1,7 @@
 RAM_SIZE := 8192
 
 FUSESOC_TARGET := MuraxIceFun
+FUSESOC_TARGET_SIM := MuraxIceFunSim
 FUSESOC_CORE  := IceFun
 
 SPLITHEX = $(SW_DIR)/splithex.py
@@ -10,6 +11,8 @@ GENMIF := $(SW_DIR)/genmif.py
 HEX2BIN := $(SW_DIR)/hex2bin.py
 
 FUSESOC_BUILD_DIR := $(FUSESOC_CORE_DIR)/build/IceFun_0/MuraxIceFun-icestorm/
+#IM_DIR := $(FUSESOC_CORE_DIR)/bench/IceFun
+
 ASC_FILE := $(FUSESOC_BUILD_DIR)/IceFun_0_next.asc
 ASC_FILE_0 := $(PROJECT_NAME)_0.asc
 ASC_FILE_1 := $(PROJECT_NAME)_1.asc
@@ -22,6 +25,11 @@ MEMFILE_1 := $(MEMFILE_DIR)/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbo
 MEMFILE_2 := $(MEMFILE_DIR)/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.hex
 MEMFILE_3 := $(MEMFILE_DIR)/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.hex
 
+#Binary file for simulation
+BINFILE_0 := $(ICEFUN_HW_DIR)/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.bin
+BINFILE_1 := $(ICEFUN_HW_DIR)/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.bin
+BINFILE_2 := $(ICEFUN_HW_DIR)/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.bin
+BINFILE_3 := $(ICEFUN_HW_DIR)/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.bin
 
 BRAM_NAME_BASE := MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol
 #BRAM_NAME_0 := $(BRAM_NAME_BASE)0.bin
@@ -74,10 +82,11 @@ $(PROJECT_NAME).elf : $(OBJ)
 
 
 
-.PHONY: clean clean_hw hw
+.PHONY: clean clean_hw hw sim 
 
 clean_hw:
 	cd $(ICEFUN_HW_DIR); rm *.bin *.hex
+
 
 clean: 
 	rm -f *.elf *.hex *.vh *.asc *.bin *.map $(PROJECT_OBJ)
@@ -97,6 +106,16 @@ hw:
 
 	cd $(FUSESOC_CORE_DIR); fusesoc --cores-root=$(FUSESOC_CORE_DIR) run --target=$(FUSESOC_TARGET) $(FUSESOC_CORE) 
 
+objdump:
+	$(OBJDUMP) -D   $(PROJECT_NAME).elf > $(PROJECT_NAME).txt
+
+sim:
+	cp $(PROJECT_NAME)_0.bin  $(BINFILE_0)
+	cp $(PROJECT_NAME)_1.bin  $(BINFILE_1)
+	cp $(PROJECT_NAME)_2.bin  $(BINFILE_2)
+	cp $(PROJECT_NAME)_3.bin  $(BINFILE_3)
+	cd $(FUSESOC_CORE_DIR); fusesoc --cores-root=$(FUSESOC_CORE_DIR) run --target=$(FUSESOC_TARGET_SIM) $(FUSESOC_CORE)
+#	cd $(SIM_DIR); verilator  -Od -Wno-WIDTH  -CFLAGS "-O3 -march=native"   --trace-fst -cc ../Murax_iceFUN.v 
 
 update_ram:
 	icebram -v $(MEMFILE_0) $(PROJECT_NAME)_0.hex < $(ASC_FILE) > $(ASC_FILE_0)

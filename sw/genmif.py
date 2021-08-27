@@ -7,11 +7,10 @@ miffile_name = argv[4]
 
 
 with open(hexfile_name,"r") as input_file:
-    lines = list(input_file)
+    lines = (list(input_file))
+ 
 
-
-
-input_file.close()
+#input_file.close()
 
 
 depth = int(int(nbytes)/int(wordlen))
@@ -25,9 +24,9 @@ mif_file.write("DATA_RADIX=BIN;\n\n")
 mif_file.write("CONTENT BEGIN\n")
 
 for i in range(0,depth):
-    #mif_file.write("\t"+str(i)+" : " + str(bin(int(lines[i],16))) + "\n")
+  
     bs = ((int(lines[depth-1-i],16)))
-    mif_file.write("\t"+str(depth-1-i)+" : " + format('{0:0{1}b}'.format((bs),32)) + ";\n")
+    mif_file.write("\t"+str(depth-1-i)+" : " + format('{0:0{1}b}'.format((bs),wordlen*8)) + ";\n")
     #mif_file.write("\t"+str(i)+" : " + format( '{0:0{0}b}'.format(int(lines[i],16))) + "\n")
 
 

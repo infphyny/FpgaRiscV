@@ -1,0 +1,52 @@
+CAPI=2:
+name : ::DecaMurax:0
+
+description: Murax SOC for Deca fpga board
+
+
+filesets:
+  rtl:
+    files:
+      
+#      - rtl/Deca/DecaMurax/
+
+  DecaMurax:
+    files:
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v : { file_type : verilogSource }
+      - data/Deca/DecaMurax/DecaMurax.sdc : {file_type : SDC}
+      - data/Deca/DecaMurax/pinmap.tcl : {file_type : tclSource}
+      - rtl/Deca/DecaMurax/Max10PLL/Max10PLL.qip : {file_type : QIP}
+      - rtl/Deca/DecaMurax/Max10PLL/Max10PLL.v : {is_include_file : true}
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol0.bin : {is_include_file : true }
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol1.bin : {is_include_file : true }
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol2.bin : {is_include_file : true }
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol3.bin : {is_include_file : true }
+
+  DecaMuraxSim:
+    files:
+      - bench/Deca/DecaMurax/DecaMuraxSimulation.cpp : {file_type : cppSource}
+      - rtl/Deca/DecaMurax/DecaMuraxSocSim.v : {file_type : verilogSource}
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol0.bin : { copyto : DecaMuraxSocSim.v_toplevel_murax_system_ram_ram_symbol0.bin }
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol1.bin : { copyto : DecaMuraxSocSim.v_toplevel_murax_system_ram_ram_symbol1.bin }
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol2.bin : { copyto : DecaMuraxSocSim.v_toplevel_murax_system_ram_ram_symbol2.bin }
+      - rtl/Deca/DecaMurax/DecaMuraxSoc.v_toplevel_murax_system_ram_ram_symbol3.bin : { copyto : DecaMuraxSocSim.v_toplevel_murax_system_ram_ram_symbol3.bin }
+targets:
+
+  DecaMurax:
+    default_tool: quartus
+    filesets_append: [rtl,DecaMurax]
+    tools:
+      quartus:
+        family:  MAX 10
+        device:  10M50DAF484C6GES
+    toplevel: DecaMuraxSoc
+
+
+  DecaMuraxSim:
+    default_tool: verilator
+    filesets: [DecaMuraxSim]
+    tools:
+      verilator:
+        verilator_options : [--trace-fst,-Wno-fatal,-Wno-WIDTH,-Od]
+    toplevel: DecaMuraxSocSim
+

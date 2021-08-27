@@ -6,8 +6,8 @@
 #include <verilated.h>
 //#include <verilated_vcd_c.h>
 #include <verilated_fst_c.h>
-#include "VMuraxIceFunSocSim.h"
-void tick(size_t tick_count,VMuraxIceFunSocSim* tb,VerilatedFstC* tfp);
+#include "VDecaMuraxSocSim.h"
+void tick(size_t tick_count,VDecaMuraxSocSim* tb,VerilatedFstC* tfp);
 
 int main(int argc,char **argv)
 {
@@ -17,7 +17,7 @@ size_t tick_count = 1;
  Verilated::traceEverOn(true);
  //std::unique_ptr<VerilatedVcdC> tfp = std::make_unique<VerilatedVcdC>();
  std::unique_ptr<VerilatedFstC> tfp = std::make_unique<VerilatedFstC>();
- std::unique_ptr<VMuraxIceFunSocSim> tb = std::make_unique<VMuraxIceFunSocSim>();
+ std::unique_ptr<VDecaMuraxSocSim> tb = std::make_unique<VDecaMuraxSocSim>();
  
   std::string timescale="ns";
  tfp->set_time_unit(timescale);
@@ -30,10 +30,11 @@ size_t tick_count = 1;
  
 // uint8_t data = 0;
  tb->io_mainClk = false;
- //tb->io_reset_n = false;
+ tb->io_mainReset = false;
+// tb->io_reset_n = false;
  //tb->io_note = 70;
  //tb->io_volume = 0;
- tb->io_uart_rxd = true;
+ tb->io_uart_0_rxd = true;
  //tb->io_tx_en = false;
  //tb->io_send_data = data;
  
@@ -46,9 +47,11 @@ size_t tick_count = 1;
  tb->io_reset_n = true;
  */
  
- for(size_t i = 0 ; i < 1000000 ; i++)
+ for(size_t i = 0 ; i < 2000000 ; i++)
  {
  
+  tb->io_mainReset = tick_count < 32 ? 0 : 1;
+
    tick(++tick_count,tb.get(),tfp.get());
     
  }
@@ -60,7 +63,7 @@ size_t tick_count = 1;
 
 }
 
-void tick(size_t tick_count,VMuraxIceFunSocSim* tb,VerilatedFstC* tfp)
+void tick(size_t tick_count,VDecaMuraxSocSim* tb,VerilatedFstC* tfp)
 {
 
     tb->eval();

@@ -1,12 +1,17 @@
 CAPI=2:
 name : ::IceFun:0
 
-description: SOC for IceFun fpga board
+description: Murax soc for IceFun fpga board
 
 filesets:
   rtl:
     files:
+
+  MuraxIceFun:
+    files:
+      - data/IceFun/io.pcf : {file_type : PCF}
       - rtl/IceFun/MuraxIceFunSoc.v : {file_type : verilogSource}
+      - rtl/IceFun/ice40pll.v : {file_type : verilogSource}
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.bin : { is_include_file : true}
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.bin : { is_include_file : true}
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.bin : { is_include_file : true}
@@ -19,11 +24,15 @@ filesets:
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.hex : { copyto : IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.hex}
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.hex : { copyto : IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.hex}
       - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.hex : { copyto : IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.hex}
-  MuraxIceFun:
-    files:
-      - data/IceFun/io.pcf : {file_type : PCF}
-      - rtl/IceFun/ice40pll.v : {file_type : verilogSource}
 
+  MuraxIceFunSim:
+    files:
+      - rtl/IceFun/MuraxIceFunSocSim.v : {file_type : verilogSource}
+      - bench/IceFun/MuraxSimulation.cpp : {file_type : cppSource} 
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol0.bin : { copyto : MuraxIceFunSocSim.v_toplevel_murax_system_ram_ram_symbol0.bin }
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol1.bin : { copyto : MuraxIceFunSocSim.v_toplevel_murax_system_ram_ram_symbol1.bin }
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol2.bin : { copyto : MuraxIceFunSocSim.v_toplevel_murax_system_ram_ram_symbol2.bin }
+      - rtl/IceFun/MuraxIceFunSoc.v_toplevel_murax_system_ram_ram_symbol3.bin : { copyto : MuraxIceFunSocSim.v_toplevel_murax_system_ram_ram_symbol3.bin }
 
 targets:
 
@@ -37,3 +46,10 @@ targets:
     toplevel : MuraxIceFunSoc	
 
 
+  MuraxIceFunSim:
+    default_tool: verilator
+    filesets: [rtl,MuraxIceFunSim]
+    tools:
+      verilator:
+        verilator_options : [--trace-fst,-Wno-fatal,-Wno-WIDTH,-Od]
+    toplevel: MuraxIceFunSocSim

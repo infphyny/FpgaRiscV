@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# Generate a .bin file from a .vh file
-#
+# Generate a .hex file from a .vh file
+# rename vh2hex
 
 from sys import argv
 vhfile = argv[1]
