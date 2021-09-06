@@ -4,3 +4,4 @@ fusesoc.conf
 fusesoc_libraries
 fusesoc_libraries/fusesoc-cores
 /sw/__pycache__/
+*.bit

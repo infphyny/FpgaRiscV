@@ -1,0 +1,5 @@
+*.bin
+*.hex
+*.bit
+*.config
+*.json
