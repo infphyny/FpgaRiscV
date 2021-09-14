@@ -1,7 +1,7 @@
 1. To generate the linker script needed to build bare metal application execute:
 
 ```
-riscv32-unknown-elf-ld --verbose >> riscv.ld
+riscv64-unknown-elf-ld --verbose >> riscv.ld
 ```
 
 2. Put in comments the lines in the start of the file

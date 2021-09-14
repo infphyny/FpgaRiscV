@@ -4,4 +4,10 @@ fusesoc.conf
 fusesoc_libraries
 fusesoc_libraries/fusesoc-cores
 /sw/__pycache__/
+
+rtl/cpu
+rtl/Deca/mtimer.v
+rtl/Deca/TEST
+rtl/IceFun/ice40pll-60Mhz.v
 *.bit
+

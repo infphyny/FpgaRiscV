@@ -4,10 +4,16 @@ name : ::Deca:0
 description: SOC for Deca fpga board
 
 filesets:
+
+  data:
+    files:
+      - data/Deca/deca.sdc 	: {file_type : SDC}
+      - data/Deca/pinmap.tcl	: {file_type: tclSource}
+
   rtl:
     files:
       - rtl/RisingEdgePulse/RisingEdgePulse.v : { file_type : verilogSource }
-      - rtl/Deca/DecaWishbone/DecaSocDDR3.v : {file_type : verilogSource}
+      
       - rtl/Deca/DecaWishbone/VexRiscv.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/TUSB1210/WishboneTUSB1210.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/AvalonClockCrossingBridge/AvalonClockDomainCrossingBridge.v : {file_type : verilogSource}
@@ -21,10 +27,25 @@ filesets:
       - rtl/afifo.v : {file_type : verilogSource }
     depend: ["fusesoc:utils:generators",i2c,wb_intercon-1.3.0,gpio,servant,simple_spi,wb_avalon_bridge]
 
+  IntelDDR3:
+    files:
+      - rtl/Deca/DecaWishbone/DecaSocDDR3.v : {file_type : verilogSource}
+
+  BrianHG_DDR3:
+    files:
+      - rtl/Deca/DecaWishbone/DecaSocBrianHG_DDR3.sv 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CMD_SEQUENCE.sv 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_COMMANDER.sv 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CONTROLLER_top.sv
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_FIFOs.sv
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_Gen_tCK.sv
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PHY_SEQ.sv
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PLL.sv
+    file_type: systemVerilogSource
+      
+
   Deca:
     files:
-      - data/Deca/deca.sdc 	: {file_type : SDC}
-      - data/Deca/pinmap.tcl	: {file_type: tclSource}
  #     - rtl/Deca/pll/pll.qip : {file_type : QIP}
       - rtl/Deca/DecaWishbone/pll/pll.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/usbpll/usbpll.v : {file_type : verilogSource}
@@ -141,6 +162,12 @@ filesets:
       - rtl/Deca/DecaWishbone/ddr/ddr3/alt_mem_ddrx_define.iv : {is_include_file : true}
        
 
+ # DecaBrianHG_DDR3:
+ #   files:
+ #     - data/Deca/deca.sdc 	: {file_type : SDC}
+ #     - data/Deca/pinmap.tcl	: {file_type: tclSource}
+
+
   Deca_testbench:
     files:
       - rtl/sim/DDR3/DDR3Sim.v : {file_type : verilogSource}
@@ -163,14 +190,26 @@ targets:
 
   Deca:
     default_tool: quartus
-    filesets_append: [rtl,Deca]
-    parameters: [memfile,memsize=0x20000,PLL=DDR3]  #PLL or NONE
+    filesets_append: [data,rtl,IntelDDR3,Deca]
+    parameters: [memfile,memsize=0x20000,PLL=DDR3]  #DDR3,PLL,NONE
     generate: [wb_intercon]
     tools:
       quartus:
         family:  MAX 10
         device:  10M50DAF484C6GES
     toplevel: DecaTopLevel
+
+  Deca_BrianHG_DDR3:
+    default_tool: quartus
+    filesets_append: [data,rtl,BrianHG_DDR3]
+    parameters : [memfile,memsize=0x20000,PLL=DDR3]
+    generate: [wb_intercon]
+    tools:
+      quartus:
+        family: MAX 10
+        device: 10M50DAF484C6GES
+      toplevel: DecaTopLevel
+    
 
   Deca_testbench:
     default_tool: verilator
