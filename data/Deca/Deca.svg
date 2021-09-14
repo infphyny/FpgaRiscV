@@ -106,6 +106,9 @@
 }
 .gpio .pinlabel__body{
     fill: rgb(160, 133, 26);
+    width: 36px;
+    height: 12px; 
+
 }
 .gpio .pinlabel__leader{
     stroke: rgb(160, 133, 26);
@@ -150,6 +153,38 @@
     fill: rgb(230, 87, 10);
 }
 
+.gpioA .pinlabel__body{
+    fill:darkseagreen
+}
+.gpioA .pinlabel__text{
+    fill :rgb(0,0,0);
+    font-size: 8px;
+}
+
+.gpioA .pinlabel__leader{
+    fill:darkseagreen
+}
+
+.gpioA .swatch__body{
+    fill :darkseagreen
+}
+
+.gpioB .pinlabel__body{
+    fill:olive
+}
+.gpioB .pinlabel__text{
+    fill :rgb(0,0,0);
+    font-size: 8px;
+}
+
+.gpioB .pinlabel__leader{
+    fill:olive
+}
+
+.gpioB .swatch__body{
+    fill :olive
+}
+
 
 
 .i2c_0 .pinlabel__body{
@@ -167,6 +202,43 @@
 }
 
 
+.spi_0 .pinlabel__body{
+    fill:slateblue;
+   
+}
+
+.spi_0 .body
+{
+    width:60;
+    height:12;
+}
+.spi_0 .pinlabel__text{
+    fill :rgb(255,255,255);
+    font-size: 8px;
+}
+.spi_0 .pinlabel__leader{
+    stroke :slateblue
+
+}
+.spi_0 .swatch__body{
+    fill :slateblue
+}
+
+
+
+
+.uart_0 .pinlabel__text{
+    fill: #FFF;
+    font-size: 8px;
+}
+.uart_0 .pinlabel__leader
+{
+    stroke: rgb(10, 10, 225);
+}
+.uart_0 .swatch__body{
+    fill: rgb(10, 10, 225);
+}
+
 .uart_0 .pinlabel__body{
     fill: rgb(10, 10, 225);
 }
@@ -183,16 +255,19 @@
 }
 
 .pinid .pinlabel__body{
-    fill: rgb(154, 154, 154);
+    fill:rgb(120, 120, 120)
 }
+
 .pinid .pinlabel__leader{
-    stroke: rgb(154, 154, 154);
+    stroke: rgb(120, 120,120);
 }
+
+
 .pinid .swatch__body {
-    fill: rgb(154, 154, 154);
+    fill: rgb(120,120,120);
 }
 .pinid .pinlabel__text {
-    fill : #000;
+    fill : #FFF;
     font-weight: normal;
     font-size: 8px;
 }
@@ -740,7 +815,7 @@
  class=" pinlabel__body" 
     x="6" 
     y="-6.0" 
-    width="36" 
+    width="48" 
     height="12" 
     shape-rendering="geometricPrecision"
     rx="3" 
@@ -748,7 +823,7 @@
 /><text
     class="pinlabel__text"
     transform="
-        translate(24.0 0) 
+        translate(30.0 0) 
         scale(1.0 1.0)
     "  
 >
@@ -841,7 +916,7 @@
  class=" pinlabel__body" 
     x="6" 
     y="-6.0" 
-    width="36" 
+    width="48" 
     height="12" 
     shape-rendering="geometricPrecision"
     rx="3" 
@@ -849,7 +924,7 @@
 /><text
     class="pinlabel__text"
     transform="
-        translate(24.0 0) 
+        translate(30.0 0) 
         scale(1.0 1.0)
     "  
 >
@@ -925,6 +1000,37 @@
 >
     W8
 </text>
+</g><g 
+        class=" pinlabel spi_0"
+    transform="
+        translate(128.0 -134.05) 
+        scale(1.0 1.0)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(1.0 1.0)
+    "  
+>
+    MISO_0
+</text>
 </g>
 </g><g 
     transform="
@@ -994,6 +1100,37 @@
     "  
 >
     AB8
+</text>
+</g><g 
+        class=" pinlabel spi_0"
+    transform="
+        translate(128.0 -153.20000000000002) 
+        scale(1.0 1.0)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(1.0 1.0)
+    "  
+>
+    SCLK
 </text>
 </g>
 </g><g 
@@ -2420,7 +2557,7 @@
  class=" pinlabel__body" 
     x="6" 
     y="-6.0" 
-    width="36" 
+    width="48" 
     height="12" 
     shape-rendering="geometricPrecision"
     rx="3" 
@@ -2428,7 +2565,7 @@
 /><text
     class="pinlabel__text"
     transform="
-        translate(24.0 0) 
+        translate(30.0 0) 
         scale(1 -1)
     "  
 >
@@ -2521,7 +2658,7 @@
  class=" pinlabel__body" 
     x="6" 
     y="-6.0" 
-    width="36" 
+    width="48" 
     height="12" 
     shape-rendering="geometricPrecision"
     rx="3" 
@@ -2529,7 +2666,7 @@
 /><text
     class="pinlabel__text"
     transform="
-        translate(24.0 0) 
+        translate(30.0 0) 
         scale(1 -1)
     "  
 >
@@ -2605,6 +2742,37 @@
 >
     V8
 </text>
+</g><g 
+        class=" pinlabel spi_0"
+    transform="
+        translate(328 -144.05) 
+        scale(1 -1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(1 -1)
+    "  
+>
+    MOSI_0
+</text>
 </g>
 </g><g 
     transform="
@@ -2674,6 +2842,37 @@
     "  
 >
     V7
+</text>
+</g><g 
+        class=" pinlabel spi_0"
+    transform="
+        translate(328 -163.20000000000002) 
+        scale(1 -1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(1 -1)
+    "  
+>
+    CS_n
 </text>
 </g>
 </g><g 
@@ -3803,6 +4002,37 @@
 >
     W18
 </text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-145 -9.149999999999999) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[0]
+</text>
 </g>
 </g><g 
     transform="
@@ -3872,6 +4102,37 @@
     "  
 >
     Y19
+</text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-145 -28.299999999999997) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[2]
 </text>
 </g>
 </g><g 
@@ -3943,6 +4204,37 @@
 >
     AA20
 </text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-145 -47.449999999999996) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[4]
+</text>
 </g>
 </g><g 
     transform="
@@ -4012,6 +4304,37 @@
     "  
 >
     AB21
+</text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-145 -66.6) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[6]
 </text>
 </g>
 </g><g 
@@ -4083,6 +4406,37 @@
 >
     AB19
 </text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-145 -85.75) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[0]
+</text>
 </g>
 </g><g 
     transform="
@@ -4152,6 +4506,37 @@
     "  
 >
     V16
+</text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-145 -104.9) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[2]
 </text>
 </g>
 </g><g 
@@ -4223,6 +4608,37 @@
 >
     V15
 </text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-145 -124.05000000000001) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[4]
+</text>
 </g>
 </g><g 
     transform="
@@ -4292,6 +4708,37 @@
     "  
 >
     AB17
+</text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-145 -143.20000000000002) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[6]
 </text>
 </g>
 </g><g 
@@ -5421,6 +5868,37 @@
 >
     Y18
 </text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-308 -19.15) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[1]
+</text>
 </g>
 </g><g 
     transform="
@@ -5490,6 +5968,37 @@
     "  
 >
     AA17
+</text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-308 -38.3) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[3]
 </text>
 </g>
 </g><g 
@@ -5561,6 +6070,37 @@
 >
     AA19
 </text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-308 -57.449999999999996) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[5]
+</text>
 </g>
 </g><g 
     transform="
@@ -5630,6 +6170,37 @@
     "  
 >
     AB20
+</text>
+</g><g 
+        class=" pinlabel gpioA"
+    transform="
+        translate(-308 -76.6) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioA[7]
 </text>
 </g>
 </g><g 
@@ -5701,6 +6272,37 @@
 >
     Y16
 </text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-308 -95.75) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[1]
+</text>
 </g>
 </g><g 
     transform="
@@ -5770,6 +6372,37 @@
     "  
 >
     AB18
+</text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-308 -114.9) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[3]
 </text>
 </g>
 </g><g 
@@ -5841,6 +6474,37 @@
 >
     W17
 </text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-308 -134.05) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[5]
+</text>
 </g>
 </g><g 
     transform="
@@ -5910,6 +6574,37 @@
     "  
 >
     AA16
+</text>
+</g><g 
+        class=" pinlabel gpioB"
+    transform="
+        translate(-308 -153.20000000000002) 
+        scale(-1 1)
+        rotate(0)
+    "
+>
+        <path 
+    class=" pinlabel__leader" 
+    d="M 0 0.0 L 6 0.0" 
+    transform="scale(1 1) translate(0 0) " 
+    shape-rendering="geometricPrecision"
+/><rect
+ class=" pinlabel__body" 
+    x="6" 
+    y="-6.0" 
+    width="48" 
+    height="12" 
+    shape-rendering="geometricPrecision"
+    rx="3" 
+    ry="3" 
+/><text
+    class="pinlabel__text"
+    transform="
+        translate(30.0 0) 
+        scale(-1 1)
+    "  
+>
+    gpioB[7]
 </text>
 </g>
 </g><g 
@@ -7112,9 +7807,73 @@
     Power
 </text>
 </g><g 
-        class="uart_0 legendentry"
+        class="gpioA legendentry"
     transform="
         translate(159.0 0) 
+        scale(1 1)
+        rotate(0)
+    "
+>
+        <g 
+        class=" swatch"
+    transform="
+        translate(4.0 14.0) 
+        scale(1 1)
+        rotate(0)
+    "
+>
+        <rect
+ class=" swatch__body" 
+    x="0" 
+    y="-10.0" 
+    width="20" 
+    height="20" 
+    shape-rendering="geometricPrecision"
+/>
+</g><text
+    transform="
+        translate(28.0 14.0) 
+        scale(1 1)
+    "  
+>
+    gpioA
+</text>
+</g><g 
+        class="gpioB legendentry"
+    transform="
+        translate(159.0 28.0) 
+        scale(1 1)
+        rotate(0)
+    "
+>
+        <g 
+        class=" swatch"
+    transform="
+        translate(4.0 14.0) 
+        scale(1 1)
+        rotate(0)
+    "
+>
+        <rect
+ class=" swatch__body" 
+    x="0" 
+    y="-10.0" 
+    width="20" 
+    height="20" 
+    shape-rendering="geometricPrecision"
+/>
+</g><text
+    transform="
+        translate(28.0 14.0) 
+        scale(1 1)
+    "  
+>
+    gpioB
+</text>
+</g><g 
+        class="uart_0 legendentry"
+    transform="
+        translate(159.0 56.0) 
         scale(1 1)
         rotate(0)
     "
@@ -7146,7 +7905,7 @@
 </g><g 
         class="i2c_0 legendentry"
     transform="
-        translate(159.0 28.0) 
+        translate(159.0 84.0) 
         scale(1 1)
         rotate(0)
     "
@@ -7173,7 +7932,39 @@
         scale(1 1)
     "  
 >
-    I2C
+    I2C_0
+</text>
+</g><g 
+        class="spi_0 legendentry"
+    transform="
+        translate(318.0 0) 
+        scale(1 1)
+        rotate(0)
+    "
+>
+        <g 
+        class=" swatch"
+    transform="
+        translate(4.0 14.0) 
+        scale(1 1)
+        rotate(0)
+    "
+>
+        <rect
+ class=" swatch__body" 
+    x="0" 
+    y="-10.0" 
+    width="20" 
+    height="20" 
+    shape-rendering="geometricPrecision"
+/>
+</g><text
+    transform="
+        translate(28.0 14.0) 
+        scale(1 1)
+    "  
+>
+    SPI_0
 </text>
 </g>
 </g>
