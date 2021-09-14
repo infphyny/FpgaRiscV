@@ -160,9 +160,10 @@ picocom /dev/ttyUSBX --baud 115200 --imap lfcrlf
 ```
 where X is usb port number or open Arduino IDE then choose serial monitor.
 
-- Pinout
+- [Pinout](https://raw.githubusercontent.com/infphyny/FpgaRiscV/main/data/Deca/Deca.svg)
+   
+  ![pinout diagram](data/Deca/Deca.svg)
 
-  View ![pinout diagram](data/Deca/Deca.svg)
 
 
 
