@@ -11,3 +11,5 @@ rtl/Deca/TEST
 rtl/IceFun/ice40pll-60Mhz.v
 *.bit
 
+__pycache__
+
