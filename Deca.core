@@ -57,7 +57,7 @@ filesets:
       - rtl/Deca/DecaWishbone/pll/pll.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/usbpll/usbpll.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/usbpll/usbpll.qip : {file_type : QIP}
-      
+      - rtl/Deca/DecaWishbone/DecaTopLevel.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/ddr/ddr3.qip : {file_type : QIP}
       - rtl/Deca/DecaWishbone/ddr/ddr3.v : {is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0.sdc : {is_include_file : true} 

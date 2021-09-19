@@ -36,7 +36,7 @@ RAM_SIZE = 131072
 LD_SCRIPT = riscv.ld
 #LD_SCRIPT = riscv_64k.ld
 FUSESOC_CORE = Deca
-FUSESOC_TARGET = Deca_BrianHG_DDR3 #Deca
+FUSESOC_TARGET = Deca #Deca_BrianHG_DDR3 #Deca
 
 GENHEX = $(SW_DIR)/genhex.py
 GENMIF = $(SW_DIR)/genmif.py
