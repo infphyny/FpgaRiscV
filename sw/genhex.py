@@ -5,7 +5,9 @@
 from sys import argv
 vhfile = argv[1]
 nbytes = int(argv[2])
-hexfile = argv[3]
+start_address = int(argv[3])
+hexfile = argv[4]
+
 
 #print(vhfile)
 #print(nbytes)
@@ -30,7 +32,7 @@ for line in lines:
 	if(len(line) >0):
 		if(line[0] == '@'):
 	#		print(line[1:])
-			address = int((line[1:]),16)
+			address = int((line[1:]),16)-start_address
 	#		print(address)
 		else:
 			bytes = line.split()

@@ -12,7 +12,7 @@ from pinout.components.legend import Legend
 # Import data for the diagram
 import data
 image_width=1400
-image_height=1520
+image_height=1600
 
 # Create a new diagram
 diagram = Diagram(image_width,image_height, "diagram")

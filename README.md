@@ -51,8 +51,17 @@ export PATH="/home/__your_user_name__/intelFPGA_lite/$QUARTUS_VERSION/quartus/bi
 ```
 
 
-* RiscV toolchain https://github.com/riscv/riscv-gnu-toolchain or
- get [pre-build binary](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2020.04.0-x86_64-linux-ubuntu14.tar.gz)
+* RiscV toolchain [from source](https://github.com/riscv/riscv-gnu-toolchain) or get [pre-build binary](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2020.04.0-x86_64-linux-ubuntu14.tar.gz) 
+  
+  
+
+<!--
+ ```
+  sudo apt install gcc-riscv64-unknown-elf
+  sudo apt install picolibc-riscv64-unknown-elf
+ ```
+ --> 
+ 
  
  
 To compile from source:

@@ -33,15 +33,22 @@ filesets:
 
   BrianHG_DDR3:
     files:
-      - rtl/Deca/DecaWishbone/DecaSocBrianHG_DDR3.sv 
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CMD_SEQUENCE.sv 
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_COMMANDER.sv 
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CONTROLLER_top.sv
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_FIFOs.sv
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_Gen_tCK.sv
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PHY_SEQ.sv
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PLL.sv
-    file_type: systemVerilogSource
+      - data/Deca/DecaWishbone/DecaWishbone.sdc 	: {file_type : SDC}
+      - data/Deca/pinmap.tcl	: {file_type: tclSource}
+      - rtl/Deca/DecaWishbone/DecaTopLevel.v : {file_type : verilogSource}
+      - rtl/Deca/DecaWishbone/usbpll/usbpll.v : {file_type : verilogSource}
+      - rtl/Deca/DecaWishbone/usbpll/usbpll.qip : {file_type : QIP}
+      - rtl/Deca/DecaWishbone/DecaSocBrianHG_DDR3.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/altera_gpio_lite.sv : {file_type : systemVerilogSource}
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CMD_SEQUENCER.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_COMMANDER.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CONTROLLER_top.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_FIFOs.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_GEN_tCK.sv : {file_type : systemVerilogSource}
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_IO_PORT_ALTERA.sv : {file_type : systemVerilogSource}
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PHY_SEQ.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PLL.sv : {file_type : systemVerilogSource} 
+    
       
 
   Deca:
@@ -50,7 +57,7 @@ filesets:
       - rtl/Deca/DecaWishbone/pll/pll.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/usbpll/usbpll.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/usbpll/usbpll.qip : {file_type : QIP}
-      - rtl/Deca/DecaWishbone/DecaTopLevel.v : {file_type : verilogSource}
+      
       - rtl/Deca/DecaWishbone/ddr/ddr3.qip : {file_type : QIP}
       - rtl/Deca/DecaWishbone/ddr/ddr3.v : {is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0.sdc : {is_include_file : true} 
@@ -201,14 +208,14 @@ targets:
 
   Deca_BrianHG_DDR3:
     default_tool: quartus
-    filesets_append: [data,rtl,BrianHG_DDR3]
+    filesets_append: [rtl,BrianHG_DDR3]
     parameters : [memfile,memsize=0x20000,PLL=DDR3]
     generate: [wb_intercon]
     tools:
       quartus:
         family: MAX 10
         device: 10M50DAF484C6GES
-      toplevel: DecaTopLevel
+    toplevel: DecaTopLevel
     
 
   Deca_testbench:
