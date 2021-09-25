@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : ColorLightMuraxSoc
-// Git hash  : cc9f3e753a2e1b7554e10bf43635f0d2b8afed82
+// Git hash  : 68e704f3092be640aa92c876cf78702a83167f94
 
 
 `define BranchCtrlEnum_binary_sequential_type [1:0]
@@ -158,7 +158,8 @@ module ColorLightMuraxSoc (
   wire       [15:0]   _zz_gpioA_16;
   wire       [15:0]   _zz_when_InOutWrapper_l65;
   wire                core_clk;
-  wire                core_resetn;
+  wire                core_reset;
+  wire                _zz_1;
   wire                when_InOutWrapper_l48;
   wire                when_InOutWrapper_l48_1;
   wire                when_InOutWrapper_l65;
@@ -183,7 +184,7 @@ module ColorLightMuraxSoc (
   assign _zz_i2c_0_scl_1 = 1'b0;
   assign _zz_i2c_0_sda_1 = 1'b0;
   MainColorLightMuraxSoc murax (
-    .io_asyncReset           (core_resetn                 ), //i
+    .io_asyncReset           (core_reset                  ), //i
     .io_mainClk              (core_clk                    ), //i
     .io_jtag_tms             (jtag_tms                    ), //i
     .io_jtag_tdi             (jtag_tdi                    ), //i
@@ -204,17 +205,17 @@ module ColorLightMuraxSoc (
     .io_spi_0_miso           (spi_0_miso                  ), //i
     .io_leds                 (murax_io_leds               )  //o
   );
-  ecppll pll (
+  EcpPLL pll (
     .reset        (pll_reset    ), //i
     .input_clk    (mainClk      ), //i
     .soc_clk      (pll_soc_clk  ), //o
     .locked       (pll_locked   )  //o
   );
   BufferCC_6 bufferCC_7 (
-    .io_dataIn     (1'b1                   ), //i
+    .io_dataIn     (1'b0                   ), //i
     .io_dataOut    (bufferCC_7_io_dataOut  ), //o
     .core_clk      (core_clk               ), //i
-    .locked        (pll_locked             )  //i
+    ._zz_1         (_zz_1                  )  //i
   );
   assign i2c_0_scl = _zz_i2c_0_scl ? _zz_i2c_0_scl_1[0] : 1'bz;
   assign i2c_0_sda = _zz_i2c_0_sda ? _zz_i2c_0_sda_1[0] : 1'bz;
@@ -362,7 +363,8 @@ module ColorLightMuraxSoc (
 
   assign pll_reset = (! mainReset);
   assign core_clk = pll_soc_clk;
-  assign core_resetn = bufferCC_7_io_dataOut;
+  assign _zz_1 = (! pll_locked);
+  assign core_reset = bufferCC_7_io_dataOut;
   assign jtag_tdo = murax_io_jtag_tdo;
   assign _zz_gpioA_16 = murax_io_gpioA_write;
   assign _zz_when_InOutWrapper_l65 = murax_io_gpioA_writeEnable;
@@ -401,16 +403,16 @@ module BufferCC_6 (
   input               io_dataIn,
   output              io_dataOut,
   input               core_clk,
-  input               locked
+  input               _zz_1
 );
   (* async_reg = "true" *) reg                 buffers_0;
   (* async_reg = "true" *) reg                 buffers_1;
 
   assign io_dataOut = buffers_1;
-  always @(posedge core_clk or posedge locked) begin
-    if(locked) begin
-      buffers_0 <= 1'b0;
-      buffers_1 <= 1'b0;
+  always @(posedge core_clk or posedge _zz_1) begin
+    if(_zz_1) begin
+      buffers_0 <= 1'b1;
+      buffers_1 <= 1'b1;
     end else begin
       buffers_0 <= io_dataIn;
       buffers_1 <= buffers_0;
@@ -574,9 +576,9 @@ module MainColorLightMuraxSoc (
   reg        [31:0]   _zz_system_mainBusDecoder_logic_masterPipelined_rsp_payload_data;
   reg                 resetCtrl_mainClkResetUnbuffered;
   reg        [5:0]    resetCtrl_systemClkResetCounter = 6'h0;
-  wire       [5:0]    _zz_when_ColorLightMurax_l185;
-  wire                when_ColorLightMurax_l185;
-  wire                when_ColorLightMurax_l189;
+  wire       [5:0]    _zz_when_ColorLightMurax_l186;
+  wire                when_ColorLightMurax_l186;
+  wire                when_ColorLightMurax_l190;
   reg                 resetCtrl_mainClkReset;
   reg                 resetCtrl_systemReset;
   reg                 system_timerInterrupt;
@@ -926,14 +928,14 @@ module MainColorLightMuraxSoc (
 
   always @(*) begin
     resetCtrl_mainClkResetUnbuffered = 1'b0;
-    if(when_ColorLightMurax_l185) begin
+    if(when_ColorLightMurax_l186) begin
       resetCtrl_mainClkResetUnbuffered = 1'b1;
     end
   end
 
-  assign _zz_when_ColorLightMurax_l185[5 : 0] = 6'h3f;
-  assign when_ColorLightMurax_l185 = (resetCtrl_systemClkResetCounter != _zz_when_ColorLightMurax_l185);
-  assign when_ColorLightMurax_l189 = io_asyncReset_buffercc_io_dataOut;
+  assign _zz_when_ColorLightMurax_l186[5 : 0] = 6'h3f;
+  assign when_ColorLightMurax_l186 = (resetCtrl_systemClkResetCounter != _zz_when_ColorLightMurax_l186);
+  assign when_ColorLightMurax_l190 = io_asyncReset_buffercc_io_dataOut;
   always @(*) begin
     system_timerInterrupt = 1'b0;
     if(system_timer_io_interrupt) begin
@@ -1012,10 +1014,10 @@ module MainColorLightMuraxSoc (
   assign system_mainBusDecoder_logic_masterPipelined_rsp_payload_data = _zz_system_mainBusDecoder_logic_masterPipelined_rsp_payload_data;
   assign when_MuraxUtiles_l133 = (system_mainBusDecoder_logic_rspPending && (! system_mainBusDecoder_logic_masterPipelined_rsp_valid));
   always @(posedge io_mainClk) begin
-    if(when_ColorLightMurax_l185) begin
+    if(when_ColorLightMurax_l186) begin
       resetCtrl_systemClkResetCounter <= (resetCtrl_systemClkResetCounter + 6'h01);
     end
-    if(when_ColorLightMurax_l189) begin
+    if(when_ColorLightMurax_l190) begin
       resetCtrl_systemClkResetCounter <= 6'h0;
     end
   end
@@ -1259,8 +1261,8 @@ module Apb3Decoder (
     io_output_PSEL[1] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h10000) && io_input_PSEL[0]);
     io_output_PSEL[2] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h20000) && io_input_PSEL[0]);
     io_output_PSEL[3] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h30000) && io_input_PSEL[0]);
-    io_output_PSEL[4] = (((io_input_PADDR & (~ 20'h003ff)) == 20'h31000) && io_input_PSEL[0]);
-    io_output_PSEL[5] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h40000) && io_input_PSEL[0]);
+    io_output_PSEL[4] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h40000) && io_input_PSEL[0]);
+    io_output_PSEL[5] = (((io_input_PADDR & (~ 20'h00fff)) == 20'h50000) && io_input_PSEL[0]);
   end
 
   always @(*) begin
@@ -7377,8 +7379,6 @@ module VexRiscv (
       IBusSimplePlugin_injector_nextPcCalc_valids_3 <= 1'b0;
       IBusSimplePlugin_pending_value <= 3'b000;
       IBusSimplePlugin_rspJoin_rspBuffer_discardCounter <= 3'b000;
-      CsrPlugin_mtvec_mode <= 2'b00;
-      CsrPlugin_mtvec_base <= 30'h00000008;
       CsrPlugin_mstatus_MIE <= 1'b0;
       CsrPlugin_mstatus_MPIE <= 1'b0;
       CsrPlugin_mstatus_MPP <= 2'b11;
@@ -7617,12 +7617,6 @@ module VexRiscv (
           CsrPlugin_mie_MEIE <= CsrPlugin_csrMapping_writeDataSignal[11];
           CsrPlugin_mie_MTIE <= CsrPlugin_csrMapping_writeDataSignal[7];
           CsrPlugin_mie_MSIE <= CsrPlugin_csrMapping_writeDataSignal[3];
-        end
-      end
-      if(execute_CsrPlugin_csr_773) begin
-        if(execute_CsrPlugin_writeEnable) begin
-          CsrPlugin_mtvec_base <= CsrPlugin_csrMapping_writeDataSignal[31 : 2];
-          CsrPlugin_mtvec_mode <= CsrPlugin_csrMapping_writeDataSignal[1 : 0];
         end
       end
     end
@@ -7909,6 +7903,12 @@ module VexRiscv (
     if(execute_CsrPlugin_csr_836) begin
       if(execute_CsrPlugin_writeEnable) begin
         CsrPlugin_mip_MSIP <= CsrPlugin_csrMapping_writeDataSignal[3];
+      end
+    end
+    if(execute_CsrPlugin_csr_773) begin
+      if(execute_CsrPlugin_writeEnable) begin
+        CsrPlugin_mtvec_base <= CsrPlugin_csrMapping_writeDataSignal[31 : 2];
+        CsrPlugin_mtvec_mode <= CsrPlugin_csrMapping_writeDataSignal[1 : 0];
       end
     end
   end

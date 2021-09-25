@@ -1,0 +1,4 @@
+
+
+$(PROJECT_NAME)_0.hex $(PROJECT_NAME)_1.hex $(PROJECT_NAME)_2.hex $(PROJECT_NAME)_3.hex  :$(PROJECT_NAME).hex
+	python $(SPLITHEX) $(PROJECT_NAME).hex $(PROJECT_NAME)_0.hex $(PROJECT_NAME)_1.hex $(PROJECT_NAME)_2.hex $(PROJECT_NAME)_3.hex 

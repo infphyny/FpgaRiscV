@@ -1,8 +1,11 @@
 
 build
+Colorlight.core
+cyc1000.core
 fusesoc.conf
 fusesoc_libraries
 fusesoc_libraries/fusesoc-cores
+pinout
 /sw/__pycache__/
 
 rtl/cpu
@@ -10,6 +13,7 @@ rtl/Deca/mtimer.v
 rtl/Deca/TEST
 rtl/IceFun/ice40pll-60Mhz.v
 *.bit
+TangNano.core
 
 __pycache__
 

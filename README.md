@@ -160,21 +160,15 @@ make objdump
 
 ## Terminal output 
 
-
- P9:11  GPIO1_D[0]  RX (Green C96 cable)   / P9:12  GPIO1_D[1]   TX  (White C96 cable)
-
-Execute program
+To view serial output from the soc execute the following program
 ```
 picocom /dev/ttyUSBX --baud 115200 --imap lfcrlf 
 ```
-where X is usb port number or open Arduino IDE then choose serial monitor.
+where X is usb port number or use Arduino IDE serial monitor.
 
 - [Pinout](https://raw.githubusercontent.com/infphyny/FpgaRiscV/main/data/Deca/DecaWishbone/pinout/DecaWishbone.svg)
    
   ![pinout diagram](data/Deca/DecaWishbone/pinout/DecaWishbone.svg)
-
-
-
 
 
 ##  Deca RiscV soc properties ##
@@ -190,7 +184,6 @@ where X is usb port number or open Arduino IDE then choose serial monitor.
 
 
 ##  TODO 
-* Better documentation for pin out.
 * Add documentation on how to generate the VexRiscv.v file from Vexriscv github repository.   
 * Show .vcd file location that generated from simulation.  
 

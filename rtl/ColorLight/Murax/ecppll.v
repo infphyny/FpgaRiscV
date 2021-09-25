@@ -2,7 +2,7 @@
 // diamond 3.8-3.9 is untested
 // diamond 3.10 or higher is likely to abort with error about unable to use feedback signal
 // cause of this could be from wrong CPHASE/FPHASE parameters
-module ecppll
+module EcpPLL
 (
     input reset, // 0:inactive, 1:reset
     input input_clk, // 25 MHz, 0 deg
