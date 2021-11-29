@@ -61,7 +61,7 @@ $(PROJ).mif : $(PROJ).hex
 
 
 $(PROJ).hex : $(PROJ).vh
-	python $(GENHEX) $< $(RAM_SIZE) $@
+	python $(GENHEX) $< $(RAM_SIZE) 0 $@
 
 
 #$(PROJ).bin : $(PROJ).elf

@@ -53,7 +53,7 @@ OBJ =  $(PROJECT_OBJ) $(DECAMURAX_OBJ)
 #	python $(GENMIF) $< 32768 1 $@
 
 $(PROJECT_NAME).hex : $(PROJECT_NAME).vh
-	python $(GENHEX) $< $(RAM_SIZE) $@
+	python $(GENHEX) $< $(RAM_SIZE) 0 $@
 	python $(SPLITHEX) $(PROJECT_NAME).hex $(PROJECT_NAME)_0.hex $(PROJECT_NAME)_1.hex $(PROJECT_NAME)_2.hex $(PROJECT_NAME)_3.hex 
 	python $(HEX2BIN) $(PROJECT_NAME)_0.hex $(PROJECT_NAME)_0.bin
 	python $(HEX2BIN) $(PROJECT_NAME)_1.hex $(PROJECT_NAME)_1.bin

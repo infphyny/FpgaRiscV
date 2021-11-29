@@ -9,23 +9,23 @@ LPF       := $(FUSESOC_CORE_DIR)data/ColorLight/Briey/5A75E-V8.lpf
 # Top level module
 TOP       := ColorLightBriey
 # Files
-FILES = ColorLightBriey.v
+FILES = ColorLightBriey.v ecppll.v
 
 TARGET_FREQUENCY := 25
 #PLL
 
-PLL_ICLK := clock_25
+PLL_ICLK := i_clk
 CLKIN := 25
 
-CLKOUT0_NAME := clockout0
+CLKOUT0_NAME := o_clk0
 CLKOUT_0 := 50
 
-CLKOUT1_NAME := clockout1
+CLKOUT1_NAME := o_clk1
 CLKOUT1 := 50
-PHASE1 := 90 
+PHASE1 := 0
 
-
-PLL_MODULE_NAME := ecppll
+PLL_MODULE_NAME  := EcpPLL
+PLL_MODULE_NAME_2 := EcpPLL2
 PLL_FILENAME := ecppll.v
 
 
@@ -76,7 +76,8 @@ ipll:
 
 # clkout0 and clkout1 defined
 ipll2:
-	ecppll --reset  --module $(PLL_MODULE_NAME)  --clkin_name $(PLL_ICLK)  --clkin $(CLKIN) --clkout0_name $(CLKOUT0_NAME) --clkout0 $(CLKOUT_0) --clkout1_name $(CLKOUT1_NAME) --clkout1 $(CLKOUT1) --phase1 $(PHASE1) --internal_feedback  -f $(PLL_FILENAME) 
+	ecppll --reset  --module $(PLL_MODULE_NAME_2)  --clkin_name $(PLL_ICLK)  --clkin $(CLKIN) --clkout0_name $(CLKOUT0_NAME) --clkout0 $(CLKOUT_0) --clkout1_name $(CLKOUT1_NAME) --clkout1 $(CLKOUT1) --phase1 $(PHASE1) --internal_feedback  -f $(PLL_FILENAME) 
+
 write-flash:
 	openFPGALoader --write-flash --bitstream $(PROJ).bit
 
