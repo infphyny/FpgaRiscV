@@ -11,7 +11,7 @@ template<typename T>
 class ClockManager
 {
   public:
-   ClockManager(VerilatedVcdC *tfp,T* top )
+   ClockManager(VerilatedVcdC *tfp,T* top ){}
    void advance(void)
    {
      
