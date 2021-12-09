@@ -121,9 +121,9 @@ fusesoc library add wb_intercon https://github.com/olofk/wb_intercon
 ```
 
 
-## Building and executing an example ##
+## Building and executing an example for DecaWishbone soc ##
 
-cd sw/Deca/accelerometer
+cd sw/Deca/DecaWishbone/accelerometer
 1. Compile software that generate .hex and .mif files
 ```
 make

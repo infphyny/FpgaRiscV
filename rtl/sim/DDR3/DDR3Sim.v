@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : DDR3Sim
-// Git hash  : 103e88b66fece04edfdc6177def05623920a54e3
+// Git hash  : c63f77f60649f6131264efdc8d97b007cb90864e
 
 
 
@@ -15,14 +15,17 @@ module DDR3Sim (
   input               avl_read_req,
   input               avl_write_req,
   input      [2:0]    avl_size,
+  output              local_init_done,
+  output              local_cal_success,
   input               clk,
   input               reset
 );
   reg        [63:0]   _zz_ram_port0;
   reg                 _zz_1;
   reg                 rdata_valid;
-  wire                when_ddr3_l48;
-  wire                when_ddr3_l53;
+  wire                when_ddr3_l46;
+  wire                when_ddr3_l59;
+  wire                when_ddr3_l64;
   reg [63:0] ram [0:67108863];
 
   always @(posedge clk) begin
@@ -39,22 +42,27 @@ module DDR3Sim (
 
   always @(*) begin
     _zz_1 = 1'b0;
-    if(when_ddr3_l48) begin
+    if(when_ddr3_l59) begin
       _zz_1 = 1'b1;
     end
   end
 
+  assign local_init_done = 1'b1;
+  assign local_cal_success = 1'b1;
   assign avl_rdata_valid = rdata_valid;
+  assign when_ddr3_l46 = (rdata_valid == 1'b1);
   assign avl_ready = 1'b1;
   assign avl_rdata = _zz_ram_port0;
-  assign when_ddr3_l48 = (avl_write_req == 1'b1);
-  assign when_ddr3_l53 = (avl_read_req == 1'b1);
+  assign when_ddr3_l59 = (avl_write_req == 1'b1);
+  assign when_ddr3_l64 = (avl_read_req == 1'b1);
   always @(posedge clk or posedge reset) begin
     if(reset) begin
       rdata_valid <= 1'b0;
     end else begin
-      rdata_valid <= 1'b0;
-      if(when_ddr3_l53) begin
+      if(when_ddr3_l46) begin
+        rdata_valid <= 1'b0;
+      end
+      if(when_ddr3_l64) begin
         rdata_valid <= 1'b1;
       end
     end

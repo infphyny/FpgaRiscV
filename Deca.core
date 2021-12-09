@@ -24,6 +24,7 @@ filesets:
       - rtl/Deca/DecaWishbone/UartWishbone/WishboneUartCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/Wishbone8LedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/MicroWire/MicroWireWishbone.v : {file_type : verilogSource}
+      - rtl/peripheral/DDR3Manager/WishboneDDR3Manager.v : {file_type : verilogSource}
       - rtl/afifo.v : {file_type : verilogSource }
     depend: ["fusesoc:utils:generators",i2c,wb_intercon-1.3.0,gpio,servant,simple_spi,wb_avalon_bridge]
 
@@ -167,6 +168,8 @@ filesets:
       - rtl/Deca/DecaWishbone/ddr/ddr3/altera_gpio_lite.sv : { is_include_file : true} 
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_pll0.sv : { is_include_file : true} 
       - rtl/Deca/DecaWishbone/ddr/ddr3/alt_mem_ddrx_define.iv : {is_include_file : true}
+      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_s0_AC_ROM.hex : {is_include_file : true}
+      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_s0_inst_ROM.hex : {is_include_file : true}
        
 
  # DecaBrianHG_DDR3:
@@ -220,7 +223,7 @@ targets:
 
   Deca_testbench:
     default_tool: verilator
-    filesets_append: [rtl,Deca_testbench]
+    filesets_append: [rtl,IntelDDR3,Deca_testbench]
     generate: [wb_intercon]
     parameters:
       - PLL=NONE
@@ -299,7 +302,9 @@ generate:
             - board_temp_sensor
             - gsensor
             - pmonitor
-            - tusb1210
+#            - tusb1210
+            - ddr3manager
+            - hdmi_i2c
             - ictrl #interrupt controller
             - wb_av_bridge
 
@@ -372,10 +377,10 @@ generate:
           size: 8
           datawidth: 8
           
-        tusb1210:
-          offset:  0x00040910 
-          size: 2
-          datawidth: 8
+#        tusb1210:
+#          offset:  0x00040910 
+#         size: 2
+#          datawidth: 8
 
         key1:
           offset: 0x00041000
@@ -392,6 +397,16 @@ generate:
           size: 1
           datawidth: 8
 
+        ddr3manager:
+          offset:  0x00050000
+          size : 1
+          datawidth: 8 
+
+        hdmi_i2c:
+          offset: 0x00050010
+          size : 8
+          datawidth : 8
+          
         ictrl:
           offset: 0x00100000
           size: 4

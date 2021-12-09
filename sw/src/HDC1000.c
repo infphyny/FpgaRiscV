@@ -84,19 +84,24 @@ bool hdc1000_trigger_measure(I2C* i2c,const uint8_t address)
   return i2c_send(i2c,address,HDC1000_TEMP_REG,NULL,0,false,true);
 }
 
-//BUG
+
 bool hdc1000_read_measure(I2C* i2c,const uint8_t address,char temp[16],char rh[16])
 {
 
-
+ bool i2c_result;
   uint8_t buffer[4];
   buffer[2] = 0;
   buffer[3] = 0;
 //Read temperature
-  if(!i2c_rcv_delay(i2c,address,HDC1000_TEMP_REG,buffer,2,true))
-  {
-    return false;
-  }
+  do{
+  i2c_result = i2c_rcv(i2c,address,HDC1000_TEMP_REG,buffer,2,true);
+  }while(i2c_result == false);
+ 
+ //i2c_rcv_delay seem broken
+ //  if(!i2c_rcv_delay(i2c,address,HDC1000_TEMP_REG,buffer,2,true)) 
+ //  {
+  //   return false;
+ //  }
 
 int32_t* t = (int32_t*)buffer;
 //  uint16_t* temp_16 = (uint16_t*)&buffer[0];
@@ -146,15 +151,19 @@ d = d - n*10;
 //  strcat(temp,sd);
 
 //Read humidity
-uint32_t *ut = (uint32_t*)buffer;
+uint32_t *ut = (uint32_t*)(buffer);
 
 buffer[2] = 0;
 buffer[3] = 0;
+ do{
+  i2c_result = i2c_rcv(i2c,address,HDC1000_RH_REG,buffer,2,true);
+  }while(i2c_result == false);
+/*
 if(!i2c_rcv_delay(i2c,address,HDC1000_RH_REG,buffer,2,true))
 {
   return false;
 }
-
+*/
 //Example
 // Case 1: 100% humidity
 // ((2^16-1)* 1E7) /2^16 =

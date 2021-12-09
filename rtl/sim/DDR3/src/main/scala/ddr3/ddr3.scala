@@ -25,6 +25,8 @@ class DDR3Sim extends Component {
     val avl_read_req = in Bool()
     val avl_write_req = in Bool()
     val avl_size = in UInt(3 bits) 
+    val local_init_done = out Bool()
+    val local_cal_success = out Bool()
   }
  
   noIoPrefix
@@ -33,8 +35,17 @@ val ram = Mem(Bits(64 bits),WORDS_COUNT)
  //val rdata = Reg(Bits(64 bits)) init 0
 // val wdata = RegNext(io.avl_wdata) init 0
 // io.avl_rdata := rdata
+ 
+ io.local_init_done := True;
+ io.local_cal_success := True;
+
  io.avl_rdata_valid := rdata_valid
- rdata_valid := False
+ //rdata_valid := False
+
+ when(rdata_valid === True)
+ {
+   rdata_valid := False;
+ }
 
  io.avl_ready := True
 

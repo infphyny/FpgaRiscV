@@ -33,7 +33,7 @@ I2C* i2c = (I2C*)(RH_TEMP_BASE_ADDRESS);
 HDC1000DeviceInfo   di;
 
 i2c_enable(i2c);
-i2c_set_prescaler(i2c,75000000,100000);
+i2c_set_prescaler(i2c,50000000,100000);
 
 bool result;
 //Acquire temperature and humidity
@@ -103,16 +103,41 @@ spinal_uart_print(uart,"Manufacturer id:");
 spinal_uart_print_line(uart,di.manufacturer);
 spinal_uart_print(uart,"Device id:");
 spinal_uart_print_line(uart,di.id);
+// 0001 0000 0000 0000
+
+result = hdc1000_configure(i2c,address,0x00);
+if(result == false)
+{
+  spinal_uart_print_line(uart,"Unable to configure HDC1000 sensors");
+}
+
+
+result = hdc1000_get_config(i2c,address,&hdc1000_config);
+itoa(hdc1000_config,hdc1000_config_string,16);
+
+if(result == false)
+{
+  spinal_uart_print_line(uart,"Unable to get config of HDC1000 sensors");
+}else
+{
+
+spinal_uart_print_line(uart,hdc1000_config_string);
+
+}
+
+
+
+
 
 //uint32_t counter
   for(;;)
   {
-  //  if(!hdc1000_trigger_measure(i2c,address))
-  //  {
-  //    spinal_uart_print_line(uart,"Unable to trigger measure");
-//    }
-  //  for(uint32_t i = 0 ; i < 10000000 ; i++){}
-     result = hdc1000_configure(i2c,address,0x00);
+    // if(!hdc1000_trigger_measure(i2c,address))
+    // {
+    //   spinal_uart_print_line(uart,"Unable to trigger measure");
+    // }
+ 
+     
      delay(500);
 
 

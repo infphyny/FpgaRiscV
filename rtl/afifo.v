@@ -106,6 +106,7 @@ module afifo(i_wclk, i_wrst_n, i_wr, i_wdata, o_wfull,
 	// Calculate the next write address, and the next graycode pointer.
 	assign	wbinnext  = wbin + { {(AW){1'b0}}, ((i_wr) && (!o_wfull)) };
 	assign	wgraynext = (wbinnext >> 1) ^ wbinnext;
+	
 
 	assign	waddr = wbin[AW-1:0];
 

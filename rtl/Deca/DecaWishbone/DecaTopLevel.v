@@ -1,7 +1,6 @@
 //`default_nettype none
 
 module DecaTopLevel(
-//input wire DDR3_CLK_50,    
 input wire i_clk,
 input wire i_rst_n,
 input wire key1,
@@ -15,9 +14,9 @@ output wire uart_0_tx,
 inout i2c_0_scl,
 inout i2c_0_sda,
 output wire spi_0_mosi,
- input wire spi_0_miso,
- output wire spi_0_sclk,
- output wire spi_0_cs_n,
+input wire spi_0_miso,
+output wire spi_0_sclk,
+output wire spi_0_cs_n,
 inout wire CAP_SENSE_I2C_SCL,
 inout wire CAP_SENSE_I2C_SDA,
 inout wire LIGHT_I2C_SCL,
@@ -49,6 +48,7 @@ input 		          		NET_TX_CLK,
 output		          		NET_TX_EN,
 output		     [3:0]		NET_TXD,
 //////////// USB //////////
+/*
 input 		          		USB_CLKIN,
 output		          		USB_CS,
 inout 		     [7:0]		USB_DATA,
@@ -57,6 +57,23 @@ input 		          		USB_FAULT_n,
 input 		          		USB_NXT,
 output		          		USB_RESET_n,
 output		          		USB_STP,
+*/
+
+//HDMI TX
+
+    inout 		          		HDMI_I2C_SCL,
+	inout 		          		HDMI_I2C_SDA,
+	inout 		     [3:0]		HDMI_I2S,
+	inout 		          		HDMI_LRCLK,
+	inout 		          		HDMI_MCLK,
+	inout 		          		HDMI_SCLK,
+	output		          		HDMI_TX_CLK,
+	output		    [23:0]		HDMI_TX_D,
+	output		          		HDMI_TX_DE,
+	output		          		HDMI_TX_HS,
+	input 		          		HDMI_TX_INT,
+	output		          		HDMI_TX_VS,
+
 /////////// DDR3 ////////////////////
 output wire     [14:0]      DDR3_A,
 output wire     [2:0]       DDR3_BA,
@@ -172,7 +189,38 @@ assign NET_RESET_n = 0;
 assign NET_TX_EN = 1'bz;
 assign NET_TXD = 4'bzzzz;
 
+//HDMI wire
 
+wire HDMI_I2C_SCL_o;
+wire HDMI_I2C_SCL_oe;
+assign HDMI_I2C_SCL = HDMI_I2C_SCL_oe ? 1'bz : HDMI_I2C_SCL_o;
+
+wire HDMI_I2C_SDA_o;
+wire HDMI_I2C_SDA_oe;
+assign HDMI_I2C_SDA = HDMI_I2C_SDA_oe ? 1'bz : HDMI_I2C_SDA_o; 
+
+wire [3:0] HDMI_I2S_o;
+wire HDMI_I2S_oe;
+
+assign HDMI_I2S = HDMI_I2S_oe ? 4'bz : HDMI_I2S_o; 
+
+
+wire HDMI_LRCLK_o;
+wire HDMI_LRCLK_oe;
+assign HDMI_LRCLK = HDMI_LRCLK_oe ? 1'bz : HDMI_LRCLK_o;
+
+wire HDMI_MCLK_o;
+wire HDMI_MCLK_oe;
+
+assign HDMI_MCLK = HDMI_MCLK_oe ? 1'bz : HDMI_MCLK_o;
+
+
+wire HDMI_SCLK_o;
+wire HDMI_SCLK_oe;
+
+assign HDMI_SCLK = HDMI_SCLK_oe ? 1'bz : HDMI_SCLK_o;
+
+/*
 wire [7:0] USB_DATA_o;
 
 generate
@@ -186,7 +234,7 @@ assign USB_DATA[usb_data_index] = USB_DIR ? 1'bz : USB_DATA_o;
 end
 
 endgenerate    
-
+*/
 
 
 DecaSoc #(
@@ -197,7 +245,7 @@ DecaSoc #(
     .with_csr(with_csr)
 ) soc(
    // .DDR3_CLK_50(DDR3_CLK_50),
-    .i_clk(i_clk),
+    .i_clk(DDR3_CLK_50 /*i_clk*/),
     .i_rst(!i_rst_n),
     .key1(key1),
     .SW0(SW0),
@@ -255,6 +303,35 @@ DecaSoc #(
     .PMONITOR_I2C_SDA_i(PMONITOR_I2C_SDA),
     .PMONITOR_I2C_SDA_o(PMONITOR_I2C_SDA_o),
     .PMONITOR_I2C_SDA_oe(PMONITOR_I2C_SDA_oe),
+
+    //HDMI
+    .HDMI_I2C_SCL_i(HDMI_I2C_SCL),
+    .HDMI_I2C_SCL_o(HDMI_I2C_SCL_o),
+    .HDMI_I2C_SCL_oe(HDMI_I2C_SCL_oe),
+    .HDMI_I2C_SDA_i(HDMI_I2C_SDA),
+    .HDMI_I2C_SDA_o(HDMI_I2C_SDA_o),
+    .HDMI_I2C_SDA_oe(HDMI_I2C_SDA_oe),
+    .HDMI_I2S_i(HDMI_I2S),
+    .HDMI_I2S_o(HDMI_I2S_o),
+    .HDMI_I2S_oe(HDMI_I2S_oe),
+    .HDMI_LRCLK_i(HDMI_LRCLK),
+    .HDMI_LRCLK_o(HDMI_LRCLK_o),
+    .HDMI_LRCLK_oe(HDMI_LRCLK_oe),
+    .HDMI_MCLK_i(HDMI_MCLK),
+    .HDMI_MCLK_o(HDMI_MCLK_o),
+    .HDMI_MCLK_oe(HDMI_MCLK_oe),
+    .HDMI_SCLK_i(HDMI_SCLK),
+    .HDMI_SCLK_o(HDMI_SCLK_o),
+    .HDMI_SCLK_oe(HDMI_SCLK_oe),
+    .HDMI_TX_CLK(HDMI_TX_CLK),
+    .HDMI_TX_D(HDMI_TX_D),
+    .HDMI_TX_DE(HDMI_TX_DE),
+    .HDMI_TX_HS(HDMI_TX_HS),
+    .HDMI_TX_INT(HDMI_TX_INT),
+    .HDMI_TX_VS(HDMI_TX_VS),
+
+
+    /*
     .USB_CLKIN(USB_CLKIN),
     .USB_CS(USB_CS),
     .USB_DATA_i(USB_DATA),
@@ -264,6 +341,8 @@ DecaSoc #(
     .USB_NXT(USB_NXT),
     .USB_RESET_n(USB_RESET_n),
     .USB_STP(USB_STP),
+    */
+     
     .DDR3_A(DDR3_A),
     .DDR3_BA(DDR3_BA),
     .DDR3_CAS_n(DDR3_CAS_n),

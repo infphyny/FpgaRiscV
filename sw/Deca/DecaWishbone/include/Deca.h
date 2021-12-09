@@ -18,6 +18,9 @@ static const uint32_t TUSB1210_BASE_ADDRESS = 0x00040910;
 static const uint32_t KEY1_BASE_ADDRESS = 0x00041000;
 static const uint32_t SW0_BASE_ADDRESS = 0x00041010;
 static const uint32_t SW1_BASE_ADDRESS = 0x00041020;
+static const uint32_t DDR3MANAGER_BASE_ADDRESS = 0x00050000;
+static const uint32_t HDMI_TX_BASE_ADDRESS = 0x00050010;
+
 
 static const uint32_t ICTRL_BASE_ADDRESS = 0x00100000;
 

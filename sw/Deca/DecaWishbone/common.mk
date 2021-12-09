@@ -36,7 +36,8 @@ RAM_SIZE = 131072
 LD_SCRIPT = riscv.ld
 #LD_SCRIPT = riscv_64k.ld
 FUSESOC_CORE = Deca
-FUSESOC_TARGET = Deca #Deca_BrianHG_DDR3 #Deca
+FUSESOC_TARGET = Deca
+#Deca_BrianHG_DDR3 #Deca
 
 GENHEX = $(SW_DIR)/genhex.py
 GENMIF = $(SW_DIR)/genmif.py
@@ -88,8 +89,9 @@ hw:
 upload:
 	cd $(FUSESOC_CORE_DIR); quartus_pgm  --mode=jtag  -o "P;build/Deca_0/Deca-quartus/Deca_0.sof"
 
-FIRMWARE = sw/Deca/$(PROJ)/$(PROJ).hex
-FUSESOC_CORE_SIM_DIR = $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../../) #$(shell pwd)
+FIRMWARE = sw/Deca/DecaWishbone/$(PROJ)/$(PROJ).hex
+FUSESOC_CORE_SIM_DIR := $(FUSESOC_CORE_DIR)
+#$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../../../) #$(shell pwd)
 
 sim:
 	cd $(FUSESOC_CORE_DIR); fusesoc --cores-root=$(FUSESOC_CORE_SIM_DIR) run --target=$(FUSESOC_TARGET)_testbench $(FUSESOC_CORE) --vcd  --memsize=$(RAM_SIZE) --firmware=$(FIRMWARE)

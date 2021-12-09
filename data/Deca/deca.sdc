@@ -2,7 +2,6 @@
 create_clock -name "i_clk" -period "50.0 MHz" [get_ports i_clk]
 
 
-
 #-------------- DDR3 memory clock
 create_clock -name "DDR3_CLK_50" -period "50.0 MHz" [get_ports DDR3_CLK_50]
 
@@ -15,7 +14,8 @@ create_clock -name {USB_CLKIN} -period "60.0 MHz"  [get_ports USB_CLKIN]
 
 
 # Automatically constrain PLL and other generated clocks
-derive_pll_clocks -create_base_clocks
+derive_pll_clocks 
+#-create_base_clocks
 
 # Automatically calculate clock uncertainty to jitter and other effects.
 derive_clock_uncertainty
@@ -28,3 +28,28 @@ set_false_path -from * -to [get_ports {LEDS*}]
 
 #set_input_delay 3.000 -clock [get_clocks USB_CLKIN] [get_ports {USB_DATA,USB_DIR,USB_NXT}]
 #set_input_delay 3.000 -clock USB_CLKIN  
+
+# set_max_skew -from [get_ports {DDR3_DQ*} ] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[1]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[2]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[3]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[4]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[5]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[6]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[7]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[8]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[9]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[10]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[11]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[12]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[13]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[14]}] 0.100
+        #set_max_skew -from [get_ports {DDR3_DQ[15]}] 0.100
+
+# set_max_skew -to  [get_ports {DDR3_DQS_p[0]}] 0.100
+# set_max_skew -to  [get_ports {DDR3_DQS_p[1]}] 0.100
+# set_max_skew -to  [get_ports {DDR3_DQS_n[0]}] 0.100
+# set_max_skew -to  [get_ports {DDR3_DQS_n[1]}] 0.100
+# set_max_skew -to  [get_ports {DDR3_RESET_n}] 0.100
+# set_max_skew -to  [get_ports {DDR3_CK_p}] 0.100
+# set_max_skew -to  [get_ports {DDR3_CK_n}] 0.100

@@ -7,6 +7,33 @@
 
 using namespace std;
 
+template<typename T>
+class ClockManager
+{
+  public:
+   ClockManager(VerilatedVcdC *tfp,T* top )
+   void advance(void)
+   {
+     
+     
+
+
+   };
+  
+  protected:
+
+    
+
+  VerilatedVcdC *m_tfp;
+  T* m_top;
+   
+
+
+  vluint64_t m_time = 0; 
+};
+
+
+
 static bool done;
 
 vluint64_t main_time = 0;       // Current simulation time
@@ -138,8 +165,8 @@ int main(int argc, char **argv/*, char **env*/)
 	bool dump = false;
 	top->DDR3_CLK_50 = 1;
 	top->i_clk = 1;
-	top->USB_CLKIN = 1;
-	top->USB_DATA_i = 0xA5;
+//	top->USB_CLKIN = 1;
+//	top->USB_DATA_i = 0xA5;
 	top->key1 = 0;
 	top->SW0 = 0;
 	top->SW1 = 0;
@@ -154,7 +181,7 @@ int main(int argc, char **argv/*, char **env*/)
    //  if( (clock_count % 15) == 0)
 //	  { 
 	 	top->i_clk = !top->i_clk;
-	  	top->USB_CLKIN = !top->USB_CLKIN;
+	 // 	top->USB_CLKIN = !top->USB_CLKIN;
 		top->DDR3_CLK_50 = !top->DDR3_CLK_50;
 	 
  		top->eval();
