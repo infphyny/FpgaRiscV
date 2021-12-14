@@ -226,12 +226,12 @@ wire [7:0] USB_DATA_o;
 generate
 
 genvar usb_data_index;
-for(usb_data_index = 0 ; usb_data_index < 8 ; usb_data_index=usb_data_index+1) begin :  generate_usb_data_signal
+    for(usb_data_index = 0 ; usb_data_index < 8 ; usb_data_index=usb_data_index+1) begin :  generate_usb_data_signal
 
-//PHY drive the bus when USB_DIR = 1, LINK drive the bus when USB_DIR = 0
-assign USB_DATA[usb_data_index] = USB_DIR ? 1'bz : USB_DATA_o; 
+    //PHY drive the bus when USB_DIR = 1, LINK drive the bus when USB_DIR = 0
+    assign USB_DATA[usb_data_index] = USB_DIR ? 1'bz : USB_DATA_o; 
 
-end
+    end
 
 endgenerate    
 */

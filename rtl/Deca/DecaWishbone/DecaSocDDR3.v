@@ -123,7 +123,9 @@ parameter PLL = "NONE";
 parameter sim = 0;
 parameter with_csr = 1;
 parameter ICONTROL_IUSED = 15;
-parameter with_bus_mem_cdc = 1;
+parameter with_bus_mem_cdc = 0;
+parameter ENABLE_DDR3 = 0;
+parameter ENABLE_TUSB = 0;
 
   wire        wb_rst;
   wire        wb_clk;
@@ -153,22 +155,42 @@ parameter with_bus_mem_cdc = 1;
    wire ddr3_local_cal_success;
    wire ddr3_pll_locked;
    reg global_reset_n = 0;
-   wire ddr3_reset_n;
+   wire ddr3_soft_reset_n;
+    
+   
+
    //assign ddr3_reset = !i_rst;
 
 
    generate
-
+    
+    wire clk_reset;
+    wire ddr3_reset;
     if(sim ==0) begin 
+
+     ResetBridge clk_reset_bridge(
+      .i_clock(i_clk),
+      .i_reset(i_rst),
+      .i_input(0),
+      .o_output(clk_reset)
+     ); 
+
+     ResetBridge ddr3_reset_bridge(
+       .i_clock(DDR3_CLK_50),
+       .i_reset(i_rst),
+       .i_input(0),
+       .o_output(ddr3_reset)
+     );
+
      // parameter RESET = 0, WAIT_DDR3_CAL = 1, SOC_RUN = 2; 
      // reg [1:0] state = RESET;
-      reg [31:0] por_counter = 32'd1000000;
+      reg [31:0] por_counter = 32'd10000;
       //reg [31 : 0] wait_ddr3_counter = 32'd0; 
       always @ (posedge i_clk/* or posedge i_rst*/) begin //TODO Change for synchronous reset
 
-        if(i_rst) begin
+        if(clk_reset) begin
        //   state <= RESET;
-          por_counter <= 32'd1000000;
+          por_counter <= 32'd10000;
           global_reset_n <= 0;
         end else begin
 
@@ -180,7 +202,7 @@ parameter with_bus_mem_cdc = 1;
             global_reset_n <= 1;
          end  
 
-        end   
+        end  // end sim = 0 
              
 
 
@@ -238,11 +260,15 @@ parameter with_bus_mem_cdc = 1;
   //   end  
 
 
-   //50 MHZ
+   
+  
+
+  
+
     ddr3 ddr3_mem(
     .pll_ref_clk(DDR3_CLK_50 /*i_clk*/),
-    .global_reset_n(global_reset_n/*ddr3_reset_n*/),
-    .soft_reset_n(ddr3_reset_n),
+    .global_reset_n(!ddr3_reset/*!i_rst*//*global_reset_n*//*ddr3_reset_n*/),
+    .soft_reset_n(ddr3_soft_reset_n),
     .afi_clk(afi_clk),
     .afi_half_clk(afi_half_clk),
     .afi_reset_n(afi_rst_n),
@@ -276,6 +302,8 @@ parameter with_bus_mem_cdc = 1;
     .local_init_done(ddr3_local_init_done),
     .local_cal_success(ddr3_local_cal_success)
   );
+
+
     end else if(sim == 1) begin
     
     DDR3Sim ddr3_sim(
@@ -348,8 +376,9 @@ end else if (PLL=="DDR3") begin
 
  
  wire pll_usb_locked;
-  assign wb_rst = /*!afi_rst_n*/!global_reset_n; //  !afi_rst_n/*!ddr3_pll_locked*/ /*&& !pll_usb_locked*/; //&& ddr3_local_cal_success && ddr3_local_init_done;
+  assign wb_rst = /*i_rst*/ /*!afi_rst_n*/!global_reset_n; //  !afi_rst_n/*!ddr3_pll_locked*/ /*&& !pll_usb_locked*/; //&& ddr3_local_cal_success && ddr3_local_init_done;
   assign wb_clk = /* DDR3_CLK_50*/ i_clk /*afi_half_clk*/;
+  
   /*
   usbpll usbclock(
       .inclk0(USB_CLKIN),
@@ -668,45 +697,53 @@ i2c_master_top pmonitor(
 
 
 //USB
+//generate
 /*
-WishboneTUSB1210 tusb1210(
-  .clk(wb_clk),
-  .reset(wb_rst),
-  .i_wb_adr(wb_m2s_tusb1210_adr[1:0]),
-  .i_wb_dat(wb_m2s_tusb1210_dat),
-  .o_wb_dat(wb_s2m_tusb1210_dat),
-  .i_wb_stb(wb_m2s_tusb1210_stb),
-  .i_wb_cyc(wb_m2s_tusb1210_cyc),
-  .i_wb_we(wb_m2s_tusb1210_we),
-  .o_wb_ack(wb_s2m_tusb1210_ack),
-  .i_usb_clk(usb_clk),
-  .i_ulpi_dat(USB_DATA_i),
-  .o_ulpi_dat(USB_DATA_o),
-  .i_ulpi_dir(USB_DIR),
-  .i_usb_fault_n(USB_FAULT_n),
-  .i_ulpi_nxt(USB_NXT),
-  .o_ulpi_reset_n(USB_RESET_n),
-  .o_ulpi_stp(USB_STP),
-  .o_ulpi_cs(USB_CS)
-);
+  if (ENABLE_TUSB == 1) begin
+
+  WishboneTUSB1210 tusb1210(
+    .clk(wb_clk),
+    .reset(wb_rst),
+    .i_wb_adr(wb_tusb1210_adr[1:0]),
+    .i_wb_dat(wb_tusb1210_dat),
+    .o_wb_dat(wb_tusb1210_rdt),
+    .i_wb_stb(wb_tusb1210_stb),
+    .i_wb_cyc(wb_tusb1210_cyc),
+    .i_wb_we(wb_tusb1210_we),
+    .o_wb_ack(wb_tusb1210_ack),
+    .i_usb_clk(usb_clk),
+    .i_ulpi_dat(USB_DATA_i),
+    .o_ulpi_dat(USB_DATA_o),
+    .i_ulpi_dir(USB_DIR),
+    .i_usb_fault_n(USB_FAULT_n),
+    .i_ulpi_nxt(USB_NXT),
+    .o_ulpi_reset_n(USB_RESET_n),
+    .o_ulpi_stp(USB_STP),
+    .o_ulpi_cs(USB_CS)
+  );
+  end
+  */
+  /*
+  else begin
+
+  assign wb_tusb1210_ack = 0;
+  assign wb_tusb1210_rdt = 32'b0;
+
+   
+  assign USB_CS = 1'bz;
+  //assign USB_DIR = 1'bz;
+  assign USB_DATA_o = 8'bz; 
+  assign  USB_RESET_n = 0;
+  assign USB_STP = 1'bz;
+
+  end  
+
 */
-/*
- assign USB_CS = 1'bz;
 
- generate
- genvar i;
-
- for(i = 0 ; i < 8 ; i = i+1) begin : generate_usb_data_signal
-
-   assign USB_DATA[i] = 1'bz;
- end
-
- endgenerate
+//endgenerate
 
 
-assign USB_RESET_n = 1'bz;
-assign USB_STP = 1'bz;
-*/
+
 
 
   // generate
@@ -745,7 +782,7 @@ assign USB_STP = 1'bz;
    .o_wb_err(wb_ddr3manager_err),
    .i_init_success(ddr3_local_init_done),
    .i_cal_success(ddr3_local_cal_success),
-   .o_soft_reset_n(ddr3_reset_n)
+   .o_soft_reset_n(ddr3_soft_reset_n)
  ); 
 
 //wire timer_irq;
@@ -773,23 +810,23 @@ assign USB_STP = 1'bz;
   // assign HDMI_I2C_SDA_oe = 1;
   // assign HDMI_I2C_SDA_o = 0;
 
-  assign HDMI_I2S_oe = 1;
-  assign HDMI_I2S_o = 0;
+  assign HDMI_I2S_oe = 4'bzzzz;
+  assign HDMI_I2S_o = 4'bzzzz;
 
-  assign HDMI_LRCLK_oe = 1;
-  assign HDMI_LRCLK_o = 0;
+  assign HDMI_LRCLK_oe = 1'bz;
+  assign HDMI_LRCLK_o = 1'bz;
 
-  assign HDMI_MCLK_oe = 1;
-  assign HDMI_MCLK_o = 0;
+  assign HDMI_MCLK_oe = 1'bz;
+  assign HDMI_MCLK_o = 1'bz;
 
-  assign HDMI_SCLK_oe = 1;
-  assign HDMI_SCLK_o = 0;
+  assign HDMI_SCLK_oe = 1'bz;
+  assign HDMI_SCLK_o = 1'bz;
 
-  assign HDMI_TX_CLK = 0;
-  assign HDMI_TX_D = 0;
-  assign HDMI_TX_DE = 0;
-  assign HDMI_TX_HS = 0; 
-  assign HDMI_TX_VS = 0;
+  assign HDMI_TX_CLK = 1'bz;
+  assign HDMI_TX_D = 24'bzzzzzzzzzzzzzzzzzzzzzzzz;
+  assign HDMI_TX_DE = 1'bz;
+  assign HDMI_TX_HS = 1'bz; 
+  assign HDMI_TX_VS = 1'bz;
 
  wire hdmi_i2c_inta;
 
@@ -869,7 +906,9 @@ assign USB_STP = 1'bz;
 
    wire [2:0] wb_av_bridge_cti = wb_wb_av_bridge_cti;//3'b000;
    wire [1:0] wb_av_bridge_bte = wb_wb_av_bridge_bte;//2'b00;
-   
+   wire av_bridge_disable = 1;
+   //assign wb_wb_av_bridge_ack = 1;
+   //assign wb_wb_av_bridge_ack = i_cdc2av_readdatavalid;
    // 50 MHZ
    wb_to_avalon_bridge #(
      .DW(64),
@@ -877,7 +916,7 @@ assign USB_STP = 1'bz;
    ) wb_av_bridge(
     //Wishbone slave input
     .wb_clk_i(wb_clk),
-    .wb_rst_i(wb_rst),
+    .wb_rst_i(wb_rst /*av_bridge_disable*/),
     .wb_adr_i(wb_wb_av_bridge_adr),
     .wb_dat_i(wb_av_bridge_dat_i),
     .wb_sel_i(wb_av_bridge_sel),

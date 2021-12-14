@@ -33,16 +33,21 @@ void main(void)
   spinal_uart_init(&uart,UART_0_BASE_ADDRESS);
 
   SimpleSpi* gsensor_spi;
-  simple_spi_init(&gsensor_spi,GSENSOR_BASE_ADDRESS);
-
-  gsensor_spi->ctrl = 0x7F;
-  gsensor_spi->ctrl_ext = 0x00;
+  
 //  leds->state = 0xAF;
   //delay(500);
 //  leds->state = 0xEE;
  //Enable acceleration sensor high resolution mode
-  lis2dh12_read_sensor(gsensor_spi,LIS2DH12_CTRL_REG4,&reg_value);
-  reg_value |= (0x08);
+ simple_spi_init(&gsensor_spi,GSENSOR_BASE_ADDRESS);
+ //TODO Add documentation for SPI controller settings
+   gsensor_spi->ctrl = 0x7F;
+   gsensor_spi->ctrl_ext = 0x00;
+  do
+  {
+   
+  // delay(100);
+   //lis2dh12_read_sensor(gsensor_spi,LIS2DH12_CTRL_REG4,&reg_value);
+  reg_value = (0x08);
   lis2dh12_write_sensor(gsensor_spi,LIS2DH12_CTRL_REG4,reg_value);
 
   //Set CTRL_REG1 (20h)
@@ -50,6 +55,17 @@ void main(void)
   lis2dh12_write_sensor(gsensor_spi,LIS2DH12_CTRL_REG1,0x27);
 
   lis2dh12_who_am_i(gsensor_spi,&leds_val);
+   if(leds_val != 0b00110011)
+   {
+     lis2dh12_who_am_i(gsensor_spi,&leds_val);
+   }
+  int lv = leds_val;
+  itoa(lv,sint,10);
+  spinal_uart_print_line(uart,sint);
+  delay(100);
+  } while (leds_val != 0b00110011);
+  
+  
   leds->state = leds_val;
   for(;;)
   {
