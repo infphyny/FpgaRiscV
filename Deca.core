@@ -12,6 +12,7 @@ filesets:
 
   rtl:
     files:
+      - rtl/Deca/DecaWishbone/WbAvlCdc/WbAvlCdc.v : { file_type : verilogSource}
       - rtl/RisingEdgePulse/RisingEdgePulse.v : { file_type : verilogSource }
       - rtl/Deca/DecaWishbone/VexRiscv.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/TUSB1210/WishboneTUSB1210.v : {file_type : verilogSource}
@@ -311,7 +312,7 @@ generate:
             - ddr3manager
             - hdmi_i2c
             - ictrl #interrupt controller
-            - wb_av_bridge
+            - wb_avl_cdc
 
       slaves: #size must be a power of 2
 
@@ -416,7 +417,7 @@ generate:
           offset: 0x00100000
           size: 4
 
-        wb_av_bridge:
+        wb_avl_cdc:
           offset: 0x80000000
           size: 536870912
  #         datawidth: 64

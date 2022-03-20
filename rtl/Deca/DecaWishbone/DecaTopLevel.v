@@ -197,12 +197,12 @@ assign HDMI_I2C_SCL = HDMI_I2C_SCL_oe ? 1'bz : HDMI_I2C_SCL_o;
 
 wire HDMI_I2C_SDA_o;
 wire HDMI_I2C_SDA_oe;
-assign HDMI_I2C_SDA = HDMI_I2C_SDA_oe ? 1'bz : HDMI_I2C_SDA_o; 
+assign HDMI_I2C_SDA = HDMI_I2C_SDA_oe ? 1'bz : HDMI_I2C_SDA_o;
 
 wire [3:0] HDMI_I2S_o;
 wire HDMI_I2S_oe;
 
-assign HDMI_I2S = HDMI_I2S_oe ? 4'bz : HDMI_I2S_o; 
+assign HDMI_I2S = HDMI_I2S_oe ? 4'bz : HDMI_I2S_o;
 
 
 wire HDMI_LRCLK_o;
@@ -229,11 +229,11 @@ genvar usb_data_index;
     for(usb_data_index = 0 ; usb_data_index < 8 ; usb_data_index=usb_data_index+1) begin :  generate_usb_data_signal
 
     //PHY drive the bus when USB_DIR = 1, LINK drive the bus when USB_DIR = 0
-    assign USB_DATA[usb_data_index] = USB_DIR ? 1'bz : USB_DATA_o; 
+    assign USB_DATA[usb_data_index] = USB_DIR ? 1'bz : USB_DATA_o;
 
     end
 
-endgenerate    
+endgenerate
 */
 
 
@@ -245,7 +245,7 @@ DecaSoc #(
     .with_csr(with_csr)
 ) soc(
    // .DDR3_CLK_50(DDR3_CLK_50),
-    .i_clk(DDR3_CLK_50 /*i_clk*/),
+    .i_clk(/*DDR3_CLK_50*/ i_clk),
     .i_rst(!i_rst_n),
     .key1(key1),
     .SW0(SW0),
@@ -342,7 +342,7 @@ DecaSoc #(
     .USB_RESET_n(USB_RESET_n),
     .USB_STP(USB_STP),
     */
-     
+
     .DDR3_A(DDR3_A),
     .DDR3_BA(DDR3_BA),
     .DDR3_CAS_n(DDR3_CAS_n),

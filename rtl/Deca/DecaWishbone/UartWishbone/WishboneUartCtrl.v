@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : WishboneUartCtrl
-// Git hash  : f4ffec70be40e3b61ec3e2fb6f93141dfe883ca1
+// Git hash  : 93ff13c803ccc7e8c0f8166031325c514c4e2d38
 
 
 `define UartStopType_binary_sequential_type [0:0]

@@ -3,7 +3,7 @@ MEMFILE = sw/Deca/DecaWishbone/$(PROJ)/$(PROJ).hex
 
 
 DECA_OBJ = $(DECA_DIR)/src/crt0.o $(DECA_DIR)/src/vtable.o $(DECA_DIR)/src/Leds.o $(DECA_DIR)/src/deca_bsp.o \
-		   $(DECA_DIR)/src/deca_ext_irq.c	
+		   $(DECA_DIR)/src/deca_ext_irq.c
 BASE_OBJ =  $(SW_DIR)/src/mtime_irq.o $(SW_DIR)/src/SpinalUart.o $(SW_DIR)/src/Timer.o $(SW_DIR)/src/delay.o $(SW_DIR)/src/riscv.o \
 						$(SW_DIR)/src/LIS2DH12.o $(SW_DIR)/src/SimpleSpi.o $(SW_DIR)/src/HDC1000.o $(SW_DIR)/src/i2c.o $(SW_DIR)/src/LM71.o \
 						$(SW_DIR)/src/MicroWire.o $(SW_DIR)/src/millis.o $(SW_DIR)/src/CY8CMBR3102.o $(SW_DIR)/src/ictrl.c
@@ -71,7 +71,7 @@ $(PROJ).vh : $(PROJ).elf
 	$(OBJCOPY) -O verilog $< $(PROJ).vh
 
 $(PROJ).elf : $(OBJ)
-	$(CC) $(DECA_INCLUDES) -lgcc -mabi=ilp32 -nostartfiles $(OPT) -march=$(ARCH) -T $(DECA_SRC)/$(LD_SCRIPT) -o $@  $^ -Wl,-Map,$(PROJ).map,$(LDFLAGS)
+	$(CC) $(DECA_INCLUDES) -lgcc -mabi=ilp32 -nostartfiles $(OPT) -march=$(ARCH) -T $(DECA_SRC)/$(LD_SCRIPT) -o $@  $^ -Xlinker --gc-sections -Wl,-Map,$(PROJ).map,$(LDFLAGS)
 
 .PHONY: clean objdump hw upload sim update_ram
 

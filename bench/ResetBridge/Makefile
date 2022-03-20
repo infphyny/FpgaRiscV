@@ -10,3 +10,9 @@ tb.vcd : $(FILES)
 	ghdl -a --std=08 $(FILES)
 	ghdl -e --std=08 ResetBridgeTestBench
 	ghdl -r --std=08  ResetBridgeTestBench --max-stack-alloc=10000 --vcd=rb_tb.vcd
+
+
+.phony: clean
+
+clean:
+	rm -f *.vcd *.cf

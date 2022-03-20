@@ -1,6 +1,6 @@
 module DecaSoc
 (
- 
+
   input wire i_clk,
   input wire i_rst,
   input wire key1,
@@ -123,20 +123,33 @@ parameter PLL = "NONE";
 parameter sim = 0;
 parameter with_csr = 1;
 parameter ICONTROL_IUSED = 15;
-parameter with_bus_mem_cdc = 0;
+parameter with_bus_mem_cdc = 1;
 parameter ENABLE_DDR3 = 0;
 parameter ENABLE_TUSB = 0;
 
   wire        wb_rst;
   wire        wb_clk;
   wire        usb_clk;
-  
+
   wire afi_clk;
   wire afi_half_clk;
   wire afi_rst_n;
   wire afi_rst;
   assign afi_rst = !afi_rst_n;
 
+
+ wire avl_burstbegin;
+ wire [7:0] avl_be;
+ wire [25:0] avl_adr;
+ wire [63:0] avl_dat;
+ wire avl_wr_req;
+ wire avl_rdt_req;
+ wire [2:0] avl_size;
+ wire [63:0] avl_rdt;
+ wire avl_ready;
+ wire avl_rdt_valid;
+
+/*
   wire [31:0] o_cdc2ddr_adr;
   wire [7:0] o_cdc2ddr_be;
   wire o_cdc2ddr_read_req;
@@ -149,31 +162,31 @@ parameter ENABLE_TUSB = 0;
   assign i_ddr2cdc_waitrequest = !avl_ready;
   wire i_ddr2cdc_readdatavalid;
   wire o_cdc2ddr_burstbegin;
-    
-   
+*/
+
    wire ddr3_local_init_done;
    wire ddr3_local_cal_success;
    wire ddr3_pll_locked;
    reg global_reset_n = 0;
    wire ddr3_soft_reset_n;
-    
-   
+
+
 
    //assign ddr3_reset = !i_rst;
 
 
    generate
-    
+
     wire clk_reset;
     wire ddr3_reset;
-    if(sim ==0) begin 
+    if(sim ==0) begin
 
      ResetBridge clk_reset_bridge(
       .i_clock(i_clk),
       .i_reset(i_rst),
       .i_input(0),
       .o_output(clk_reset)
-     ); 
+     );
 
      ResetBridge ddr3_reset_bridge(
        .i_clock(DDR3_CLK_50),
@@ -182,10 +195,10 @@ parameter ENABLE_TUSB = 0;
        .o_output(ddr3_reset)
      );
 
-     // parameter RESET = 0, WAIT_DDR3_CAL = 1, SOC_RUN = 2; 
+     // parameter RESET = 0, WAIT_DDR3_CAL = 1, SOC_RUN = 2;
      // reg [1:0] state = RESET;
       reg [31:0] por_counter = 32'd10000;
-      //reg [31 : 0] wait_ddr3_counter = 32'd0; 
+      //reg [31 : 0] wait_ddr3_counter = 32'd0;
       always @ (posedge i_clk/* or posedge i_rst*/) begin //TODO Change for synchronous reset
 
         if(clk_reset) begin
@@ -200,27 +213,27 @@ parameter ENABLE_TUSB = 0;
          end else begin
             por_counter <= 32'd0;
             global_reset_n <= 1;
-         end  
+         end
 
-        end  // end sim = 0 
-             
+        end  // end sim = 0
 
 
-        // case (state) 
+
+        // case (state)
         //  RESET:  begin
 
         //   if (por_counter) begin
         //     por_counter <= por_counter - 1 ;
         //   end else if(por_counter == 32'd0) begin
-        //   wait_ddr3_counter <= 32'd0; 
+        //   wait_ddr3_counter <= 32'd0;
         //   state <= WAIT_DDR3_CAL;
-        //   end 
-        //  end  
+        //   end
+        //  end
         // WAIT_DDR3_CAL: begin
-        
+
         //   if( ddr3_local_init_done & ddr3_local_cal_success ) begin
         //      //por_counter <= 32'd0;
-        //   state <= SOC_RUN;  
+        //   state <= SOC_RUN;
         //   end else if(wait_ddr3_counter == 10000000 ) begin
         //     por_counter <= 32'd125000;
         //     state <= RESET;
@@ -230,20 +243,20 @@ parameter ENABLE_TUSB = 0;
         //   end
         // end
         // SOC_RUN: begin
-        //   state <= SOC_RUN; 
-        // end 
+        //   state <= SOC_RUN;
+        // end
         //     // if ( !(ddr3_local_init_done & ddr3_local_cal_success) ) begin
         //     //  state <= RESET;
         //     //  por_counter <= 32'd125000;
         //     // end else begin
         //     // state <= SOC_RUN;
         //     // end
-        
+
         // endcase
 
       end
 
-      
+
    //assign global_reset_n = (por_counter == 0);
 
   //  wire ddr3_reset_n = !i_rst;
@@ -251,19 +264,14 @@ parameter ENABLE_TUSB = 0;
 
 //     always @ (posedge i_clk) begin
  //       avl_prevburstbegin <=  o_av_read_req & o_av_write_req;
-     
-//         avl_burstbegin <= (o_av_read_req && o_av_write_req) &&  (avl_prevburstbegin == 0); 
-       
+
+//         avl_burstbegin <= (o_av_read_req && o_av_write_req) &&  (avl_prevburstbegin == 0);
+
     //     avl_burstbegin <= 1;
-    //  end    
-      
-  //   end  
+    //  end
 
+  //   end
 
-   
-  
-
-  
 
     ddr3 ddr3_mem(
     .pll_ref_clk(DDR3_CLK_50 /*i_clk*/),
@@ -288,15 +296,15 @@ parameter ENABLE_TUSB = 0;
     .mem_dqs_n(DDR3_DQS_n),
     .mem_odt(DDR3_ODT),
     .avl_ready(avl_ready),
-    .avl_burstbegin(o_cdc2ddr_burstbegin),
-    .avl_addr(o_cdc2ddr_adr[28:3]),
-    .avl_rdata_valid(i_ddr2cdc_readdatavalid),
-    .avl_rdata(i_ddr2cdc_readdata),
-    .avl_wdata(o_cdc2ddr_writedata),
-    .avl_be(o_cdc2ddr_be),
-    .avl_read_req(o_cdc2ddr_read_req),
-    .avl_write_req(o_cdc2ddr_write_req),
-    .avl_size(o_cdc2ddr_burstcount[2:0]),
+    .avl_burstbegin(avl_burstbegin),
+    .avl_addr(avl_adr),
+    .avl_rdata_valid(avl_rdt_valid),
+    .avl_rdata(avl_rdt),
+    .avl_wdata(avl_dat),
+    .avl_be(avl_be),
+    .avl_read_req(avl_rdt_req),
+    .avl_write_req(avl_wr_req),
+    .avl_size(avl_size),
     //.pll_mem_clk(DDR3_)
     .pll_locked(ddr3_pll_locked),
     .local_init_done(ddr3_local_init_done),
@@ -305,20 +313,20 @@ parameter ENABLE_TUSB = 0;
 
 
     end else if(sim == 1) begin
-    
+
     DDR3Sim ddr3_sim(
       .clk(DDR3_CLK_50),
       .reset(wb_rst),
       .avl_ready(avl_ready),
-      .avl_burst_begin(o_cdc2ddr_burstbegin),
-      .avl_addr(o_cdc2ddr_adr[28:3]),
-      .avl_rdata_valid(i_ddr2cdc_readdatavalid),
-      .avl_rdata(i_ddr2cdc_readdata),
-      .avl_wdata(o_cdc2ddr_writedata),
-      .avl_be(o_cdc2ddr_be),
-      .avl_read_req(o_cdc2ddr_read_req),
-      .avl_write_req(o_cdc2ddr_write_req),
-      .avl_size(o_cdc2ddr_burstcount[2:0]),
+      .avl_burst_begin(avl_burstbegin),
+      .avl_addr(avl_adr),
+      .avl_rdata_valid(avl_rdt_valid),
+      .avl_rdata(avl_rdt),
+      .avl_wdata(avl_dat),
+      .avl_be(avl_be),
+      .avl_read_req(avl_rdt_req),
+      .avl_write_req(avl_wr_req),
+      .avl_size(avl_size),
       .local_init_done(ddr3_local_init_done),
       .local_cal_success(ddr3_local_cal_success)
     );
@@ -344,8 +352,8 @@ assign afi_rst_n = !i_rst;
 end else if (PLL=="PLL") begin  // PLL== "NONE"
   //  wire wb_rst;
 
- 
-    
+
+
     wire locked_1;
     wire pll_usb_locked;
     //wire locked_2;
@@ -369,16 +377,16 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
       .locked(pll_usb_locked)
     );
 
-  */ 
-   
+  */
+
 
 end else if (PLL=="DDR3") begin
 
- 
+
  wire pll_usb_locked;
   assign wb_rst = /*i_rst*/ /*!afi_rst_n*/!global_reset_n; //  !afi_rst_n/*!ddr3_pll_locked*/ /*&& !pll_usb_locked*/; //&& ddr3_local_cal_success && ddr3_local_init_done;
   assign wb_clk = /* DDR3_CLK_50*/ i_clk /*afi_half_clk*/;
-  
+
   /*
   usbpll usbclock(
       .inclk0(USB_CLKIN),
@@ -729,14 +737,14 @@ i2c_master_top pmonitor(
   assign wb_tusb1210_ack = 0;
   assign wb_tusb1210_rdt = 32'b0;
 
-   
+
   assign USB_CS = 1'bz;
   //assign USB_DIR = 1'bz;
-  assign USB_DATA_o = 8'bz; 
+  assign USB_DATA_o = 8'bz;
   assign  USB_RESET_n = 0;
   assign USB_STP = 1'bz;
 
-  end  
+  end
 
 */
 
@@ -783,7 +791,7 @@ i2c_master_top pmonitor(
    .i_init_success(ddr3_local_init_done),
    .i_cal_success(ddr3_local_cal_success),
    .o_soft_reset_n(ddr3_soft_reset_n)
- ); 
+ );
 
 //wire timer_irq;
  WishboneMachineTimer timer(
@@ -800,13 +808,13 @@ i2c_master_top pmonitor(
    .wb_rty_o(wb_timer_rty),
    .irq(timer_irq)
    );
-   
+
 
   ////////////   HDMI ////////////////////////
 
-  //assign HDMI_I2C_SCL_oe = 1; 
+  //assign HDMI_I2C_SCL_oe = 1;
   //assign HDMI_I2C_SCL_o = 0;
-  
+
   // assign HDMI_I2C_SDA_oe = 1;
   // assign HDMI_I2C_SDA_o = 0;
 
@@ -825,7 +833,7 @@ i2c_master_top pmonitor(
   assign HDMI_TX_CLK = 1'bz;
   assign HDMI_TX_D = 24'bzzzzzzzzzzzzzzzzzzzzzzzz;
   assign HDMI_TX_DE = 1'bz;
-  assign HDMI_TX_HS = 1'bz; 
+  assign HDMI_TX_HS = 1'bz;
   assign HDMI_TX_VS = 1'bz;
 
  wire hdmi_i2c_inta;
@@ -852,27 +860,28 @@ i2c_master_top pmonitor(
   );
 
 //Wishbone-Avalon bridge to ClockDomain crossing bridge signals
+/*
    wire [31:0] o_av2cdc_adr;
    wire [7:0] o_av2cdc_be;
    wire o_av2cdc_read_req;
    wire o_av2cdc_write_req;
-   
+
    wire [7:0] o_av2cdc_burstcount;
    wire [63:0] o_av2cdc_writedata;
    wire [63:0] i_cdc2av_readdata;
    wire i_cdc2av_waitrequest;
    wire i_cdc2av_readdatavalid;
    wire o_av2cdc_burstbegin = 0;
-
- 
- BusMemClockDomainCrossing #(.CDC_ENABLE(with_bus_mem_cdc)) 
+*/
+/*
+ BusMemClockDomainCrossing #(.CDC_ENABLE(with_bus_mem_cdc))
  bmcdc(
-   
+
    .i_bus_clock(wb_clk),
    .i_bus_reset(wb_rst),
    .i_mem_clock(afi_clk),
    .i_mem_reset(afi_rst),
-   //Bus to/from cdc signals 
+   //Bus to/from cdc signals
    .i_bus_address(o_av2cdc_adr),
    .i_bus_be(o_av2cdc_be),
    .i_bus_read_req(o_av2cdc_read_req),
@@ -884,7 +893,7 @@ i2c_master_top pmonitor(
    .i_bus_write_data(o_av2cdc_writedata),
    .o_bus_wait_request(i_cdc2av_waitrequest),
  // Mem to/from cdc signals
-   
+
    .o_mem_address(o_cdc2ddr_adr),
    .o_mem_be(o_cdc2ddr_be),
    .o_mem_read_req(o_cdc2ddr_read_req),
@@ -896,52 +905,83 @@ i2c_master_top pmonitor(
    .o_mem_write_data(o_cdc2ddr_writedata),
    .i_mem_wait_request(i_ddr2cdc_waitrequest)
  );
-
+*/
 
    //stub
+   /*
    wire [7:0] wb_av_bridge_sel = {4'b0000,wb_wb_av_bridge_sel};
    wire [63:0] wb_av_bridge_dat_i = {32'h0000,wb_wb_av_bridge_dat};
-   wire [63:0] wb_av_bridge_dat_o;// = {32'h0000,wb_s2m_wb_av_bridge_dat}; 
+   wire [63:0] wb_av_bridge_dat_o;// = {32'h0000,wb_s2m_wb_av_bridge_dat};
    assign wb_wb_av_bridge_rdt = wb_av_bridge_dat_o[31:0];
 
    wire [2:0] wb_av_bridge_cti = wb_wb_av_bridge_cti;//3'b000;
    wire [1:0] wb_av_bridge_bte = wb_wb_av_bridge_bte;//2'b00;
    wire av_bridge_disable = 1;
+   */
    //assign wb_wb_av_bridge_ack = 1;
    //assign wb_wb_av_bridge_ack = i_cdc2av_readdatavalid;
    // 50 MHZ
-   wb_to_avalon_bridge #(
-     .DW(64),
-     .AW(32)
-   ) wb_av_bridge(
-    //Wishbone slave input
-    .wb_clk_i(wb_clk),
-    .wb_rst_i(wb_rst /*av_bridge_disable*/),
-    .wb_adr_i(wb_wb_av_bridge_adr),
-    .wb_dat_i(wb_av_bridge_dat_i),
-    .wb_sel_i(wb_av_bridge_sel),
-    .wb_we_i(wb_wb_av_bridge_we),
-    .wb_cyc_i(wb_wb_av_bridge_cyc),
-    .wb_stb_i(wb_wb_av_bridge_stb),
-    .wb_cti_i(wb_av_bridge_cti),
-    .wb_bte_i(wb_av_bridge_bte),
-    .wb_dat_o(wb_av_bridge_dat_o),
-    .wb_ack_o(wb_wb_av_bridge_ack),
-    .wb_err_o(wb_wb_av_bridge_err),
-    .wb_rty_o(wb_wb_av_bridge_rty),
-   //Avalon master output
-    .m_av_address_o(o_av2cdc_adr),
-    .m_av_byteenable_o(o_av2cdc_be),
-    .m_av_read_o(o_av2cdc_read_req),
-    .m_av_readdata_i(i_cdc2av_readdata),
-    .m_av_burstcount_o(o_av2cdc_burstcount),
-    .m_av_write_o(o_av2cdc_write_req),
-    .m_av_writedata_o(o_av2cdc_writedata),
-    .m_av_waitrequest_i(i_cdc2av_waitrequest),
-    .m_av_readdatavalid_i(i_cdc2av_readdatavalid)
-   // .m_av_burstbegin_o(o_av2cdc_burstbegin)
-   );
-   
+
+   WbAvlCdc wb_avl_cdc(
+     .i_wb_clock(wb_clk),
+     .i_wb_reset(wb_rst),
+     .i_wb_adr(wb_wb_avl_cdc_adr),
+     .i_wb_sel(wb_wb_avl_cdc_sel),
+     .i_wb_dat(wb_wb_avl_cdc_dat),
+     .o_wb_rdt(wb_wb_avl_cdc_rdt),
+     .i_wb_we(wb_wb_avl_cdc_we),
+     .i_wb_cyc(wb_wb_avl_cdc_cyc),
+     .i_wb_stb(wb_wb_avl_cdc_stb),
+     .o_wb_ack(wb_wb_avl_cdc_ack),
+     .o_wb_err(wb_wb_avl_cdc_err),
+     .o_wb_rty(wb_wb_avl_cdc_rty),
+     .i_avl_clock(afi_clk),
+     .i_avl_reset(!afi_rst_n),
+     .o_avl_burstbegin(avl_burstbegin),
+     .o_avl_be(avl_be),
+     .o_avl_adr(avl_adr),
+     .o_avl_dat(avl_dat),
+     .o_avl_wr_req(avl_wr_req),
+     .o_avl_rdt_req(avl_rdt_req),
+     .o_avl_size(avl_size),
+     .i_avl_rdt(avl_rdt),
+     .i_avl_ready(avl_ready),
+     .i_avl_rdt_valid(avl_rdt_valid)
+     );
+
+   //
+   // wb_to_avalon_bridge #(
+   //   .DW(64),
+   //   .AW(32)
+   // ) wb_av_bridge(
+   //  //Wishbone slave input
+   //  .wb_clk_i(wb_clk),
+   //  .wb_rst_i(wb_rst /*av_bridge_disable*/),
+   //  .wb_adr_i(wb_wb_av_bridge_adr),
+   //  .wb_dat_i(wb_av_bridge_dat_i),
+   //  .wb_sel_i(wb_av_bridge_sel),
+   //  .wb_we_i(wb_wb_av_bridge_we),
+   //  .wb_cyc_i(wb_wb_av_bridge_cyc),
+   //  .wb_stb_i(wb_wb_av_bridge_stb),
+   //  .wb_cti_i(wb_av_bridge_cti),
+   //  .wb_bte_i(wb_av_bridge_bte),
+   //  .wb_dat_o(wb_av_bridge_dat_o),
+   //  .wb_ack_o(wb_wb_av_bridge_ack),
+   //  .wb_err_o(wb_wb_av_bridge_err),
+   //  .wb_rty_o(wb_wb_av_bridge_rty),
+   // //Avalon master output
+   //  .m_av_address_o(o_av2cdc_adr),
+   //  .m_av_byteenable_o(o_av2cdc_be),
+   //  .m_av_read_o(o_av2cdc_read_req),
+   //  .m_av_readdata_i(i_cdc2av_readdata),
+   //  .m_av_burstcount_o(o_av2cdc_burstcount),
+   //  .m_av_write_o(o_av2cdc_write_req),
+   //  .m_av_writedata_o(o_av2cdc_writedata),
+   //  .m_av_waitrequest_i(i_cdc2av_waitrequest),
+   //  .m_av_readdatavalid_i(i_cdc2av_readdatavalid)
+   // // .m_av_burstbegin_o(o_av2cdc_burstbegin)
+   // );
+
    /*
    afifo #(.DW(26))
     cdc_adr(
@@ -957,32 +997,30 @@ i2c_master_top pmonitor(
    wire s0_valid;
    reg prev_av_read;
    reg prev_av_write;
-   
-   assign s0_valid = ((prev_av_read == 0) && (o_av2cdc_read_req == 1)) || ((prev_av_write == 0) && (o_av2cdc_write_req == 1)); 
+
+   assign s0_valid = ((prev_av_read == 0) && (o_av2cdc_read_req == 1)) || ((prev_av_write == 0) && (o_av2cdc_write_req == 1));
 
    always @(posedge wb_clk or posedge wb_rst ) begin
-    
+
     if(wb_rst == 1) begin
      prev_av_read <= 0;
      prev_av_write <= 0;
-    end 
+    end
     else begin
 
-     prev_av_read <= o_av2cdc_write_req; 
+     prev_av_read <= o_av2cdc_write_req;
      prev_av_write <= o_av2cdc_write_req;
 
-     
-
-    end  
-    
 
 
+    end
 
-   end  
+
+
+
+   end
 
    // DDR3 memory to to ClockDomainCrossing bridge
-
-
 
    AvalonClockDomainCrossingBridge avcc(
     .s0_clock(wb_clk),
@@ -1051,14 +1089,14 @@ i2c_master_top pmonitor(
 
    wire externalInterrupt;
    wire [ICONTROL_IUSED-1:0] i_brd_ints;
-    
+
    assign i_brd_ints[0] = key1_interrupt;
    assign i_brd_ints[1] = sw0_interrupt;
    assign i_brd_ints[2] = sw1_interrupt;
-    
+
    icontrol #(
      .IUSED(ICONTROL_IUSED)
-   ) 
+   )
     ictrl(
      .i_clk(wb_clk),
      .i_reset(wb_rst),
@@ -1086,7 +1124,7 @@ i2c_master_top pmonitor(
           .o_wb_rdt(wb_mem_rdt),
           .o_wb_ack(wb_mem_ack)
     );
-    
+
    wire softwareInterrupt = 0;
    assign wb_cpu_ibus_adr[1:0] = 0;
  //  assign wb_m2s_cpu_dbus_adr[1:0] = 0;
