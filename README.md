@@ -11,9 +11,6 @@ I have added support to modify .mif file from Tom Verbeure tutorial. No need to 
 
 DDR3 with Intel IP work but implementation is not optimized. Write speed is ~12MiB/s. So no burstmode with burst size greater than one supported right now. 
 
-Started to work on DDR3 memory support, but signals have some glitches that prevent the ddr3 example to run reliably. Still investigating on that problem, 
-Run time vary from 0s to 30 minutes. Need to push Key0 on the board (reset button of the soc) a couple of times to be able to make it run. 
-
 
 Started to work on usb. When building hardware, the timing requirements are not met because of TUSB1210 hardware controller but other peripherals still works.   
 
