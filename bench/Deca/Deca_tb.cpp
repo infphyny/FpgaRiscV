@@ -14,22 +14,22 @@ class ClockManager
    ClockManager(VerilatedVcdC *tfp,T* top ){}
    void advance(void)
    {
-     
-     
+
+
 
 
    };
-  
+
   protected:
 
-    
+
 
   VerilatedVcdC *m_tfp;
   T* m_top;
-   
 
 
-  vluint64_t m_time = 0; 
+
+  vluint64_t m_time = 0;
 };
 
 
@@ -116,12 +116,12 @@ int main(int argc, char **argv/*, char **env*/)
   std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_int_distribution<vluint64_t> distrib(-10,10);
-  //vluint64_t clock_jitter; 	
+  //vluint64_t clock_jitter;
   vluint64_t sample_time = 0;
 	uint32_t insn = 0;
 	uint32_t ex_pc = 0;
 	//int baud_rate = 0;
-  vluint64_t clock_count = 0; 
+  vluint64_t clock_count = 0;
 
 //	gpio_context_t gpio_context;
 //	uart_context_t uart_context;
@@ -160,7 +160,8 @@ int main(int argc, char **argv/*, char **env*/)
 	  vcd_start = atoi(arg_vcd_start+11);
 
     top->uart_0_rx = 1;
-  //  top->uart_1_rx = 1; 
+    top->i2c_0_sda = 1;
+  //  top->uart_1_rx = 1;
    // top->SEN_SDO = 0;
 	bool dump = false;
 	top->DDR3_CLK_50 = 1;
@@ -179,16 +180,16 @@ int main(int argc, char **argv/*, char **env*/)
 	 // if( (clock_count % 3) == 0)
  // if( (clock_count%17) == 0 )
    //  if( (clock_count % 15) == 0)
-//	  { 
+//	  {
 	 	top->i_clk = !top->i_clk;
 	 // 	top->USB_CLKIN = !top->USB_CLKIN;
 		top->DDR3_CLK_50 = !top->DDR3_CLK_50;
-	 
+
  		top->eval();
 	  	if (dump)
 	    tfp->dump(main_time);
 //	  }
-    
+
 
 
 	    /*
@@ -196,29 +197,29 @@ int main(int argc, char **argv/*, char **env*/)
 	    do_uart(&uart_context, top->q);
 	  else
 	    do_gpio(&gpio_context, top->q);
-*/ 
+*/
       if(main_time > key1_toggle_time)
-	  { 
+	  {
          key1_toggle_time += 10000000;
-        top->key1 = (top->key1+1) % 2;  
+        top->key1 = (top->key1+1) % 2;
 	//	top->SW0 =  (top->SW0+1) % 2;
-	//	top->SW1 = (top->SW1+1) % 2;    
-	  }   
+	//	top->SW1 = (top->SW1+1) % 2;
+	  }
 	  if (timeout && (main_time >= timeout)) {
 	    printf("Timeout: Exiting at time %lu\n", main_time);
 	    done = true;
 	  }
-       main_time+=(1);  
-       
+       main_time+=(1);
+
 	  {
-		 
+
 		//    top->DDR3_CLK_50 = !top->DDR3_CLK_50;
-      	 	
+
 	//  	 top->eval();
 //		if (dump)
 //	    tfp->dump(main_time);
 	  }
-	
+
 	  main_time+=(9);
 
       clock_count++;

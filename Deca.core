@@ -21,6 +21,7 @@ filesets:
       - rtl/peripheral/icontrol.v : {file_type : verilogSource}
       - rtl/peripheral/MachineTimer/WishboneMachineTimer.v : {file_type : verilogSource}
       - rtl/peripheral/Switch/WishboneSwitch.v : {file_type : verilogSource}
+      - rtl/peripheral/I2c/WishboneI2cCtrl.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/UartWishbone/WishboneUartCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/Wishbone8LedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/MicroWire/MicroWireWishbone.v : {file_type : verilogSource}
@@ -235,8 +236,8 @@ targets:
       - PLL=NONE
       - firmware
       - memsize=0x20000
-      - vcd
-      - vcd_start
+      - vcd=true
+      - vcd_start=0
     tools:
       verilator:
         verilator_options : [--trace,-Wno-fatal]
@@ -312,7 +313,7 @@ generate:
             - ddr3manager
             - hdmi_i2c
             - ictrl #interrupt controller
-            - wb_avl_cdc
+   #         - wb_avl_cdc
 
       slaves: #size must be a power of 2
 
@@ -344,9 +345,9 @@ generate:
           size: 16
         
         i2c_0:
-          offset: 0x00040120
-          size: 8
-          datawidth: 8
+          offset: 0x00042000
+          size: 256
+          datawidth: 32
 
         spi_0:
           offset: 0x00040140
@@ -410,8 +411,8 @@ generate:
 
         hdmi_i2c:
           offset: 0x00050010
-          size : 8
-          datawidth : 8
+          size : 256
+          datawidth : 32
           
         ictrl:
           offset: 0x00100000
@@ -420,5 +421,5 @@ generate:
         wb_avl_cdc:
           offset: 0x80000000
           size: 536870912
- #         datawidth: 64
+          datawidth: 64
 

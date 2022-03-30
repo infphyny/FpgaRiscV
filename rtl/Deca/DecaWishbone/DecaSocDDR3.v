@@ -15,12 +15,17 @@ module DecaSoc
  output wire [7:0] LEDS,
  input wire uart_0_rx,
  output wire uart_0_tx,
- input wire i2c_0_scl_i,
+
+ inout i2c_0_scl,
+ inout i2c_0_sda,
+ /*
+  input wire i2c_0_scl_i,
  output wire i2c_0_scl_o,
  output wire i2c_0_scl_oe,
  input wire i2c_0_sda_i,
  output wire i2c_0_sda_o,
  output wire i2c_0_sda_oe,
+ */
  output wire spi_0_mosi,
  input wire spi_0_miso,
  output wire spi_0_sclk,
@@ -532,6 +537,22 @@ WishboneUartCtrl uart_0(
 
 
 wire i2c_0_inta;
+
+WishboneI2cCtrl i2c_0(
+   .io_bus_CYC(wb_i2c_0_cyc),
+   .io_bus_STB(wb_i2c_0_stb),
+   .io_bus_ACK(wb_i2c_0_ack),
+   .io_bus_WE(wb_i2c_0_we),
+   .io_bus_ADR(wb_i2c_0_adr[9:2]),//WishboneI2cCtrl expect word of 4 bytes addressing   io_bus_ADR = wb_i2c_0_adr/4
+   .io_bus_DAT_MISO(wb_i2c_0_rdt),
+   .io_bus_DAT_MOSI(wb_i2c_0_dat),
+   .io_interrupt(i2c_0_inta),
+   .io_i2c_scl(i2c_0_scl),
+   .io_i2c_sda(i2c_0_sda),
+   .clk(wb_clk),
+   .reset(wb_rst)
+  );
+/*
 i2c_master_top i2c_0
 (
   .wb_clk_i(wb_clk),
@@ -552,6 +573,7 @@ i2c_master_top i2c_0
   .sda_pad_o(i2c_0_sda_o),
   .sda_padoen_o(i2c_0_sda_oe)
 );
+*/
 
 simple_spi spi_0(
   .clk_i(wb_clk),

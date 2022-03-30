@@ -7,9 +7,14 @@
 #include "Leds.h"
 #include "SpinalUart.h"
 
+//#define SIM = 1
+
+
 Leds *leds;
 SpinalUart* uart;
 volatile uint8_t* ddr3manager;
+
+
 
 
 void main(void)
@@ -39,36 +44,41 @@ void main(void)
 
     while( ((*ddr3manager)&0x03)!= 0x03 )
     {
-
-
     }
    spinal_uart_print_line(uart,"ddr3 memory to calibrated ");
    for(;;)
    {
-      uint32_t i = 0;
+      #ifdef SIM
+      const uint32_t MAX_LOOP = 10;
+      #else
+      const uint32_t MAX_LOOP = 10000000;
+      #endif
+
        spinal_uart_print_line(uart,"DDR3 write");
        leds->state = ~leds->state;
-       for(uint32_t j = 0 ; j < 10000000 ; j++)
+       for(uint32_t j = 0 ; j <MAX_LOOP ; j++)
        {
-       mem[j] = i;
-       i++;
+       mem[j] = j;
        }
        leds->state = ~leds->state;
-      // delay(1);
+     
        spinal_uart_print_line(uart,"DDR3 read");
-       for(uint32_t j = 0 ; j < 10000000 ; j++ )
+       for(uint32_t j = 0 ; j < MAX_LOOP ; j++ )
        {
+
          if(mem[j] != j)
          {
+
 
            spinal_uart_print(uart,"j = ");
            utoa(j,sint,10);
            spinal_uart_print(uart,sint);
            spinal_uart_print(uart, ":  mem[j]= ");
+
            utoa(mem[j],sint,10);
            spinal_uart_print_line(uart,sint);
          }
-        //delay(1);
+       
        // spinal_uart_print(uart,"DDR3 mem value ");
 
        }

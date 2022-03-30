@@ -26,6 +26,7 @@ static void i2c_delay(void)
 void i2c_init(I2C** i2c,uint32_t BASE_ADDRESS)
 {
   *i2c = (I2C*)BASE_ADDRESS;
+//  (*i2c)->ctr = 0;
   //(*i2c)->ctr = 0;
 //  (*i2c)->sr_cr = 0x1;
 }
@@ -41,8 +42,7 @@ bool i2c_enable(I2C* i2c)
 void i2c_set_prescaler(I2C* i2c, uint32_t freq_in,uint32_t freq_out)
 {
   uint16_t prescale;
-  prescale = (freq_in/(freq_out*4)) - 1;
-
+  prescale = (freq_in/(freq_out*5)) - 1;
   uint8_t* p = (uint8_t*)&prescale;
 
 
@@ -51,7 +51,8 @@ void i2c_set_prescaler(I2C* i2c, uint32_t freq_in,uint32_t freq_out)
 }
 
 
-bool i2c_master_transmit(I2C* i2c, uint16_t address,const uint8_t *data,uint16_t size,bool stop)
+
+bool i2c_master_transmit(I2C* i2c, uint16_t address,const uint8_t *data,uint16_t n,bool stop)
 {
 
 uint8_t status;
@@ -66,7 +67,7 @@ uint8_t status;
 
      status = i2c->sr;
      while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
-    //i2c_delay();
+
   }
   else // 2 bytes address
   {
@@ -93,18 +94,20 @@ uint32_t counter = 0;
  //const uint8_t mask = (stop) ? 0xFF : 0x00;
 
 
- for(uint16_t i= 0 ; i < size ; i++)
+ for(uint16_t i= 0 ; i < n ; i++)
  {
-  i2c->txr = data[i];
-  i2c->cr = I2C_CR_WR_BIT ;
+    i2c->txr = data[i];
+    i2c->cr = (i == n-1) ? I2C_CR_WR_BIT|I2C_CR_STO_BIT : I2C_CR_WR_BIT ;
 
 
-  status = i2c->sr;
-  while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
-  if( (status & I2C_SR_RXACK_BIT)  != 0 ){
-    i2c->cr = I2C_CR_STO_BIT;
-    return false;
-  }
+    status = i2c->sr;
+    while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
+    if( (status & I2C_SR_RXACK_BIT)  != 0 ){
+      i2c->cr = I2C_CR_STO_BIT;
+      return false;
+
+}
+
   //
 /*
   counter = 0;
@@ -118,13 +121,6 @@ uint32_t counter = 0;
     return false;
   }
 */
- }
-
- if(stop)
- {
-   i2c->cr = I2C_CR_STO_BIT;
-  // i2c_delay();
-   while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
  }
 
   return true;
@@ -142,12 +138,6 @@ bool i2c_master_receive(I2C* i2c,uint16_t adr,uint8_t* data,uint16_t size,bool s
        status = i2c->sr;
        while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
 
-      // i2c_delay();
-
-
-       //status = i2c->sr;
-    //   while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
-
     }
     else // 2 bytes address
     {
@@ -156,9 +146,12 @@ bool i2c_master_receive(I2C* i2c,uint16_t adr,uint8_t* data,uint16_t size,bool s
 
     //Receive acknoledge from slave
     if( (status & I2C_SR_RXACK_BIT)  != 0 ){
-      i2c->cr = I2C_CR_STO_BIT;
+      //i2c->cr = I2C_CR_STO_BIT;
       return false;
     }
+
+
+
     /*
     uint32_t counter = 0;
      while( ((status & I2C_SR_RXACK_BIT) ==  I2C_SR_RXACK_BIT)&& (counter<64)  )
@@ -176,7 +169,7 @@ bool i2c_master_receive(I2C* i2c,uint16_t adr,uint8_t* data,uint16_t size,bool s
      for(uint16_t i = 0 ; i < size ; i++)
      {
 
-        i2c->cr = ((i+1)==size ? (I2C_CR_RD_BIT|I2C_CR_NACK_BIT) : I2C_CR_RD_BIT );
+        i2c->cr = ((i+1)==size ? (I2C_CR_RD_BIT|I2C_CR_NACK_BIT|I2C_CR_STO_BIT) : I2C_CR_RD_BIT );
       //  i2c_delay();
         status = i2c->sr;
         while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
@@ -198,7 +191,7 @@ bool i2c_master_receive(I2C* i2c,uint16_t adr,uint8_t* data,uint16_t size,bool s
      }
 
 
-  i2c->cr = I2C_CR_STO_BIT;
+//  i2c->cr = ;
   //i2c_delay();
 //  status = i2c->sr;
 //  while( (status & I2C_TIP_BIT) == I2C_TIP_BIT ){status = i2c->sr;}
@@ -277,7 +270,7 @@ bool i2c_rcv(I2C* i2c, uint8_t address,uint8_t reg, uint8_t* rcv_data,const uint
   }
 
 
- send_stop(i2c);
+ //send_stop(i2c);
 //    send_nack_stop(i2c);
 
  return true;

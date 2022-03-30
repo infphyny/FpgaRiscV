@@ -61,7 +61,7 @@ output		          		USB_STP,
 
 //HDMI TX
 
-    inout 		          		HDMI_I2C_SCL,
+  inout 		          		HDMI_I2C_SCL,
 	inout 		          		HDMI_I2C_SDA,
 	inout 		     [3:0]		HDMI_I2S,
 	inout 		          		HDMI_LRCLK,
@@ -113,6 +113,7 @@ wire [7:0] o_gpioB;
 wire [7:0] o_gpioB_oe;
 
 
+/*
 wire i2c_0_scl_oe;
 wire i2c_0_scl_o;
 wire i2c_0_sda_oe;
@@ -120,7 +121,7 @@ wire i2c_0_sda_o;
 
 assign i2c_0_scl = i2c_0_scl_oe ? 1'bz : i2c_0_scl_o;
 assign i2c_0_sda = i2c_0_sda_oe ? 1'bz : i2c_0_sda_o;
-
+*/
 
 generate
 genvar i;
@@ -259,12 +260,16 @@ DecaSoc #(
     .LEDS(LEDS),
     .uart_0_rx(uart_0_rx),
     .uart_0_tx(uart_0_tx),
+    .i2c_0_scl(i2c_0_scl),
+    .i2c_0_sda(i2c_0_sda),
+    /*
     .i2c_0_scl_i(i2c_0_scl),
     .i2c_0_scl_o(i2c_0_scl_o),
     .i2c_0_scl_oe(i2c_0_scl_oe),
     .i2c_0_sda_i(i2c_0_sda),
     .i2c_0_sda_o(i2c_0_sda_o),
     .i2c_0_sda_oe(i2c_0_sda_oe),
+    */
     .spi_0_mosi(spi_0_mosi),
     .spi_0_miso(spi_0_miso),
     .spi_0_sclk(spi_0_sclk),

@@ -46,9 +46,19 @@ typedef struct I2C
 //  uint8_t sladr; //Slave address register
 }I2C;
 
+
+
+
 void i2c_init(I2C** i2c,uint32_t BASE_ADDRESS);
 bool i2c_enable(I2C* i2c);
 void i2c_set_prescaler(I2C* i2c,uint32_t freq_in,uint32_t freq_out );
+
+/*
+void i2c_begin_transmission(I2C* i2c,uint8_t* address,uint8_t n);
+void i2c_end_transmission(I2C* i2c);
+void i2c_read(I2C* i2c,uint8_t*data,uint16_t n);
+void i2c_write(I2C* i2c,uint8_t* data,uint16_t n);
+*/
 bool i2c_send(I2C* i2c, uint8_t address,uint8_t reg,uint8_t* data, const uint8_t size,bool reverse,bool stop);
 bool i2c_rcv(I2C* i2c, uint8_t address,uint8_t reg,uint8_t* rcv_data,const uint16_t rcv_size,bool reverse);
 

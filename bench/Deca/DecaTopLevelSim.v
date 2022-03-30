@@ -15,12 +15,16 @@ module DecaTopLevelSim(
   output wire [7:0] LEDS,
   input wire uart_0_rx,
   output wire uart_0_tx,
+  inout i2c_0_scl,
+  inout i2c_0_sda,
+  /*
   input wire i2c_0_scl_i,
   output wire i2c_0_scl_o,
   output wire i2c_0_scl_oe,
   input wire i2c_0_sda_i,
   output wire i2c_0_sda_o,
   output wire i2c_0_sda_oe,
+  */
   output wire spi_0_mosi,
   input wire spi_0_miso,
   output wire spi_0_sclk,
@@ -103,7 +107,7 @@ output wire HDMI_TX_VS,
  output		          		USB_STP,         //ULPI STP input signal
 */
  /////////// DDR3 ////////////////////
- 
+
 output wire     [14:0]      DDR3_A,
 output wire     [2:0]       DDR3_BA,
 output wire                 DDR3_CAS_n,
@@ -160,12 +164,16 @@ DecaSoc #(
     .LEDS(LEDS),
     .uart_0_rx(uart_0_rx),
     .uart_0_tx(uart_0_tx),
+    .i2c_0_scl(i2c_0_scl),
+    .i2c_0_sda(i2c_0_sda),
+    /*
     .i2c_0_scl_i(i2c_0_scl_i),
     .i2c_0_scl_o(i2c_0_scl_o),
     .i2c_0_scl_oe(i2c_0_scl_oe),
     .i2c_0_sda_i(i2c_0_sda_i),
     .i2c_0_sda_o(i2c_0_sda_o),
     .i2c_0_sda_oe(i2c_0_sda_oe),
+    */
     .spi_0_miso(spi_0_miso),
     .spi_0_mosi(spi_0_mosi),
     .spi_0_sclk(spi_0_sclk),
