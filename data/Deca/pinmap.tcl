@@ -57,6 +57,12 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CAP_SENSE_I2C_SCL
 set_location_assignment PIN_AB3 -to CAP_SENSE_I2C_SDA
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CAP_SENSE_I2C_SDA
 
+#set_location_assignment PIN_R11 -to CAP_SENSE_I2C_SCL_DEBUG
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CAP_SENSE_I2C_SCL_DEBUG
+#set_location_assignment PIN_AB7 -to CAP_SENSE_I2C_SDA_DEBUG
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CAP_SENSE_I2C_SDA_DEBUG
+
+
 #Switch
 set_location_assignment PIN_J21 -to SW0
 set_instance_assignment -name IO_STANDARD "1.5 V SCHMITT TRIGGER"  -to SW0
@@ -309,18 +315,18 @@ set_location_assignment PIN_N19 -to DDR3_DM[0]
 set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DM[0]
 set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DM[0]
 #set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DM[0]
-set_instance_assignment -name DM_PIN ON -to DDR3_DM[0] 
+set_instance_assignment -name DM_PIN ON -to DDR3_DM[0]
 
 set_location_assignment PIN_J15 -to DDR3_DM[1]
 set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DM[1]
 set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DM[1]
 #set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DM[1]
-set_instance_assignment -name DM_PIN ON -to DDR3_DM[1] 
+set_instance_assignment -name DM_PIN ON -to DDR3_DM[1]
 
 set_location_assignment PIN_L20 -to DDR3_DQ[0]
 set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[0]
 set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITH CALIBRATION" -to DDR3_DQ[0]
-#set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[0] 
+#set_instance_assignment -name PACKAGE_SKEW_COMPENSATION OFF -to DDR3_DQ[0]
 
 set_location_assignment PIN_L19 -to DDR3_DQ[1]
 set_instance_assignment -name IO_STANDARD "SSTL-15" -to DDR3_DQ[1]
@@ -461,7 +467,7 @@ set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[0] -to DDR3_DM[0]
 set_instance_assignment -name DQ_GROUP 9 -from DDR3_DQS_p[1] -to DDR3_DM[1]
 
 
-#set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON 
+#set_instance_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION_FOR_NON_GLOBAL_CLOCKS ON
 #set_instance_assignment -name GLOBAL_SIGNAL OFF -to if0|p0|umemphy|ureset|phy_reset_n -tag __nios_system_ddr3_p0
 #set_instance_assignment -name GLOBAL_SIGNAL OFF -to if0|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[0] -tag __nios_system_ddr3_p0
 #set_instance_assignment -name GLOBAL_SIGNAL OFF -to if0|p0|umemphy|uread_datapath|reset_n_fifo_wraddress[1] -tag __nios_system_ddr3_p0

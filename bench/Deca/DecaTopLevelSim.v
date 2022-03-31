@@ -29,12 +29,16 @@ module DecaTopLevelSim(
   input wire spi_0_miso,
   output wire spi_0_sclk,
   output wire spi_0_cs_n,
+  inout CAP_SENSE_I2C_SCL,
+  inout CAP_SENSE_I2C_SDA,
+  /*
   input wire CAP_SENSE_I2C_SCL_i,
   output wire CAP_SENSE_I2C_SCL_o,
   output wire CAP_SENSE_I2C_SCL_oe,
   input wire CAP_SENSE_I2C_SDA_i,
   output wire CAP_SENSE_I2C_SDA_o,
   output wire CAP_SENSE_I2C_SDA_oe,
+  */
   input wire LIGHT_I2C_SCL_i,
   output wire LIGHT_I2C_SCL_o,
   output wire LIGHT_I2C_SCL_oe,
@@ -178,12 +182,16 @@ DecaSoc #(
     .spi_0_mosi(spi_0_mosi),
     .spi_0_sclk(spi_0_sclk),
     .spi_0_cs_n(spi_0_cs_n),
+    .CAP_SENSE_I2C_SCL(CAP_SENSE_I2C_SCL),
+    .CAP_SENSE_I2C_SDA(CAP_SENSE_I2C_SDA),
+    /*
     .CAP_SENSE_I2C_SCL_i(CAP_SENSE_I2C_SCL_i),
     .CAP_SENSE_I2C_SCL_o(CAP_SENSE_I2C_SCL_o),
     .CAP_SENSE_I2C_SCL_oe(CAP_SENSE_I2C_SCL_oe),
     .CAP_SENSE_I2C_SDA_i(CAP_SENSE_I2C_SDA_i),
     .CAP_SENSE_I2C_SDA_o(CAP_SENSE_I2C_SDA_o),
     .CAP_SENSE_I2C_SDA_oe(CAP_SENSE_I2C_SDA_oe),
+    */
     .LIGHT_I2C_SCL_i(LIGHT_I2C_SCL_i),
     .LIGHT_I2C_SCL_o(LIGHT_I2C_SCL_o),
     .LIGHT_I2C_SCL_oe(LIGHT_I2C_SCL_oe),
@@ -215,12 +223,16 @@ DecaSoc #(
 
     //////// HDMI ///////////////
      //HDMI
+     .HDMI_I2C_SCL(HDMI_I2C_SCL),
+     .HDMI_I2C_SDA(HDMI_I2C_SDA),
+     /*
     .HDMI_I2C_SCL_i(HDMI_I2C_SCL),
     .HDMI_I2C_SCL_o(HDMI_I2C_SCL_o),
     .HDMI_I2C_SCL_oe(HDMI_I2C_SCL_oe),
     .HDMI_I2C_SDA_i(HDMI_I2C_SDA),
     .HDMI_I2C_SDA_o(HDMI_I2C_SDA_o),
     .HDMI_I2C_SDA_oe(HDMI_I2C_SDA_oe),
+    */
     .HDMI_I2S_i(HDMI_I2S),
     .HDMI_I2S_o(HDMI_I2S_o),
     .HDMI_I2S_oe(HDMI_I2S_oe),

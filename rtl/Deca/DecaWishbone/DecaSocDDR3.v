@@ -30,12 +30,16 @@ module DecaSoc
  input wire spi_0_miso,
  output wire spi_0_sclk,
  output wire spi_0_cs_n,
+ inout  CAP_SENSE_I2C_SCL,
+ inout CAP_SENSE_I2C_SDA,
+ /*
  input wire CAP_SENSE_I2C_SCL_i,
  output wire CAP_SENSE_I2C_SCL_o,
  output wire CAP_SENSE_I2C_SCL_oe,
  input wire CAP_SENSE_I2C_SDA_i,
  output wire CAP_SENSE_I2C_SDA_o,
  output wire CAP_SENSE_I2C_SDA_oe,
+ */
  input wire LIGHT_I2C_SCL_i,
  output wire LIGHT_I2C_SCL_o,
  output wire LIGHT_I2C_SCL_oe,
@@ -66,12 +70,16 @@ module DecaSoc
  output wire PMONITOR_I2C_SDA_o,
  output wire PMONITOR_I2C_SDA_oe,
 // HDMI
+inout wire HDMI_I2C_SCL,
+inout wire HDMI_I2C_SDA,
+/*
 input wire HDMI_I2C_SCL_i,
 output wire HDMI_I2C_SCL_o,
 output wire HDMI_I2C_SCL_oe,
 input wire HDMI_I2C_SDA_i,
 output wire HDMI_I2C_SDA_o,
 output wire HDMI_I2C_SDA_oe,
+*/
 input wire [3:0] HDMI_I2S_i,
 output wire [3:0] HDMI_I2S_o,
 output wire HDMI_I2S_oe,
@@ -596,6 +604,21 @@ simple_spi spi_0(
 
 //wire arst_i = 0;
 wire cap_sens_inta;
+WishboneI2cCtrl cap_sens(
+   .io_bus_CYC(wb_cap_sense_cyc),
+   .io_bus_STB(wb_cap_sense_stb),
+   .io_bus_ACK(wb_cap_sense_ack),
+   .io_bus_WE(wb_cap_sense_we),
+   .io_bus_ADR(wb_cap_sense_adr[9:2]),//WishboneI2cCtrl expect word of 4 bytes addressing   io_bus_ADR = wb_i2c_0_adr/4
+   .io_bus_DAT_MISO(wb_cap_sense_rdt),
+   .io_bus_DAT_MOSI(wb_cap_sense_dat),
+   .io_interrupt(cap_sens_inta),
+   .io_i2c_scl(CAP_SENSE_I2C_SCL),
+   .io_i2c_sda(CAP_SENSE_I2C_SDA),
+   .clk(wb_clk),
+   .reset(wb_rst)
+  );
+/*
 i2c_master_top cap_sens
 (
  .wb_clk_i(wb_clk),
@@ -616,7 +639,7 @@ i2c_master_top cap_sens
   .sda_pad_o(CAP_SENSE_I2C_SDA_o),
   .sda_padoen_o(CAP_SENSE_I2C_SDA_oe)
 );
-
+*/
 wire light_inta;
 i2c_master_top light
 (
@@ -860,6 +883,23 @@ i2c_master_top pmonitor(
 
  wire hdmi_i2c_inta;
 
+
+ WishboneI2cCtrl hdmi_i2c(
+    .io_bus_CYC(wb_hdmi_i2c_cyc),
+    .io_bus_STB(wb_hdmi_i2c_stb),
+    .io_bus_ACK(wb_hdmi_i2c_ack),
+    .io_bus_WE(wb_hdmi_i2c_we),
+    .io_bus_ADR(wb_hdmi_i2c_adr[9:2]),//WishboneI2cCtrl expect word of 4 bytes addressing   io_bus_ADR = wb_i2c_0_adr/4
+    .io_bus_DAT_MISO(wb_hdmi_i2c_rdt),
+    .io_bus_DAT_MOSI(wb_hdmi_i2c_dat),
+    .io_interrupt(hdmi_i2c_inta),
+    .io_i2c_scl(HDMI_I2C_SCL),
+    .io_i2c_sda(HDMI_I2C_SDA),
+    .clk(wb_clk),
+    .reset(wb_rst)
+   );
+
+/*
   i2c_master_top hdmi_i2c
   (
     .wb_clk_i(wb_clk),
@@ -880,7 +920,7 @@ i2c_master_top pmonitor(
   .sda_pad_o(HDMI_I2C_SDA_o),
   .sda_padoen_o(HDMI_I2C_SDA_oe)
   );
-
+*/
 //Wishbone-Avalon bridge to ClockDomain crossing bridge signals
 /*
    wire [31:0] o_av2cdc_adr;

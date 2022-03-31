@@ -98,7 +98,7 @@ for(uint8_t i = 0 ; i < 64 ; i++)
    result = spinal_i2c_start(i2c,EEPROM_ADR,false);
    if(result == false)
    {
-     spinal_uart_print_line(uart,"i2c_begin_transmissionx error");
+     spinal_uart_print_line(uart,"i2c error");
    }
    spinal_i2c_write(i2c,read_address,2);
    spinal_i2c_start(i2c,EEPROM_ADR,true);

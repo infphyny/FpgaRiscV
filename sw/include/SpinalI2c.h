@@ -119,7 +119,7 @@
 
 #define I2C_MAX_READ 10
 
-#define I2C_MAX_TRIES 100000
+#define I2C_MAX_TRIES 1000
 
 
 
@@ -194,7 +194,7 @@ void spinal_i2c_init(SpinalI2C* i2c,
 size_t spinal_i2c_read(SpinalI2C* i2c,uint8_t* data,size_t n);
 bool spinal_i2c_start(SpinalI2C* i2c,uint8_t address,bool read);
 void spinal_i2c_stop(SpinalI2C* i2c);
-size_t spinal_i2c_write(SpinalI2C* i2c,uint8_t* data, size_t n );
+size_t spinal_i2c_write(SpinalI2C* i2c,const uint8_t* data, size_t n );
 
 
 #endif

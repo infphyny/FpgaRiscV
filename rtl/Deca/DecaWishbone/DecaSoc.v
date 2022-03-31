@@ -166,8 +166,8 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
       .locked(pll_usb_locked)
     );
 
-   
-   
+
+
 
   end
 
@@ -515,14 +515,14 @@ generate
   assign wb_tusb1210_ack = 0;
   assign wb_tusb1210_rdt = 32'b0;
 
-   
+
   assign USB_CS = 1'bz;
   //assign USB_DIR = 1'bz;
-  assign USB_DATA_o = 8'bz; 
+  assign USB_DATA_o = 8'bz;
   assign  USB_RESET_n = 0;
   assign USB_STP = 1'bz;
 
-  end  
+  end
 
 
 
@@ -584,13 +584,13 @@ assign USB_STP = 1'bz;
    .wb_rty_o(wb_timer_rty),
    .irq(timer_irq)
    );
-   
+
 
    ////////////   HDMI ////////////////////////
 
-  //assign HDMI_I2C_SCL_oe = 1; 
+  //assign HDMI_I2C_SCL_oe = 1;
   //assign HDMI_I2C_SCL_o = 0;
-  
+
   // assign HDMI_I2C_SDA_oe = 1;
   // assign HDMI_I2C_SDA_o = 0;
 
@@ -609,10 +609,12 @@ assign USB_STP = 1'bz;
   assign HDMI_TX_CLK = 1'bz;
   assign HDMI_TX_D = 24'bzzzzzzzzzzzzzzzzzzzzzzzz;
   assign HDMI_TX_DE = 1'bz;
-  assign HDMI_TX_HS = 1'bz; 
+  assign HDMI_TX_HS = 1'bz;
   assign HDMI_TX_VS = 1'bz;
 
  wire hdmi_i2c_inta;
+
+
 
   i2c_master_top hdmi_i2c
   (
@@ -651,7 +653,7 @@ assign USB_STP = 1'bz;
    .i_init_success(ddr3_local_init_done),
    .i_cal_success(ddr3_local_cal_success),
    .o_soft_reset_n(ddr3_reset_n)
- ); 
+ );
 
 
 // Wire between wb_avalon bridge and ddr3 memory ctrl
@@ -669,7 +671,7 @@ assign USB_STP = 1'bz;
    wire avl_burstbegin;
    assign avl_burstbegin =  o_av_read_req & o_av_write_req;
 
-   
+
 
 
    wire ddr3_reset;
@@ -678,9 +680,9 @@ assign USB_STP = 1'bz;
 
    generate
 
-    if(sim ==0) begin 
+    if(sim ==0) begin
 
-   
+
       if (ENABLE_DDR3 == 1) begin
       //50 MHZ
       ddr3 ddr3_mem(
@@ -713,11 +715,11 @@ assign USB_STP = 1'bz;
         .avl_write_req(o_av_write_req),
         .avl_size(o_av_burstcount[2:0]),
         //.pll_mem_clk(DDR3_)
-        
+
       );
 
       end else begin
-       
+
         //wire dummy_
         ddr3 ddr3_mem(
         .pll_ref_clk(DDR3_CLK_50),
@@ -749,9 +751,9 @@ assign USB_STP = 1'bz;
         .avl_write_req(o_av_write_req),
         .avl_size(o_av_burstcount[2:0]),
         //.pll_mem_clk(DDR3_)
-        
+
       );
-       
+
        /*
        assign DDR3_A = 15'bz;
        assign DDR3_BA = 3'bzzz;
@@ -781,13 +783,13 @@ assign USB_STP = 1'bz;
    //stub
     wire [7:0] wb_av_bridge_sel = {4'b0000,wb_wb_av_bridge_sel};
    wire [63:0] wb_av_bridge_dat_i = {32'h0000,wb_wb_av_bridge_dat};
-   wire [63:0] wb_av_bridge_dat_o;// = {32'h0000,wb_s2m_wb_av_bridge_dat}; 
+   wire [63:0] wb_av_bridge_dat_o;// = {32'h0000,wb_s2m_wb_av_bridge_dat};
    assign wb_wb_av_bridge_rdt = wb_av_bridge_dat_o[31:0];
 
    wire [2:0] wb_av_bridge_cti = wb_wb_av_bridge_cti;//3'b000;
    wire [1:0] wb_av_bridge_bte = wb_wb_av_bridge_bte;//2'b00;
    wire av_bridge_disable = 1;
-   
+
    // 75 MHZ
    wb_to_avalon_bridge #(
      .DW(64),
@@ -820,19 +822,19 @@ assign USB_STP = 1'bz;
     .m_av_readdatavalid_i(i_av_readdatavalid)
    );
 
-   
+
 
 
    wire externalInterrupt;
    wire [ICONTROL_IUSED-1:0] i_brd_ints;
-    
+
    assign i_brd_ints[0] = key1_interrupt;
    assign i_brd_ints[1] = sw0_interrupt;
    assign i_brd_ints[2] = sw1_interrupt;
-    
+
    icontrol #(
      .IUSED(ICONTROL_IUSED)
-   ) 
+   )
     ictrl(
      .i_clk(wb_clk),
      .i_reset(wb_rst),
@@ -860,8 +862,8 @@ assign USB_STP = 1'bz;
           .o_wb_rdt(wb_mem_rdt),
           .o_wb_ack(wb_mem_ack)
     );
-    
-    
+
+
    wire softwareInterrupt = 0;
    assign wb_cpu_ibus_adr[1:0] = 0;
  //  assign wb_m2s_cpu_dbus_adr[1:0] = 0;

@@ -56,12 +56,12 @@ void main(void)
 
        spinal_uart_print_line(uart,"DDR3 write");
        leds->state = ~leds->state;
-       for(uint32_t j = 0 ; j <MAX_LOOP ; j++)
+       for(uint32_t j = 0 ; j < MAX_LOOP ; j++)
        {
        mem[j] = j;
        }
        leds->state = ~leds->state;
-     
+
        spinal_uart_print_line(uart,"DDR3 read");
        for(uint32_t j = 0 ; j < MAX_LOOP ; j++ )
        {
@@ -78,7 +78,7 @@ void main(void)
            utoa(mem[j],sint,10);
            spinal_uart_print_line(uart,sint);
          }
-       
+
        // spinal_uart_print(uart,"DDR3 mem value ");
 
        }

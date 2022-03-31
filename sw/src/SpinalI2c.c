@@ -50,7 +50,7 @@ static size_t __spinal_i2c_read(SpinalI2C* i2c, uint8_t* data,bool ack)
 }
 
 
-static size_t __spinal_i2c_write(SpinalI2C* i2c,uint8_t data)
+static size_t __spinal_i2c_write(SpinalI2C* i2c,const uint8_t data)
 {
   i2c->tx_data = data | I2C_TX_ENABLE | I2C_TX_VALID;
   i2c->tx_ack = I2C_TX_VALID;
@@ -67,7 +67,7 @@ static size_t __spinal_i2c_write(SpinalI2C* i2c,uint8_t data)
    }
 }
 
-size_t spinal_i2c_read(SpinalI2C* i2c,uint8_t* data,size_t n)
+size_t spinal_i2c_read(SpinalI2C* i2c, uint8_t* data,size_t n)
 {
   i2c->rx_data = I2C_RX_LISTEN;
   size_t read_count = 0;
@@ -94,7 +94,7 @@ bool spinal_i2c_start(SpinalI2C* i2c,uint8_t address,bool read)
 {
   uint8_t is_read = read ? 0x01 : 0x00;
   i2c->master_status = I2C_MASTER_START;
-  i2c->tx_data = is_read|(0x50<<1)| I2C_TX_VALID|I2C_TX_ENABLE;//tx valid tx_enable;
+  i2c->tx_data = is_read|(address<<1)| I2C_TX_VALID|I2C_TX_ENABLE;//tx valid tx_enable;
   i2c->tx_ack = I2C_TX_VALID/*|I2C_TX_ENABLE*/;
 
   uint32_t status = 2; // Timeout
@@ -125,7 +125,7 @@ void spinal_i2c_stop(SpinalI2C* i2c)
 }
 
 
-size_t spinal_i2c_write(SpinalI2C* i2c,uint8_t* data, size_t n )
+size_t spinal_i2c_write(SpinalI2C* i2c,const uint8_t* data, size_t n )
 {
   size_t write_count = 0;
   for(size_t i=0;i<n;i++) {

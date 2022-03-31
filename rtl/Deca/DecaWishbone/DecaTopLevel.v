@@ -17,8 +17,14 @@ output wire spi_0_mosi,
 input wire spi_0_miso,
 output wire spi_0_sclk,
 output wire spi_0_cs_n,
+
 inout wire CAP_SENSE_I2C_SCL,
 inout wire CAP_SENSE_I2C_SDA,
+// CAP_SENCE_DEBUG
+/*
+inout wire CAP_SENSE_I2C_SCL_DEBUG,
+inout wire CAP_SENSE_I2C_SDA_DEBUG,
+*/
 inout wire LIGHT_I2C_SCL,
 inout wire LIGHT_I2C_SDA,
 inout wire RH_TEMP_I2C_SCL,
@@ -131,6 +137,7 @@ genvar i;
    end
 endgenerate
 
+/*
 wire CAP_SENSE_I2C_SCL_oe;
 wire CAP_SENSE_I2C_SCL_o;
 wire CAP_SENSE_I2C_SDA_oe;
@@ -139,7 +146,11 @@ wire CAP_SENSE_I2C_SDA_o;
 
 assign CAP_SENSE_I2C_SCL = CAP_SENSE_I2C_SCL_oe ?  1'bz : CAP_SENSE_I2C_SCL_o;
 assign CAP_SENSE_I2C_SDA = CAP_SENSE_I2C_SDA_oe ?  1'bz : CAP_SENSE_I2C_SDA_o;
-
+*/
+/*
+assign CAP_SENSE_I2C_SCL_DEBUG = CAP_SENSE_I2C_SCL;
+assign CAP_SENSE_I2C_SDA_DEBUG = CAP_SENSE_I2C_SDA;
+*/
 
 wire LIGHT_I2C_SCL_oe;
 wire LIGHT_I2C_SCL_o;
@@ -192,14 +203,16 @@ assign NET_TXD = 4'bzzzz;
 
 //HDMI wire
 
+/*
 wire HDMI_I2C_SCL_o;
 wire HDMI_I2C_SCL_oe;
 assign HDMI_I2C_SCL = HDMI_I2C_SCL_oe ? 1'bz : HDMI_I2C_SCL_o;
-
+*/
+/*
 wire HDMI_I2C_SDA_o;
 wire HDMI_I2C_SDA_oe;
 assign HDMI_I2C_SDA = HDMI_I2C_SDA_oe ? 1'bz : HDMI_I2C_SDA_o;
-
+*/
 wire [3:0] HDMI_I2S_o;
 wire HDMI_I2S_oe;
 
@@ -274,12 +287,16 @@ DecaSoc #(
     .spi_0_miso(spi_0_miso),
     .spi_0_sclk(spi_0_sclk),
     .spi_0_cs_n(spi_0_cs_n),
+    .CAP_SENSE_I2C_SCL(CAP_SENSE_I2C_SCL),
+    .CAP_SENSE_I2C_SDA(CAP_SENSE_I2C_SDA),
+    /*
     .CAP_SENSE_I2C_SCL_i(CAP_SENSE_I2C_SCL),
     .CAP_SENSE_I2C_SCL_o(CAP_SENSE_I2C_SCL_o),
     .CAP_SENSE_I2C_SCL_oe(CAP_SENSE_I2C_SCL_oe),
     .CAP_SENSE_I2C_SDA_i(CAP_SENSE_I2C_SDA),
     .CAP_SENSE_I2C_SDA_o(CAP_SENSE_I2C_SDA_o),
     .CAP_SENSE_I2C_SDA_oe(CAP_SENSE_I2C_SDA_oe),
+    */
     .LIGHT_I2C_SCL_i(LIGHT_I2C_SCL),
     .LIGHT_I2C_SCL_o(LIGHT_I2C_SCL_o),
     .LIGHT_I2C_SCL_oe(LIGHT_I2C_SCL_oe),
@@ -310,12 +327,16 @@ DecaSoc #(
     .PMONITOR_I2C_SDA_oe(PMONITOR_I2C_SDA_oe),
 
     //HDMI
+    .HDMI_I2C_SCL(HDMI_I2C_SCL),
+    .HDMI_I2C_SDA(HDMI_I2C_SDA),
+    /*
     .HDMI_I2C_SCL_i(HDMI_I2C_SCL),
     .HDMI_I2C_SCL_o(HDMI_I2C_SCL_o),
     .HDMI_I2C_SCL_oe(HDMI_I2C_SCL_oe),
     .HDMI_I2C_SDA_i(HDMI_I2C_SDA),
     .HDMI_I2C_SDA_o(HDMI_I2C_SDA_o),
     .HDMI_I2C_SDA_oe(HDMI_I2C_SDA_oe),
+    */
     .HDMI_I2S_i(HDMI_I2S),
     .HDMI_I2S_o(HDMI_I2S_o),
     .HDMI_I2S_oe(HDMI_I2S_oe),
