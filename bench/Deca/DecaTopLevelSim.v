@@ -45,12 +45,17 @@ module DecaTopLevelSim(
   input wire LIGHT_I2C_SDA_i,
   output wire LIGHT_I2C_SDA_o,
   output wire LIGHT_I2C_SDA_oe,
+
+  inout wire RH_TEMP_I2C_SCL,
+  inout wire RH_TEMP_I2C_SDA,
+  /*
   input wire RH_TEMP_I2C_SDA_i,
   output wire RH_TEMP_I2C_SDA_o,
   output wire RH_TEMP_I2C_SDA_oe,
   input wire RH_TEMP_I2C_SCL_i,
   output wire RH_TEMP_I2C_SCL_o,
   output wire RH_TEMP_I2C_SCL_oe,
+  */
   input wire RH_TEMP_DRDY_n,
 
   input wire TEMP_SI,

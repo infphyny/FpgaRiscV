@@ -46,12 +46,16 @@ module DecaSoc
  input wire LIGHT_I2C_SDA_i,
  output wire LIGHT_I2C_SDA_o,
  output wire LIGHT_I2C_SDA_oe,
+ inout RH_TEMP_I2C_SCL,
+ inout RH_TEMP_I2C_SDA,
+ /*
  input wire RH_TEMP_I2C_SDA_i,
  output wire RH_TEMP_I2C_SDA_o,
  output wire RH_TEMP_I2C_SDA_oe,
  input wire RH_TEMP_I2C_SCL_i,
  output wire RH_TEMP_I2C_SCL_o,
  output wire RH_TEMP_I2C_SCL_oe,
+ */
  input wire RH_TEMP_DRDY_n,
 
  input wire TEMP_SI,
@@ -663,6 +667,22 @@ i2c_master_top light
 );
 
 wire rh_temp_inta;
+
+WishboneI2cCtrl rh_temp(
+   .io_bus_CYC(wb_rh_temp_cyc),
+   .io_bus_STB(wb_rh_temp_stb),
+   .io_bus_ACK(wb_rh_temp_ack),
+   .io_bus_WE(wb_rh_temp_we),
+   .io_bus_ADR(wb_rh_temp_adr[9:2]),//WishboneI2cCtrl expect word of 4 bytes addressing   io_bus_ADR = wb_i2c_0_adr/4
+   .io_bus_DAT_MISO(wb_rh_temp_rdt),
+   .io_bus_DAT_MOSI(wb_rh_temp_dat),
+   .io_interrupt(rh_temp_inta),
+   .io_i2c_scl(RH_TEMP_I2C_SCL),
+   .io_i2c_sda(RH_TEMP_I2C_SDA),
+   .clk(wb_clk),
+   .reset(wb_rst)
+  );
+/*
 i2c_master_top rh_temp
 (
  .wb_clk_i(wb_clk),
@@ -683,7 +703,7 @@ i2c_master_top rh_temp
   .sda_pad_o(RH_TEMP_I2C_SDA_o),
   .sda_padoen_o(RH_TEMP_I2C_SDA_oe)
 );
-
+*/
 
  MicroWireWishbone board_temp_sensor
  (

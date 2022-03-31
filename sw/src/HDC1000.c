@@ -35,20 +35,46 @@ static void inplace_reverse(char * str)
 
 
 
-bool hdc1000_configure(I2C* i2c,const uint8_t address,const uint16_t conf)
+bool hdc1000_configure(SpinalI2C* i2c,const uint8_t address,const uint16_t conf)
 {
 
+ uint8_t temp[3];
  uint8_t* c = (uint8_t*)&conf;
- return i2c_send(i2c,address,HDC1000_CONF_REG,c,2,true,true);
+ temp[0] = HDC1000_CONF_REG;
+ temp[1] = c[1];
+ temp[2] = c[0];
+
+ while(!spinal_i2c_start(i2c,address,SPINAL_I2C_WRITE))
+ {
+   for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+ }
+ spinal_i2c_write(i2c,temp,3);
+ spinal_i2c_stop(i2c);
+
+ return true /*i2c_send(i2c,address,HDC1000_CONF_REG,c,2,true,true)*/;
 }
 
-bool hdc1000_get_config(I2C* i2c,const uint8_t address,uint16_t* conf)
+bool hdc1000_get_config(SpinalI2C* i2c,const uint8_t address,uint16_t* conf)
 {
    uint8_t* c = (uint8_t*)conf;
-   return i2c_rcv(i2c,address,HDC1000_CONF_REG,c,2,true);
+   uint8_t temp[2];
+
+   while(!spinal_i2c_start(i2c,address,SPINAL_I2C_WRITE))
+   {
+     for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+   }
+   spinal_i2c_write(i2c,&HDC1000_CONF_REG,1);
+   spinal_i2c_start(i2c,address,SPINAL_I2C_READ);
+   spinal_i2c_read(i2c,temp,2);
+   spinal_i2c_stop(i2c);
+
+   c[0] = temp[1];
+   c[1] = temp[0];
+
+   return true/*i2c_rcv(i2c,address,HDC1000_CONF_REG,c,2,true)*/;
 }
 
-void hdc1000_get_device_info(I2C* i2c,uint8_t address,HDC1000DeviceInfo* di)
+void hdc1000_get_device_info(SpinalI2C* i2c,uint8_t address,HDC1000DeviceInfo* di)
 {
 
   uint8_t buffer[4];
@@ -60,32 +86,74 @@ void hdc1000_get_device_info(I2C* i2c,uint8_t address,HDC1000DeviceInfo* di)
 
 
   bool i2c_result;
+//Retreive HDC1000_DEVICE_ID
+  while(!spinal_i2c_start(i2c,address,SPINAL_I2C_WRITE))
+  {
+    for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+  }
 
+  spinal_i2c_write(i2c,&HDC1000_DEVICE_ID,1);
+
+  while(!spinal_i2c_start(i2c,address,SPINAL_I2C_READ))
+  {
+    for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+  }
+  spinal_i2c_read(i2c,buffer,2);
+
+  spinal_i2c_stop(i2c);
+  buffer[3] = buffer[0];
+  buffer[0] = buffer[1];
+  buffer[1] = buffer[3];
+  buffer[3] = 0x00;
+  itoa(*t,di->id,16);
+
+/*
 do{
   i2c_result = i2c_rcv(i2c,address,HDC1000_DEVICE_ID,buffer,2,true);
 }while(i2c_result == false);
+*/
 
 
-  itoa(*t,di->id,16);
+//Retreive manufacturer id
 
-
+/*
   do
   {
   i2c_result = i2c_rcv(i2c,address,HDC1000_MANUFACTURER_ID,buffer,2,true);
 }while(i2c_result == false);
+*/
+while(!spinal_i2c_start(i2c,address,SPINAL_I2C_WRITE))
+{
+  for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+}
+
+spinal_i2c_write(i2c,&HDC1000_MANUFACTURER_ID,1);
+
+while(!spinal_i2c_start(i2c,address,SPINAL_I2C_READ))
+{
+  for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+}
+spinal_i2c_read(i2c,buffer,2);
+
+spinal_i2c_stop(i2c);
+buffer[3] = buffer[0];
+buffer[0] = buffer[1];
+buffer[1] = buffer[3];
+buffer[3] = 0x00;
 
   itoa(*t,di->manufacturer,16);
 
 }
 
 
-bool hdc1000_trigger_measure(I2C* i2c,const uint8_t address)
+bool hdc1000_trigger_measure(SpinalI2C* i2c,const uint8_t address)
 {
-  return i2c_send(i2c,address,HDC1000_TEMP_REG,NULL,0,false,true);
+  //return i2c_send(i2c,address,HDC1000_TEMP_REG,NULL,0,false,true);
+  return false;
 }
 
 
-bool hdc1000_read_measure(I2C* i2c,const uint8_t address,char temp[16],char rh[16])
+bool hdc1000_read_measure(SpinalI2C* i2c,const uint8_t address,char temp[16],char rh[16])
 {
 
  bool i2c_result;
@@ -93,12 +161,38 @@ bool hdc1000_read_measure(I2C* i2c,const uint8_t address,char temp[16],char rh[1
   buffer[2] = 0;
   buffer[3] = 0;
 //Read temperature
+
+
+while(!spinal_i2c_start(i2c,address,SPINAL_I2C_WRITE))
+{
+    for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+}
+spinal_i2c_write(i2c,&HDC1000_TEMP_REG,1);
+while(!spinal_i2c_start(i2c,address,SPINAL_I2C_READ))
+{
+    for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+}
+spinal_i2c_read(i2c,buffer,2);
+spinal_i2c_stop(i2c);
+
+buffer[3] = buffer[0];
+buffer[0] = buffer[1];
+buffer[1] = buffer[3];
+buffer[3] = 0x00;
+
+
+
+
+/*
   do{
   i2c_result = i2c_rcv(i2c,address,HDC1000_TEMP_REG,buffer,2,true);
   }while(i2c_result == false);
- 
+*/
+
+
+
  //i2c_rcv_delay seem broken
- //  if(!i2c_rcv_delay(i2c,address,HDC1000_TEMP_REG,buffer,2,true)) 
+ //  if(!i2c_rcv_delay(i2c,address,HDC1000_TEMP_REG,buffer,2,true))
  //  {
   //   return false;
  //  }
@@ -155,9 +249,32 @@ uint32_t *ut = (uint32_t*)(buffer);
 
 buffer[2] = 0;
 buffer[3] = 0;
+
+
+while(!spinal_i2c_start(i2c,address,SPINAL_I2C_WRITE))
+{
+  for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+}
+spinal_i2c_write(i2c,&HDC1000_RH_REG,1);
+
+while(!spinal_i2c_start(i2c,address,SPINAL_I2C_READ))
+{
+  for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {}
+}
+spinal_i2c_read(i2c,buffer,2);
+spinal_i2c_stop(i2c);
+
+buffer[3] = buffer[0];
+buffer[0] = buffer[1];
+buffer[1] = buffer[3];
+buffer[3] = 0x00;
+
+
+/*
  do{
   i2c_result = i2c_rcv(i2c,address,HDC1000_RH_REG,buffer,2,true);
   }while(i2c_result == false);
+  */
 /*
 if(!i2c_rcv_delay(i2c,address,HDC1000_RH_REG,buffer,2,true))
 {

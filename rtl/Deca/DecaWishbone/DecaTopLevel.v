@@ -160,18 +160,19 @@ wire LIGHT_I2C_SDA_o;
 assign LIGHT_I2C_SCL = LIGHT_I2C_SCL_oe ?  1'bz : LIGHT_I2C_SCL_o;
 assign LIGHT_I2C_SDA = LIGHT_I2C_SDA_oe ?  1'bz : LIGHT_I2C_SDA_o;
 
+/*
 wire RH_TEMP_I2C_SDA_oe;
 wire RH_TEMP_I2C_SDA_o;
 wire RH_TEMP_I2C_SCL_oe;
 wire RH_TEMP_I2C_SCL_o;
-
+*/
 //assign RH_TEMP_I2C_SCL = RH_TEMP_I2C_SCL_oe ? RH_TEMP_I2C_SCL_o : 1'bz;
 //assign RH_TEMP_I2C_SDA = RH_TEMP_I2C_SDA_oe ? RH_TEMP_I2C_SDA_o : 1'bz;
 
-
+/*
 assign RH_TEMP_I2C_SCL = RH_TEMP_I2C_SCL_oe ?  1'bz : RH_TEMP_I2C_SCL_o;
 assign RH_TEMP_I2C_SDA = RH_TEMP_I2C_SDA_oe ?  1'bz : RH_TEMP_I2C_SDA_o;
-
+*/
 
 wire TEMP_SO;
 wire TEMP_SO_oe;
@@ -303,12 +304,16 @@ DecaSoc #(
     .LIGHT_I2C_SDA_i(LIGHT_I2C_SDA),
     .LIGHT_I2C_SDA_o(LIGHT_I2C_SDA_o),
     .LIGHT_I2C_SDA_oe(LIGHT_I2C_SDA_oe),
+    .RH_TEMP_I2C_SCL(RH_TEMP_I2C_SCL),
+    .RH_TEMP_I2C_SDA(RH_TEMP_I2C_SDA),
+    /*
     .RH_TEMP_I2C_SCL_i(RH_TEMP_I2C_SCL),
     .RH_TEMP_I2C_SCL_o(RH_TEMP_I2C_SCL_o),
     .RH_TEMP_I2C_SCL_oe(RH_TEMP_I2C_SCL_oe),
     .RH_TEMP_I2C_SDA_i(RH_TEMP_I2C_SDA),
     .RH_TEMP_I2C_SDA_o(RH_TEMP_I2C_SDA_o),
     .RH_TEMP_I2C_SDA_oe(RH_TEMP_I2C_SDA_oe),
+    */
     .RH_TEMP_DRDY_n(RH_TEMP_DRDY_n),
     .TEMP_SI(TEMP_SIO),
     .TEMP_SO(TEMP_SO),

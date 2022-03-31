@@ -120,7 +120,8 @@
 #define I2C_MAX_READ 10
 
 #define I2C_MAX_TRIES 1000
-
+#define SPINAL_I2C_WRITE  0x00
+#define SPINAL_I2C_READ  0x01
 
 
 

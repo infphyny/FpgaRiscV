@@ -5,12 +5,13 @@
 #include "deca_bsp.h"
 //#include "Deca.h"
 
-#include "i2c.h"
+//#include "i2c.h"
+#include "SpinalI2c.h"
 #include "HDC1000.h"
 #include "SpinalUart.h"
 
 //I2C address of HDC1000 rh temp sensor
-const uint8_t address = 0x80;// 7 bit address shifted one bit to left
+const uint8_t address = 0x40;// 7 bit address shifted one bit to left
 
 
 void main(void)
@@ -21,19 +22,21 @@ deca_init();
 char temperature[16];
 char humidity[16];
 SpinalUart* uart;
+SpinalI2C* i2c;
 
 uint16_t hdc1000_config;
 char hdc1000_config_string[16];
 
 spinal_uart_init(&uart,UART_0_BASE_ADDRESS);
-
+delay(10);
 spinal_uart_print_line(uart,"RH Temp sensor demo");
 
-I2C* i2c = (I2C*)(RH_TEMP_BASE_ADDRESS);
+i2c = (SpinalI2C*)(RH_TEMP_BASE_ADDRESS);
+spinal_i2c_init(i2c,50000,250,250,1000,5,5);
 HDC1000DeviceInfo   di;
 
-i2c_enable(i2c);
-i2c_set_prescaler(i2c,50000000,100000);
+//i2c_enable(i2c);
+//i2c_set_prescaler(i2c,50000000,100000);
 
 bool result;
 //Acquire temperature and humidity
@@ -99,9 +102,9 @@ if(i2c_result == false)
 */
 //char smanufacturer_id[5];
 //itoa(*t,smanufacturer_id,16);
-spinal_uart_print(uart,"Manufacturer id:");
+spinal_uart_print(uart,"Manufacturer id:0x");
 spinal_uart_print_line(uart,di.manufacturer);
-spinal_uart_print(uart,"Device id:");
+spinal_uart_print(uart,"Device id:0x");
 spinal_uart_print_line(uart,di.id);
 // 0001 0000 0000 0000
 
@@ -136,8 +139,8 @@ spinal_uart_print_line(uart,hdc1000_config_string);
     // {
     //   spinal_uart_print_line(uart,"Unable to trigger measure");
     // }
- 
-     
+
+
      delay(500);
 
 

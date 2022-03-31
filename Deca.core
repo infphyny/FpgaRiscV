@@ -365,9 +365,9 @@ generate:
           datawidth: 8
 
         rh_temp:
-          offset: 0x00040820
-          size : 8
-          datawidth: 8
+          offset: 0x00045000
+          size : 1024
+          datawidth: 32
 
         board_temp_sensor:
           offset: 0x00040840
