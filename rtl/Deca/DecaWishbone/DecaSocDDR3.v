@@ -18,28 +18,14 @@ module DecaSoc
 
  inout i2c_0_scl,
  inout i2c_0_sda,
- /*
-  input wire i2c_0_scl_i,
- output wire i2c_0_scl_o,
- output wire i2c_0_scl_oe,
- input wire i2c_0_sda_i,
- output wire i2c_0_sda_o,
- output wire i2c_0_sda_oe,
- */
+
  output wire spi_0_mosi,
  input wire spi_0_miso,
  output wire spi_0_sclk,
  output wire spi_0_cs_n,
  inout  CAP_SENSE_I2C_SCL,
  inout CAP_SENSE_I2C_SDA,
- /*
- input wire CAP_SENSE_I2C_SCL_i,
- output wire CAP_SENSE_I2C_SCL_o,
- output wire CAP_SENSE_I2C_SCL_oe,
- input wire CAP_SENSE_I2C_SDA_i,
- output wire CAP_SENSE_I2C_SDA_o,
- output wire CAP_SENSE_I2C_SDA_oe,
- */
+
  input wire LIGHT_I2C_SCL_i,
  output wire LIGHT_I2C_SCL_o,
  output wire LIGHT_I2C_SCL_oe,
@@ -48,14 +34,7 @@ module DecaSoc
  output wire LIGHT_I2C_SDA_oe,
  inout RH_TEMP_I2C_SCL,
  inout RH_TEMP_I2C_SDA,
- /*
- input wire RH_TEMP_I2C_SDA_i,
- output wire RH_TEMP_I2C_SDA_o,
- output wire RH_TEMP_I2C_SDA_oe,
- input wire RH_TEMP_I2C_SCL_i,
- output wire RH_TEMP_I2C_SCL_o,
- output wire RH_TEMP_I2C_SCL_oe,
- */
+ 
  input wire RH_TEMP_DRDY_n,
 
  input wire TEMP_SI,
@@ -166,20 +145,7 @@ parameter ENABLE_TUSB = 0;
  wire avl_ready;
  wire avl_rdt_valid;
 
-/*
-  wire [31:0] o_cdc2ddr_adr;
-  wire [7:0] o_cdc2ddr_be;
-  wire o_cdc2ddr_read_req;
-  wire o_cdc2ddr_write_req;
-  wire [63:0] i_ddr2cdc_readdata;
-  wire [7:0] o_cdc2ddr_burstcount;
-  wire [63:0] o_cdc2ddr_writedata;
-  wire avl_ready;
-  wire i_ddr2cdc_waitrequest;
-  assign i_ddr2cdc_waitrequest = !avl_ready;
-  wire i_ddr2cdc_readdatavalid;
-  wire o_cdc2ddr_burstbegin;
-*/
+
 
    wire ddr3_local_init_done;
    wire ddr3_local_cal_success;
@@ -564,28 +530,7 @@ WishboneI2cCtrl i2c_0(
    .clk(wb_clk),
    .reset(wb_rst)
   );
-/*
-i2c_master_top i2c_0
-(
-  .wb_clk_i(wb_clk),
-  .wb_rst_i(wb_rst),
-  .arst_i(i_rst),
-  .wb_adr_i(wb_i2c_0_adr[2:0]),
-  .wb_dat_i(wb_i2c_0_dat),
-  .wb_dat_o(wb_i2c_0_rdt),
-  .wb_we_i(wb_i2c_0_we),
-  .wb_stb_i(wb_i2c_0_stb),
-  .wb_cyc_i(wb_i2c_0_cyc),
-  .wb_ack_o(wb_i2c_0_ack),
-  .wb_inta_o(i2c_0_inta),
-  .scl_pad_i(i2c_0_scl_i),
-  .scl_pad_o(i2c_0_scl_o),
-  .scl_padoen_o(i2c_0_scl_oe),
-  .sda_pad_i(i2c_0_sda_i),
-  .sda_pad_o(i2c_0_sda_o),
-  .sda_padoen_o(i2c_0_sda_oe)
-);
-*/
+
 
 simple_spi spi_0(
   .clk_i(wb_clk),
@@ -622,28 +567,7 @@ WishboneI2cCtrl cap_sens(
    .clk(wb_clk),
    .reset(wb_rst)
   );
-/*
-i2c_master_top cap_sens
-(
- .wb_clk_i(wb_clk),
- .wb_rst_i(wb_rst),
- .arst_i(i_rst),
- .wb_adr_i(wb_cap_sense_adr[2:0]),
- .wb_dat_i(wb_cap_sense_dat),
- .wb_dat_o(wb_cap_sense_rdt),
- .wb_we_i(wb_cap_sense_we),
-  .wb_stb_i(wb_cap_sense_stb),
-  .wb_cyc_i(wb_cap_sense_cyc),
-  .wb_ack_o(wb_cap_sense_ack),
-  .wb_inta_o(cap_sens_inta),
-  .scl_pad_i(CAP_SENSE_I2C_SCL_i),
-  .scl_pad_o(CAP_SENSE_I2C_SCL_o),
-  .scl_padoen_o(CAP_SENSE_I2C_SCL_oe),
-  .sda_pad_i(CAP_SENSE_I2C_SDA_i),
-  .sda_pad_o(CAP_SENSE_I2C_SDA_o),
-  .sda_padoen_o(CAP_SENSE_I2C_SDA_oe)
-);
-*/
+
 wire light_inta;
 i2c_master_top light
 (
@@ -682,28 +606,7 @@ WishboneI2cCtrl rh_temp(
    .clk(wb_clk),
    .reset(wb_rst)
   );
-/*
-i2c_master_top rh_temp
-(
- .wb_clk_i(wb_clk),
- .wb_rst_i(wb_rst),
- .arst_i(i_rst),
- .wb_adr_i(wb_rh_temp_adr[2:0]),
- .wb_dat_i(wb_rh_temp_dat),
- .wb_dat_o(wb_rh_temp_rdt),
- .wb_we_i(wb_rh_temp_we),
-  .wb_stb_i(wb_rh_temp_stb),
-  .wb_cyc_i(wb_rh_temp_cyc),
-  .wb_ack_o(wb_rh_temp_ack),
-  .wb_inta_o(rh_temp_inta),
-  .scl_pad_i(RH_TEMP_I2C_SCL_i),
-  .scl_pad_o(RH_TEMP_I2C_SCL_o),
-  .scl_padoen_o(RH_TEMP_I2C_SCL_oe),
-  .sda_pad_i(RH_TEMP_I2C_SDA_i),
-  .sda_pad_o(RH_TEMP_I2C_SDA_o),
-  .sda_padoen_o(RH_TEMP_I2C_SDA_oe)
-);
-*/
+
 
  MicroWireWishbone board_temp_sensor
  (
@@ -895,11 +798,11 @@ i2c_master_top pmonitor(
   assign HDMI_SCLK_oe = 1'bz;
   assign HDMI_SCLK_o = 1'bz;
 
-  assign HDMI_TX_CLK = 1'bz;
-  assign HDMI_TX_D = 24'bzzzzzzzzzzzzzzzzzzzzzzzz;
-  assign HDMI_TX_DE = 1'bz;
-  assign HDMI_TX_HS = 1'bz;
-  assign HDMI_TX_VS = 1'bz;
+  assign HDMI_TX_CLK = 1'b0;//1'bz;
+  assign HDMI_TX_D = 24'd0;
+  assign HDMI_TX_DE = 1'b0;/*1'bz*/
+  assign HDMI_TX_HS = 1'b1;
+  assign HDMI_TX_VS = 1'b1;
 
  wire hdmi_i2c_inta;
 
@@ -919,90 +822,8 @@ i2c_master_top pmonitor(
     .reset(wb_rst)
    );
 
-/*
-  i2c_master_top hdmi_i2c
-  (
-    .wb_clk_i(wb_clk),
-  .wb_rst_i(wb_rst),
-  .arst_i(i_rst),
-  .wb_adr_i(wb_hdmi_i2c_adr[2:0]),
-  .wb_dat_i(wb_hdmi_i2c_dat),
-  .wb_dat_o(wb_hdmi_i2c_rdt),
-  .wb_we_i(wb_hdmi_i2c_we),
-  .wb_stb_i(wb_hdmi_i2c_stb),
-  .wb_cyc_i(wb_hdmi_i2c_cyc),
-  .wb_ack_o(wb_hdmi_i2c_ack),
-  .wb_inta_o(hdmi_i2c_inta),
-  .scl_pad_i(HDMI_I2C_SCL_i),
-  .scl_pad_o(HDMI_I2C_SCL_o),
-  .scl_padoen_o(HDMI_I2C_SCL_oe),
-  .sda_pad_i(HDMI_I2C_SDA_i),
-  .sda_pad_o(HDMI_I2C_SDA_o),
-  .sda_padoen_o(HDMI_I2C_SDA_oe)
-  );
-*/
-//Wishbone-Avalon bridge to ClockDomain crossing bridge signals
-/*
-   wire [31:0] o_av2cdc_adr;
-   wire [7:0] o_av2cdc_be;
-   wire o_av2cdc_read_req;
-   wire o_av2cdc_write_req;
 
-   wire [7:0] o_av2cdc_burstcount;
-   wire [63:0] o_av2cdc_writedata;
-   wire [63:0] i_cdc2av_readdata;
-   wire i_cdc2av_waitrequest;
-   wire i_cdc2av_readdatavalid;
-   wire o_av2cdc_burstbegin = 0;
-*/
-/*
- BusMemClockDomainCrossing #(.CDC_ENABLE(with_bus_mem_cdc))
- bmcdc(
 
-   .i_bus_clock(wb_clk),
-   .i_bus_reset(wb_rst),
-   .i_mem_clock(afi_clk),
-   .i_mem_reset(afi_rst),
-   //Bus to/from cdc signals
-   .i_bus_address(o_av2cdc_adr),
-   .i_bus_be(o_av2cdc_be),
-   .i_bus_read_req(o_av2cdc_read_req),
-   .o_bus_read_data(i_cdc2av_readdata),
-   .o_bus_read_data_valid(i_cdc2av_readdatavalid),
-   .i_bus_burst_count(o_av2cdc_burstcount),
-   .i_bus_burst_begin(o_av2cdc_burstbegin),
-   .i_bus_write_req(o_av2cdc_write_req),
-   .i_bus_write_data(o_av2cdc_writedata),
-   .o_bus_wait_request(i_cdc2av_waitrequest),
- // Mem to/from cdc signals
-
-   .o_mem_address(o_cdc2ddr_adr),
-   .o_mem_be(o_cdc2ddr_be),
-   .o_mem_read_req(o_cdc2ddr_read_req),
-   .i_mem_read_data(i_ddr2cdc_readdata),
-   .i_mem_read_data_valid(i_ddr2cdc_readdatavalid),
-   .o_mem_burst_count(o_cdc2ddr_burstcount),
-   .o_mem_burst_begin(o_cdc2ddr_burstbegin),
-   .o_mem_write_req(o_cdc2ddr_write_req),
-   .o_mem_write_data(o_cdc2ddr_writedata),
-   .i_mem_wait_request(i_ddr2cdc_waitrequest)
- );
-*/
-
-   //stub
-   /*
-   wire [7:0] wb_av_bridge_sel = {4'b0000,wb_wb_av_bridge_sel};
-   wire [63:0] wb_av_bridge_dat_i = {32'h0000,wb_wb_av_bridge_dat};
-   wire [63:0] wb_av_bridge_dat_o;// = {32'h0000,wb_s2m_wb_av_bridge_dat};
-   assign wb_wb_av_bridge_rdt = wb_av_bridge_dat_o[31:0];
-
-   wire [2:0] wb_av_bridge_cti = wb_wb_av_bridge_cti;//3'b000;
-   wire [1:0] wb_av_bridge_bte = wb_wb_av_bridge_bte;//2'b00;
-   wire av_bridge_disable = 1;
-   */
-   //assign wb_wb_av_bridge_ack = 1;
-   //assign wb_wb_av_bridge_ack = i_cdc2av_readdatavalid;
-   // 50 MHZ
 
    WbAvlCdc wb_avl_cdc(
      .i_wb_clock(wb_clk),
@@ -1031,143 +852,7 @@ i2c_master_top pmonitor(
      .i_avl_rdt_valid(avl_rdt_valid)
      );
 
-   //
-   // wb_to_avalon_bridge #(
-   //   .DW(64),
-   //   .AW(32)
-   // ) wb_av_bridge(
-   //  //Wishbone slave input
-   //  .wb_clk_i(wb_clk),
-   //  .wb_rst_i(wb_rst /*av_bridge_disable*/),
-   //  .wb_adr_i(wb_wb_av_bridge_adr),
-   //  .wb_dat_i(wb_av_bridge_dat_i),
-   //  .wb_sel_i(wb_av_bridge_sel),
-   //  .wb_we_i(wb_wb_av_bridge_we),
-   //  .wb_cyc_i(wb_wb_av_bridge_cyc),
-   //  .wb_stb_i(wb_wb_av_bridge_stb),
-   //  .wb_cti_i(wb_av_bridge_cti),
-   //  .wb_bte_i(wb_av_bridge_bte),
-   //  .wb_dat_o(wb_av_bridge_dat_o),
-   //  .wb_ack_o(wb_wb_av_bridge_ack),
-   //  .wb_err_o(wb_wb_av_bridge_err),
-   //  .wb_rty_o(wb_wb_av_bridge_rty),
-   // //Avalon master output
-   //  .m_av_address_o(o_av2cdc_adr),
-   //  .m_av_byteenable_o(o_av2cdc_be),
-   //  .m_av_read_o(o_av2cdc_read_req),
-   //  .m_av_readdata_i(i_cdc2av_readdata),
-   //  .m_av_burstcount_o(o_av2cdc_burstcount),
-   //  .m_av_write_o(o_av2cdc_write_req),
-   //  .m_av_writedata_o(o_av2cdc_writedata),
-   //  .m_av_waitrequest_i(i_cdc2av_waitrequest),
-   //  .m_av_readdatavalid_i(i_cdc2av_readdatavalid)
-   // // .m_av_burstbegin_o(o_av2cdc_burstbegin)
-   // );
 
-   /*
-   afifo #(.DW(26))
-    cdc_adr(
-      .i_wclk(wb_clk),
-      .i_wrst_n(!wb_rst),
-      .i_wr(o_av2cdc_write_req || o_av2cdc_read_req),
-      .i_wdata(o_av2cdc_adr)
-    )
-    */
-
-
-   /*
-   wire s0_valid;
-   reg prev_av_read;
-   reg prev_av_write;
-
-   assign s0_valid = ((prev_av_read == 0) && (o_av2cdc_read_req == 1)) || ((prev_av_write == 0) && (o_av2cdc_write_req == 1));
-
-   always @(posedge wb_clk or posedge wb_rst ) begin
-
-    if(wb_rst == 1) begin
-     prev_av_read <= 0;
-     prev_av_write <= 0;
-    end
-    else begin
-
-     prev_av_read <= o_av2cdc_write_req;
-     prev_av_write <= o_av2cdc_write_req;
-
-
-
-    end
-
-
-
-
-   end
-
-   // DDR3 memory to to ClockDomainCrossing bridge
-
-   AvalonClockDomainCrossingBridge avcc(
-    .s0_clock(wb_clk),
-    .s0_reset(wb_rst),
-    .m0_clock(afi_clk),
-    .m0_reset(afi_rst),
-    .s0_waitrequest_valid(),
-    .s0_waitrequest_ready(),
-    .s0_waitrequest_payload(i_cdc2av_waitrequest),
-    .s0_readata_valid(),
-    .s0_readdata_ready(),
-    .s0_readdata_payload(i_cdc2av_readdata),
-    .s0_readdatavalid_valid(),
-    .s0_readdatavalid_ready(),
-    .s0_readdatavalid_payload(i_cdc2av_readdatavalid),
-    .s0_burstbegin_valid(s0_valid),
-    .s0_burstbegin_ready(),
-    .s0_burstbegin_payload(o_av2cdc_burstbegin),
-    .s0_burstcount_valid(s0_valid),
-    .s0_burstcount_ready(),
-    .s0_burstcount_payload(o_av2cdc_burstcount),
-    .s0_writedata_valid(s0_valid),
-    .s0_writedata_ready(),
-    .s0_writedata_payload(o_av2cdc_writedata),
-    .s0_address_valid(s0_valid),
-    .s0_address_ready(),
-    .s0_address_payload(o_av2cdc_adr),
-    .s0_read_valid(s0_valid),
-    .s0_read_ready(),
-    .s0_read_payload(o_av2cdc_read_req),
-    .s0_write_valid(s0_valid),
-    .s0_write_ready(),
-    .s0_write_payload(o_av2cdc_write_req),
-    .s0_byteenable_valid(s0_valid),
-    .s0_byteenable_ready(),
-    .s0_byteenable_payload(o_av2cdc_be),
-    .m0_waitrequest_valid(),
-    .m0_waitrequest_ready(),
-    .m0_waitrequest_payload(i_ddr2cdc_waitrequest),
-    .m0_readdata_valid(),
-    .m0_readdata_ready(),
-    .m0_readdata_payload(i_ddr2cdc_readdata),
-    .m0_readdatavalid_valid(),
-    .m0_readdatavalid_ready(),
-    .m0_readdatavalid_payload(i_ddr2cdc_readdatavalid),
-    .m0_burstbegin_valid(),
-    .m0_burstbegin_ready(),
-    .m0_burstbegin_payload(o_cdc2ddr_burstbegin),
-    .m0_burstcount_valid(),
-    .m0_burstcount_ready(),
-    .m0_burstcount_payload(o_cdc2ddr_burstcount),
-    .m0_writedata_valid(),
-    .m0_writedata_ready(),
-    .m0_writedata_payload(o_cdc2ddr_writedata),
-    .m0_address_valid(),
-    .m0_address_ready(),
-    .m0_address_payload(o_cdc2ddr_adr),
-    .m0_write_valid(),
-    .m0_write_ready(),
-    .m0_write_payload(o_cdc2ddr_write_req),
-    .m0_byteenable_valid(),
-    .m0_byteenable_ready(),
-    .m0_byteenable_payload(o_cdc2ddr_be)
-   );
-*/
 
    wire externalInterrupt;
    wire [ICONTROL_IUSED-1:0] i_brd_ints;

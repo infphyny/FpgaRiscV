@@ -46,18 +46,18 @@ filesets:
       - rtl/Deca/DecaWishbone/DecaTopLevel.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/usbpll/usbpll.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/usbpll/usbpll.qip : {file_type : QIP}
-      - rtl/Deca/DecaWishbone/DecaSocBrianHG_DDR3.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/DecaSocBrianHG_DDR3.sv : {file_type : systemVerilogSource}
       - rtl/Deca/DecaWishbone/BrianHG_DDR3/altera_gpio_lite.sv : {file_type : systemVerilogSource}
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CMD_SEQUENCER.sv : {file_type : systemVerilogSource} 
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_COMMANDER.sv : {file_type : systemVerilogSource} 
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CONTROLLER_top.sv : {file_type : systemVerilogSource} 
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_FIFOs.sv : {file_type : systemVerilogSource} 
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CMD_SEQUENCER.sv : {file_type : systemVerilogSource}
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_COMMANDER.sv : {file_type : systemVerilogSource}
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_CONTROLLER_top.sv : {file_type : systemVerilogSource}
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_FIFOs.sv : {file_type : systemVerilogSource}
       - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_GEN_tCK.sv : {file_type : systemVerilogSource}
       - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_IO_PORT_ALTERA.sv : {file_type : systemVerilogSource}
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PHY_SEQ.sv : {file_type : systemVerilogSource} 
-      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PLL.sv : {file_type : systemVerilogSource} 
-    
-      
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PHY_SEQ.sv : {file_type : systemVerilogSource}
+      - rtl/Deca/DecaWishbone/BrianHG_DDR3/BrianHG_DDR3_PLL.sv : {file_type : systemVerilogSource}
+
+
 
   Deca:
     files:
@@ -68,7 +68,7 @@ filesets:
       - rtl/Deca/DecaWishbone/DecaTopLevel.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/ddr/ddr3.qip : {file_type : QIP}
       - rtl/Deca/DecaWishbone/ddr/ddr3.v : {is_include_file : true}
-      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0.sdc : {is_include_file : true} 
+      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0.sdc : {is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_parameters.tcl : { is_include_file : true }
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_timing.tcl : { is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_report_timing_core.tcl : { is_include_file : true }
@@ -166,18 +166,18 @@ filesets:
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_fr_cycle_shifter.v : { is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_read_datapath_m10.sv : { is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_write_datapath_m10.v : { is_include_file : true }
-      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_simple_ddio_out_m10.sv : { is_include_file : true }     
+      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_simple_ddio_out_m10.sv : { is_include_file : true }
       - rtl/Deca/DecaWishbone/ddr/ddr3/max10emif_dcfifo.sv : { is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_iss_probe.v : { is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_addr_cmd_pads_m10.v : { is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0_flop_mem.v : {is_include_file : true }
-      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0.sv : { is_include_file : true} 
-      - rtl/Deca/DecaWishbone/ddr/ddr3/altera_gpio_lite.sv : { is_include_file : true} 
-      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_pll0.sv : { is_include_file : true} 
+      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_p0.sv : { is_include_file : true}
+      - rtl/Deca/DecaWishbone/ddr/ddr3/altera_gpio_lite.sv : { is_include_file : true}
+      - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_pll0.sv : { is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/alt_mem_ddrx_define.iv : {is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_s0_AC_ROM.hex : {is_include_file : true}
       - rtl/Deca/DecaWishbone/ddr/ddr3/ddr3_s0_inst_ROM.hex : {is_include_file : true}
-       
+
 
  # DecaBrianHG_DDR3:
  #   files:
@@ -193,7 +193,7 @@ filesets:
     depend : [vlog_tb_utils]
 
  # ddr3_sim:
-    
+
 
 
  # memfiles:
@@ -226,7 +226,7 @@ targets:
         family: MAX 10
         device: 10M50DAF484C6GES
     toplevel: DecaTopLevel
-    
+
 
   Deca_testbench:
     default_tool: verilator
@@ -343,7 +343,7 @@ generate:
         uart_0:
           offset: 0x00040100
           size: 16
-        
+
         i2c_0:
           offset: 0x00042000
           size: 1024
@@ -383,9 +383,9 @@ generate:
           offset:  0x00040900
           size: 8
           datawidth: 8
-          
+
 #      tusb1210:
-#        offset:  0x00040910 
+#        offset:  0x00040910
 #        size: 2
 #        datawidth: 8
 
@@ -407,13 +407,13 @@ generate:
         ddr3manager:
           offset:  0x00050000
           size : 1
-          datawidth: 8 
+          datawidth: 8
 
         hdmi_i2c:
-          offset: 0x00050400
+          offset: 0x00051000
           size : 1024
           datawidth : 32
-          
+
         ictrl:
           offset: 0x00100000
           size: 4
@@ -421,5 +421,3 @@ generate:
         wb_avl_cdc:
           offset: 0x80000000
           size: 536870912
-       
-

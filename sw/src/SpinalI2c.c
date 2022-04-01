@@ -90,6 +90,27 @@ size_t spinal_i2c_read(SpinalI2C* i2c, uint8_t* data,size_t n)
   return(read_count);
 
 }
+
+bool spinal_i2c_poll_start(SpinalI2C* i2c,uint8_t address,bool read,size_t poll_limit)
+{
+  size_t i = 0;
+  while(!spinal_i2c_start(i2c,address,read))
+  {
+    //spinal_i2c_stop(i2c);
+    for(uint32_t i=0;i<I2C_MAX_TRIES && (i2c->master_status & I2C_MASTER_IS_BUSY);i++) {};
+
+    i++;
+    if(i > poll_limit)
+    {
+      return false;
+    }
+  }
+
+  return true;
+
+}
+
+
 bool spinal_i2c_start(SpinalI2C* i2c,uint8_t address,bool read)
 {
   uint8_t is_read = read ? 0x01 : 0x00;
@@ -115,6 +136,9 @@ bool spinal_i2c_start(SpinalI2C* i2c,uint8_t address,bool read)
      return false;
    }
 }
+
+
+
 
 
 void spinal_i2c_stop(SpinalI2C* i2c)

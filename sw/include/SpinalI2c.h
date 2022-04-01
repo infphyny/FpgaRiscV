@@ -193,6 +193,7 @@ void spinal_i2c_init(SpinalI2C* i2c,
                     uint32_t sampling_clock_divider);
 
 size_t spinal_i2c_read(SpinalI2C* i2c,uint8_t* data,size_t n);
+bool spinal_i2c_poll_start(SpinalI2C* i2c,uint8_t address,bool read,size_t poll_limit);
 bool spinal_i2c_start(SpinalI2C* i2c,uint8_t address,bool read);
 void spinal_i2c_stop(SpinalI2C* i2c);
 size_t spinal_i2c_write(SpinalI2C* i2c,const uint8_t* data, size_t n );

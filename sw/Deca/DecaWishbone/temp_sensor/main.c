@@ -8,12 +8,7 @@
 #include "SpinalUart.h"
 #include "LM71.h"
 
-
-
-
 //void test_temp_sensor(SpinalUart *uart,MicroWire* mw);
-
-
 void main(void)
 {
 
@@ -38,6 +33,7 @@ void main(void)
 
  spinal_uart_print_line(uart,"Test temp sensor");
 
+ //Temperature conversion algorithm test
  lm71_convert_temp(0xEC03,sint); //
  spinal_uart_print_line(uart,sint);
  lm71_convert_temp(0xF383,sint); //
