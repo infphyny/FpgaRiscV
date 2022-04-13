@@ -22,6 +22,7 @@ filesets:
       - rtl/peripheral/MachineTimer/WishboneMachineTimer.v : {file_type : verilogSource}
       - rtl/peripheral/Switch/WishboneSwitch.v : {file_type : verilogSource}
       - rtl/peripheral/I2c/WishboneI2cCtrl.v : {file_type : verilogSource}
+      - rtl/peripheral/Video/VideoCtrl.v : {file_type : verilogSource }
       - rtl/Deca/DecaWishbone/UartWishbone/WishboneUartCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/Wishbone8LedsCtrl/WishboneLedsCtrl.v : {file_type : verilogSource}
       - rtl/peripheral/MicroWire/MicroWireWishbone.v : {file_type : verilogSource}
@@ -312,6 +313,7 @@ generate:
 #            - tusb1210
             - ddr3manager
             - hdmi_i2c
+            - HdmiCtrl
             - ictrl #interrupt controller
             - wb_avl_cdc
 
@@ -412,6 +414,11 @@ generate:
         hdmi_i2c:
           offset: 0x00051000
           size : 1024
+          datawidth : 32
+
+        HdmiCtrl:
+          offset: 0x00060000
+          size : 64
           datawidth : 32
 
         ictrl:

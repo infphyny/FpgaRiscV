@@ -33,7 +33,7 @@ PLL_FILENAME := ecppll.v
 # Generate for speed
 #yosys -p "synth_ecp5 -abc9 -json filename.json"
 
-#Generate for reduce area 
+#Generate for reduce area
 #yosys -p "synth_ecp5 -abc9 -nowidelut -json filename.json"
 
 #Generate for more efficient mapping
@@ -42,14 +42,14 @@ PLL_FILENAME := ecppll.v
 
 #.PHONY: $(PROJ) clean ipll ipll2 write-flash write-sram
 
-		
+
 
 $(PROJ).bit $(PROJ).svf : $(PROJ).config
 	ecppack $(PROJ).config $(PROJ).bit
 	ecppack $(PROJ).config --svf $(PROJ).svf
 
 $(PROJ).config : $(PROJ).json
-	nextpnr-ecp5  -r --$(DEVICE)  --json $< --textcfg $@ --package $(PACKAGE) --speed $(SPEED) --freq $(TARGET_FREQUENCY) --lpf $(LPF) 
+	nextpnr-ecp5  -r --$(DEVICE)  --json $< --textcfg $@ --package $(PACKAGE) --speed $(SPEED) --freq $(TARGET_FREQUENCY) --lpf $(LPF)
 
 
 $(PROJ).json : $(FILES)
@@ -63,20 +63,20 @@ $(PROJ).json : $(FILES)
 	# synthesize using Yosys
 #	yosys -p "synth_ecp5 -top $(TOP) -json $(PROJ).json" $(FILES)
 	# Place and route using nextpnr
-		
+
 
 
 
 	# Convert to bitstream using ecppack
-    
-	
+
+
 
 ipll:
-	ecppll --reset  --module $(PLL_MODULE_NAME)  --clkin_name $(PLL_ICLK)  --clkin $(CLKIN) --clkout0_name $(CLKOUT0_NAME) --clkout0 $(CLKOUT_0) --internal_feedback  -f $(PLL_FILENAME) 
+	ecppll --reset  --module $(PLL_MODULE_NAME)  --clkin_name $(PLL_ICLK)  --clkin $(CLKIN) --clkout0_name $(CLKOUT0_NAME) --clkout0 $(CLKOUT_0) --internal_feedback  -f $(PLL_FILENAME)
 
 # clkout0 and clkout1 defined
 ipll2:
-	ecppll --reset  --module $(PLL_MODULE_NAME_2)  --clkin_name $(PLL_ICLK)  --clkin $(CLKIN) --clkout0_name $(CLKOUT0_NAME) --clkout0 $(CLKOUT_0) --clkout1_name $(CLKOUT1_NAME) --clkout1 $(CLKOUT1) --phase1 $(PHASE1) --internal_feedback  -f $(PLL_FILENAME) 
+	ecppll --reset  --module $(PLL_MODULE_NAME_2)  --clkin_name $(PLL_ICLK)  --clkin $(CLKIN) --clkout0_name $(CLKOUT0_NAME) --clkout0 $(CLKOUT_0) --clkout1_name $(CLKOUT1_NAME) --clkout1 $(CLKOUT1) --phase1 $(PHASE1) --internal_feedback  -f $(PLL_FILENAME)
 
 write-flash:
 	openFPGALoader --write-flash --bitstream $(PROJ).bit
@@ -86,5 +86,4 @@ write-sram:
 
 
 clean:
-	rm -f *.svf *.bit *.json 
-
+	rm -f *.svf *.bit *.json

@@ -7,7 +7,7 @@ DECA_OBJ = $(DECA_DIR)/src/crt0.o $(DECA_DIR)/src/vtable.o $(DECA_DIR)/src/Leds.
 BASE_OBJ =  $(SW_DIR)/src/mtime_irq.o $(SW_DIR)/src/SpinalUart.o $(SW_DIR)/src/Timer.o $(SW_DIR)/src/delay.o $(SW_DIR)/src/riscv.o \
 						$(SW_DIR)/src/LIS2DH12.o $(SW_DIR)/src/SimpleSpi.o $(SW_DIR)/src/HDC1000.o $(SW_DIR)/src/i2c.o $(SW_DIR)/src/LM71.o \
 						$(SW_DIR)/src/MicroWire.o $(SW_DIR)/src/millis.o $(SW_DIR)/src/CY8CMBR3102.o $(SW_DIR)/src/ictrl.c \
-						 $(SW_DIR)/src/SpinalI2c.c
+						 $(SW_DIR)/src/SpinalI2c.c $(SW_DIR)/src/SpinalVga.c
 #OBJDIR = obj
 
 QUARTUS_DB_DIR = $(FUSESOC_CORE_DIR)/build/Deca_0/Deca-quartus/db

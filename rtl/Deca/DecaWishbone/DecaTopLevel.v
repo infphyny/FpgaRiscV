@@ -212,26 +212,26 @@ assign NET_TXD = 4'bzzzz;
 //assign HDMI_I2C_SCL_DEBUG = HDMI_I2C_SCL;
 //assign HDMI_I2C_SDA_DEBUG = HDMI_I2C_SDA;
 //assign HDMI_TX_INT_DEBUG = HDMI_TX_INT;
-wire [3:0] HDMI_I2S_o;
-wire HDMI_I2S_oe;
+//wire [3:0] HDMI_I2S_o;
+//wire HDMI_I2S_oe;
 
-assign HDMI_I2S = HDMI_I2S_oe ? 4'bz : HDMI_I2S_o;
-
-
-wire HDMI_LRCLK_o;
-wire HDMI_LRCLK_oe;
-assign HDMI_LRCLK = HDMI_LRCLK_oe ? 1'bz : HDMI_LRCLK_o;
-
-wire HDMI_MCLK_o;
-wire HDMI_MCLK_oe;
-
-assign HDMI_MCLK = HDMI_MCLK_oe ? 1'bz : HDMI_MCLK_o;
+//assign HDMI_I2S = HDMI_I2S_oe ? 4'bz : HDMI_I2S_o;
 
 
-wire HDMI_SCLK_o;
-wire HDMI_SCLK_oe;
+//wire HDMI_LRCLK_o;
+//wire HDMI_LRCLK_oe;
+//assign HDMI_LRCLK = HDMI_LRCLK_oe ? 1'bz : HDMI_LRCLK_o;
 
-assign HDMI_SCLK = HDMI_SCLK_oe ? 1'bz : HDMI_SCLK_o;
+//wire HDMI_MCLK_o;
+//wire HDMI_MCLK_oe;
+
+//assign HDMI_MCLK = HDMI_MCLK_oe ? 1'bz : HDMI_MCLK_o;
+
+
+//wire HDMI_SCLK_o;
+//wire HDMI_SCLK_oe;
+
+//assign HDMI_SCLK = HDMI_SCLK_oe ? 1'bz : HDMI_SCLK_o;
 
 /*
 wire [7:0] USB_DATA_o;
@@ -332,26 +332,11 @@ DecaSoc #(
     //HDMI
     .HDMI_I2C_SCL(HDMI_I2C_SCL),
     .HDMI_I2C_SDA(HDMI_I2C_SDA),
-    /*
-    .HDMI_I2C_SCL_i(HDMI_I2C_SCL),
-    .HDMI_I2C_SCL_o(HDMI_I2C_SCL_o),
-    .HDMI_I2C_SCL_oe(HDMI_I2C_SCL_oe),
-    .HDMI_I2C_SDA_i(HDMI_I2C_SDA),
-    .HDMI_I2C_SDA_o(HDMI_I2C_SDA_o),
-    .HDMI_I2C_SDA_oe(HDMI_I2C_SDA_oe),
-    */
-    .HDMI_I2S_i(HDMI_I2S),
-    .HDMI_I2S_o(HDMI_I2S_o),
-    .HDMI_I2S_oe(HDMI_I2S_oe),
-    .HDMI_LRCLK_i(HDMI_LRCLK),
-    .HDMI_LRCLK_o(HDMI_LRCLK_o),
-    .HDMI_LRCLK_oe(HDMI_LRCLK_oe),
-    .HDMI_MCLK_i(HDMI_MCLK),
-    .HDMI_MCLK_o(HDMI_MCLK_o),
-    .HDMI_MCLK_oe(HDMI_MCLK_oe),
-    .HDMI_SCLK_i(HDMI_SCLK),
-    .HDMI_SCLK_o(HDMI_SCLK_o),
-    .HDMI_SCLK_oe(HDMI_SCLK_oe),
+  
+    .HDMI_I2S(HDMI_I2S),
+    .HDMI_LRCLK(HDMI_LRCLK),
+    .HDMI_MCLK(HDMI_MCLK),
+    .HDMI_SCLK(HDMI_SCLK),
     .HDMI_TX_CLK(HDMI_TX_CLK),
     .HDMI_TX_D(HDMI_TX_D),
     .HDMI_TX_DE(HDMI_TX_DE),

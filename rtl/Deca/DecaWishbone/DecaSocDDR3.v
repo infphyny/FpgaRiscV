@@ -34,7 +34,7 @@ module DecaSoc
  output wire LIGHT_I2C_SDA_oe,
  inout RH_TEMP_I2C_SCL,
  inout RH_TEMP_I2C_SDA,
- 
+
  input wire RH_TEMP_DRDY_n,
 
  input wire TEMP_SI,
@@ -55,26 +55,15 @@ module DecaSoc
 // HDMI
 inout wire HDMI_I2C_SCL,
 inout wire HDMI_I2C_SDA,
-/*
-input wire HDMI_I2C_SCL_i,
-output wire HDMI_I2C_SCL_o,
-output wire HDMI_I2C_SCL_oe,
-input wire HDMI_I2C_SDA_i,
-output wire HDMI_I2C_SDA_o,
-output wire HDMI_I2C_SDA_oe,
-*/
-input wire [3:0] HDMI_I2S_i,
-output wire [3:0] HDMI_I2S_o,
-output wire HDMI_I2S_oe,
-input wire HDMI_LRCLK_i,
-output wire HDMI_LRCLK_o,
-output wire HDMI_LRCLK_oe,
-input wire HDMI_MCLK_i,
-output wire HDMI_MCLK_o,
-output wire HDMI_MCLK_oe,
-input wire HDMI_SCLK_i,
-output wire HDMI_SCLK_o,
-output wire HDMI_SCLK_oe,
+
+output wire HDMI_I2S,
+
+output wire HDMI_LRCLK,
+
+output wire HDMI_MCLK,
+
+output wire  HDMI_SCLK,
+
 output wire HDMI_TX_CLK,
 output wire [23:0] HDMI_TX_D,
 output wire HDMI_TX_DE,
@@ -126,6 +115,8 @@ parameter ENABLE_TUSB = 0;
   wire        wb_rst;
   wire        wb_clk;
   wire        usb_clk;
+  wire video_clock;
+  wire video_reset;
 
   wire afi_clk;
   wire afi_half_clk;
@@ -332,6 +323,11 @@ assign wb_rst = i_rst;
 assign afi_clk = i_clk;
 assign afi_rst_n = !i_rst;
 
+assign video_clock = i_clk;
+assign video_reset = i_rst;
+
+
+
 end else if (PLL=="PLL") begin  // PLL== "NONE"
   //  wire wb_rst;
 
@@ -365,10 +361,22 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
 
 end else if (PLL=="DDR3") begin
 
+wire syspll_locked;
+pll syspll(
+  .inclk0(i_clk),
+  .areset(!global_reset_n),
+  .c0(wb_clk),
+  .c1(video_clock),
+  .locked(syspll_locked)
+  );
 
- wire pll_usb_locked;
-  assign wb_rst = /*i_rst*/ /*!afi_rst_n*/!global_reset_n; //  !afi_rst_n/*!ddr3_pll_locked*/ /*&& !pll_usb_locked*/; //&& ddr3_local_cal_success && ddr3_local_init_done;
-  assign wb_clk = /* DDR3_CLK_50*/ i_clk /*afi_half_clk*/;
+ assign wb_rst = !syspll_locked;
+ assign video_reset = !syspll_locked;
+
+ // wire pll_usb_locked;
+ //
+ //  assign wb_rst = /*i_rst*/ /*!afi_rst_n*/!global_reset_n; //  !afi_rst_n/*!ddr3_pll_locked*/ /*&& !pll_usb_locked*/; //&& ddr3_local_cal_success && ddr3_local_init_done;
+ //  assign wb_clk = /* DDR3_CLK_50*/ i_clk /*afi_half_clk*/;
 
   /*
   usbpll usbclock(
@@ -780,29 +788,29 @@ i2c_master_top pmonitor(
 
   ////////////   HDMI ////////////////////////
 
-  //assign HDMI_I2C_SCL_oe = 1;
-  //assign HDMI_I2C_SCL_o = 0;
 
-  // assign HDMI_I2C_SDA_oe = 1;
-  // assign HDMI_I2C_SDA_o = 0;
 
-  assign HDMI_I2S_oe = 4'bzzzz;
-  assign HDMI_I2S_o = 4'bzzzz;
+  //assign HDMI_I2S_oe = 1'bz;
+  assign HDMI_I2S = 4'b0000;
 
-  assign HDMI_LRCLK_oe = 1'bz;
-  assign HDMI_LRCLK_o = 1'bz;
+  //assign HDMI_LRCLK_oe = 1'b0;
+  assign HDMI_LRCLK = 1'b0;
 
-  assign HDMI_MCLK_oe = 1'bz;
-  assign HDMI_MCLK_o = 1'bz;
+  //assign HDMI_MCLK_oe = 1'b0;
+  assign HDMI_MCLK = 1'b0;
 
-  assign HDMI_SCLK_oe = 1'bz;
-  assign HDMI_SCLK_o = 1'bz;
+  //assign HDMI_SCLK_oe = 1'b0;
+  assign HDMI_SCLK = 1'b0;
 
-  assign HDMI_TX_CLK = 1'b0;//1'bz;
-  assign HDMI_TX_D = 24'd0;
-  assign HDMI_TX_DE = 1'b0;/*1'bz*/
-  assign HDMI_TX_HS = 1'b1;
-  assign HDMI_TX_VS = 1'b1;
+  assign HDMI_TX_CLK = ~video_clock;
+//  assign HDMI_TX_D = 24'd0;
+//  assign HDMI_TX_DE = 1'b0;/*1'bz*/
+//  assign HDMI_TX_HS = 1'b1;
+//  assign HDMI_TX_VS = 1'b1;
+
+assign HDMI_TX_D[18:16] = { HDMI_TX_D[19],HDMI_TX_D[19],HDMI_TX_D[19]};
+assign HDMI_TX_D[9:8] = {HDMI_TX_D[10],HDMI_TX_D[10]};
+assign HDMI_TX_D[2:0] = { HDMI_TX_D[3],HDMI_TX_D[3],HDMI_TX_D[3]};
 
  wire hdmi_i2c_inta;
 
@@ -821,8 +829,43 @@ i2c_master_top pmonitor(
     .clk(wb_clk),
     .reset(wb_rst)
    );
+wire frame_start;
+
+wire [4:0] pixels_payload_r = 5'd0;
+wire [5:0] pixels_payload_g = 6'b111111;
+wire [4:0] pixels_payload_b = 5'd0;
+wire pixels_valid = 1'b1;
+wire pixels_ready;
 
 
+
+ VideoCtrl HdmiCtrl(
+  //  .soft_reset(wb_rst),
+    .wb_clock(wb_clk),
+    .wb_reset(wb_rst),
+    .i_hdmi_tx_int(HDMI_TX_INT),
+    .video_clock(video_clock),
+    .video_reset(video_reset),
+    .bus_CYC(wb_HdmiCtrl_cyc),
+    .bus_STB(wb_HdmiCtrl_stb),
+    .bus_ACK(wb_HdmiCtrl_ack),
+    .bus_WE(wb_HdmiCtrl_we),
+    .bus_ADR(wb_HdmiCtrl_adr[6:2]),
+    .bus_DAT_MISO(wb_HdmiCtrl_rdt),
+    .bus_DAT_MOSI(wb_HdmiCtrl_dat),
+    .vga_hSync(HDMI_TX_HS),
+    .vga_vSync(HDMI_TX_VS),
+    .vga_color_r(HDMI_TX_D[23:19]),
+    .vga_color_g(HDMI_TX_D[15:10]),
+    .vga_color_b(HDMI_TX_D[7:3]),
+    .vga_colorEn( HDMI_TX_DE),
+    .frameStart(frame_start),
+    .pixels_valid(pixels_valid),
+    .pixels_ready(pixels_ready),
+    .pixels_payload_r(pixels_payload_r),
+    .pixels_payload_g(pixels_payload_g),
+    .pixels_payload_b(pixels_payload_b)
+   );
 
 
    WbAvlCdc wb_avl_cdc(

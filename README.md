@@ -174,7 +174,6 @@ where X is usb port number or use Arduino IDE serial monitor.
 * VexRiscv cpu that implement RiscV 32 imc instructions set with a Wishbone bus.
 * Frequency: 50 MHz
 * Ram: 128k
-* Interupt controller from Dan Gisselquist ZipCpu 
 * KEY0 is wired to reset.
 * Uart RX need to be connected or pull high, otherwise Uart tx will be halted (SpinalHDL Uart implementation feature).
 * To modify frequency, go in rtl/Deca/pll, execute quartus then choose pll for MAX10 and overwrite pll.v

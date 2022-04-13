@@ -20,6 +20,7 @@ static const uint32_t CAP_SENSE_BASE_ADDRESS = 0x00043000;
 static const uint32_t RH_TEMP_BASE_ADDRESS = 0x00045000;
 static const uint32_t DDR3MANAGER_BASE_ADDRESS = 0x00050000;
 static const uint32_t HDMI_TX_BASE_ADDRESS = 0x00051000;
+static const uint32_t HDMI_CTRL_BASE_ADDRESS = 0x00060000;
 static const uint32_t ICTRL_BASE_ADDRESS = 0x00100000;
 static const uint32_t DDR3_BASE_ADDRESS = 0x80000000;
 
