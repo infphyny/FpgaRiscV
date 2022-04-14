@@ -1,15 +1,16 @@
 # Examples of bare metal RiscV programming with a softcore on a fpga #
 
-This is a work in progress. Next thing to implement is a HDMI controller for video output. 
- 
-Bought a Deca board a few month ago to learn RiscV with a VexriscV cpu and wishbone bus to interface peripherals.
-For now my project is just programming RiscV bare metal, just basic stuff.
+This is a work in progress. Next thing to implement is a HDMI controller for video output. Currently, output constant green background.
 
+ 
 In summary, I use fusesoc wishbone bus generator and VexriscV wishbone ibus and dbus. But VexriscV wishbone dbus need a little modification to make it compatible with fusesoc wishbone bus implementation.
 
 I have added support to modify .mif file from Tom Verbeure tutorial. No need to recompile hardware each time.
 
-DDR3 with Intel IP work but implementation is not optimized. Write speed is ~12MiB/s. So no burstmode with burst size greater than one supported right now. 
+DDR3 with Intel IP work but implementation is not optimized. Write speed is ~12MiB/s. So no burstmode with burst size greater than one supported right now.
+Bandwidth between cpu and memory is limited by Wishbone Bus with no burst support. Theoretical write speed from cpu:  50MHz * 4 bytes /(2 cycles per write + 2 cycles to read instruction) ~= 25 MiB/s.
+ 
+Long term goal is to use BrianNG DDR3 memory controller. It offer faster speed ddr3 at 2x400MHz, memory interface at 200 MHz vs Intel 2x300MHz and memory interface at 150 MHz.
 
 
 Started to work on usb. When building hardware, the timing requirements are not met because of TUSB1210 hardware controller but other peripherals still works.   

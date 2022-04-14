@@ -69,10 +69,10 @@ output		          		USB_STP,
 
   inout 		          		HDMI_I2C_SCL,
 	inout 		          		HDMI_I2C_SDA,
-  /*
-  inout                   HDMI_I2C_SCL_DEBUG,
-  inout                   HDMI_I2C_SDA_DEBUG,
-  */
+
+  // inout                   HDMI_I2C_SCL_DEBUG,
+  // inout                   HDMI_I2C_SDA_DEBUG,
+
 	inout 		     [3:0]		HDMI_I2S,
 	inout 		          		HDMI_LRCLK,
 	inout 		          		HDMI_MCLK,
@@ -209,9 +209,9 @@ assign NET_TXD = 4'bzzzz;
 
 //HDMI
 
-//assign HDMI_I2C_SCL_DEBUG = HDMI_I2C_SCL;
-//assign HDMI_I2C_SDA_DEBUG = HDMI_I2C_SDA;
-//assign HDMI_TX_INT_DEBUG = HDMI_TX_INT;
+// assign HDMI_I2C_SCL_DEBUG = HDMI_I2C_SCL;
+// assign HDMI_I2C_SDA_DEBUG = HDMI_I2C_SDA;
+// assign HDMI_TX_INT_DEBUG = HDMI_TX_INT;
 //wire [3:0] HDMI_I2S_o;
 //wire HDMI_I2S_oe;
 
@@ -332,7 +332,7 @@ DecaSoc #(
     //HDMI
     .HDMI_I2C_SCL(HDMI_I2C_SCL),
     .HDMI_I2C_SDA(HDMI_I2C_SDA),
-  
+
     .HDMI_I2S(HDMI_I2S),
     .HDMI_LRCLK(HDMI_LRCLK),
     .HDMI_MCLK(HDMI_MCLK),

@@ -35,7 +35,7 @@ M_h = 19,M_l = 18,N_h = 3,N_l = 2,C_h = 3,C_l = 2
 #include "SpinalUart.h"
 #include "SpinalI2c.h"
 #include "SpinalVga.h"
-#include "LedCtrl.h"
+#include "LedsCtrl.h"
 
 typedef struct ADV7513RegVal
 {
@@ -71,7 +71,7 @@ void main(void)
     {.reg = 0x14, .val = 0x70}, // Set Ch count in the channel status to 8.
     {.reg = 0x15, .val = 0x20}, //Input 444 (RGB or YCrCb) with Separate Syncs, 48kHz fs
     {.reg = 0x16, .val = 0x30}, //Output format 444, 24-bit input
-    {.reg = 0x18, .val = 0x40}, //Disable CSC
+    {.reg = 0x18, .val = 0x46}, //Disable CSC
     {.reg = 0x40, .val = 0x80}, //General control packet enable
     {.reg = 0x41, .val = 0x10}, //Power down control
     {.reg = 0x44, .val = 0x00}, //Audio packet enable bit 5
@@ -111,7 +111,7 @@ void main(void)
   spinal_uart_init(&uart,UART_0_BASE_ADDRESS);
 
   i2c = (SpinalI2C*)HDMI_TX_BASE_ADDRESS;
-  spinal_i2c_init(i2c,50000,250,250,1000,5,5);
+  spinal_i2c_init(i2c,5000000,500,500,50,5,5);
 
   spinal_uart_print_line(uart,"HDMI test");
 
@@ -138,8 +138,8 @@ void main(void)
   //Read revision of the chip
   #ifndef SIM
   printVgaTimings(uart,hdmi_settings);
-  delay(500); //Wait at least 200 ms before ADV7513 initialize.
-
+//  delay(500); //Wait at least 200 ms before ADV7513 initialize.
+  //
   spinal_i2c_poll_start(i2c,ADV7513_I2C_ADR_MAIN,SPINAL_I2C_WRITE,64);
   spinal_i2c_write(i2c,&ADV7513_CHIP_REVISION/*&ADV7513_CHIP_REVISION*/,1);
 
@@ -166,19 +166,10 @@ void main(void)
   }*/
   //Initialization sequence
 
-  do {
+  //do {
     /* code */
-  uint32_t i = 0;
-  while(adv_7513_settings[i].reg != 0x00)
-  {
-    spinal_i2c_poll_start(i2c,ADV7513_I2C_ADR_MAIN,SPINAL_I2C_WRITE,64);
-    spinal_i2c_write(i2c,&adv_7513_settings[i].reg,1);
-    spinal_i2c_write(i2c,&adv_7513_settings[i].val,1);
-    spinal_i2c_stop(i2c);
-    delay(1);
-    i++;
-  }
-   } while(!((uint8_t)  hdmi_settings->hv_polarity & 0x08) );
+
+  // } while(!((uint8_t)  hdmi_settings->hv_polarity & 0x08) );
 
 
   // Waveshare 800x480 timings
@@ -191,21 +182,48 @@ void main(void)
 
 
 
-
   //Read power down mode
   //spinal_i2c_poll_start(i2c,ADV7513_I2C_ADR_MAIN,SPINAL_I2C_WRITE,64);
   //spinal_i2c_write(i2c,&ADV7513_CHIP_REVISION/*&ADV7513_CHIP_REVISION*/,1);
+  //spinal_uart_print_line(uart,sint);
 
-
-
-  spinal_uart_print_line(uart,sint);
-
-  spinal_uart_print_line(uart,"Retreiving monitor information");
+  //spinal_uart_print_line(uart,"Retreiving monitor information");
   #endif
 
 
   for(;;)
   {
+    utoa(hdmi_settings->hv_polarity,sint,16);
+    spinal_uart_print(uart,"Value of hdmi_settings->hv_polarity: ");
+    spinal_uart_print_line(uart,sint);
+
+    if( (hdmi_settings->hv_polarity&0x08) != 0x08)
+    {
+    //  spinal_uart_print_line(uart,"Initialize hdmi tx");
+      uint32_t i = 0;
+      while(adv_7513_settings[i].reg != 0x00)
+      {
+         if(hdmi_settings->hv_polarity&0x08 != 0x08)
+         {
+           i = 0;
+         }
+      //  do {
+          spinal_i2c_poll_start(i2c,ADV7513_I2C_ADR_MAIN,SPINAL_I2C_WRITE,64);
+          //delay(1);
+          spinal_i2c_write(i2c,&adv_7513_settings[i].reg,1);
+          spinal_i2c_write(i2c,&adv_7513_settings[i].val,1);
+          spinal_i2c_stop(i2c);
+        //  delay(1);
+      //  } while(hdmi_settings->hv_polarity&0x08 != 0x08); // Wait for HDMI_TX go high
+
+
+        i++;
+      }
+    }else //Try draw 
+    {
+
+    }
+
 
   }
 

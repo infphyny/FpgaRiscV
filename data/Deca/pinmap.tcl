@@ -627,10 +627,10 @@ set_location_assignment PIN_B15 -to HDMI_I2C_SDA
 set_instance_assignment -name IO_STANDARD "1.8 V" -to HDMI_I2C_SDA
 
 #
-# set_location_assignment PIN_R11 -to HDMI_I2C_SCL_DEBUG
-# set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HDMI_I2C_SCL_DEBUG
-# set_location_assignment PIN_AB7 -to HDMI_I2C_SDA_DEBUG
-# set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HDMI_I2C_SDA_DEBUG
+ # set_location_assignment PIN_R11 -to HDMI_I2C_SCL_DEBUG
+ # set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HDMI_I2C_SCL_DEBUG
+ # set_location_assignment PIN_AB7 -to HDMI_I2C_SDA_DEBUG
+ # set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HDMI_I2C_SDA_DEBUG
 
 set_location_assignment PIN_A9 -to HDMI_I2S[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to HDMI_I2S[0]
@@ -702,8 +702,8 @@ set_location_assignment PIN_B11 -to HDMI_TX_HS
 set_instance_assignment -name IO_STANDARD "1.8 V" -to HDMI_TX_HS
 set_location_assignment PIN_B10 -to HDMI_TX_INT
 set_instance_assignment -name IO_STANDARD "1.8 V" -to HDMI_TX_INT
-# set_location_assignment PIN_AB6 -to HDMI_TX_INT_DEBUG
-# set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HDMI_TX_INT_DEBUG
+ # set_location_assignment PIN_AB6 -to HDMI_TX_INT_DEBUG
+ # set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HDMI_TX_INT_DEBUG
 set_location_assignment PIN_C11 -to HDMI_TX_VS
 set_instance_assignment -name IO_STANDARD "1.8 V" -to HDMI_TX_VS
 

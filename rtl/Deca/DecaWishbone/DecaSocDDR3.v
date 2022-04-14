@@ -832,7 +832,7 @@ assign HDMI_TX_D[2:0] = { HDMI_TX_D[3],HDMI_TX_D[3],HDMI_TX_D[3]};
 wire frame_start;
 
 wire [4:0] pixels_payload_r = 5'd0;
-wire [5:0] pixels_payload_g = 6'b111111;
+wire [5:0] pixels_payload_g = /*6'd0;*/6'b111111;
 wire [4:0] pixels_payload_b = 5'd0;
 wire pixels_valid = 1'b1;
 wire pixels_ready;
@@ -866,7 +866,6 @@ wire pixels_ready;
     .pixels_payload_g(pixels_payload_g),
     .pixels_payload_b(pixels_payload_b)
    );
-
 
    WbAvlCdc wb_avl_cdc(
      .i_wb_clock(wb_clk),
