@@ -103,11 +103,7 @@ output		          		DDR3_RAS_n,
 output		          		DDR3_RESET_n,
 output		          		DDR3_WE_n
 
-//output wire test_temp_sc,
-//output wire test_temp_si,
-//output wire test_temp_so,
-//output wire test_temp_soe,
-//output wire test_temp_cs_n
+
 
 );
 
@@ -274,28 +270,14 @@ DecaSoc #(
     .uart_0_tx(uart_0_tx),
     .i2c_0_scl(i2c_0_scl),
     .i2c_0_sda(i2c_0_sda),
-    /*
-    .i2c_0_scl_i(i2c_0_scl),
-    .i2c_0_scl_o(i2c_0_scl_o),
-    .i2c_0_scl_oe(i2c_0_scl_oe),
-    .i2c_0_sda_i(i2c_0_sda),
-    .i2c_0_sda_o(i2c_0_sda_o),
-    .i2c_0_sda_oe(i2c_0_sda_oe),
-    */
+
     .spi_0_mosi(spi_0_mosi),
     .spi_0_miso(spi_0_miso),
     .spi_0_sclk(spi_0_sclk),
     .spi_0_cs_n(spi_0_cs_n),
     .CAP_SENSE_I2C_SCL(CAP_SENSE_I2C_SCL),
     .CAP_SENSE_I2C_SDA(CAP_SENSE_I2C_SDA),
-    /*
-    .CAP_SENSE_I2C_SCL_i(CAP_SENSE_I2C_SCL),
-    .CAP_SENSE_I2C_SCL_o(CAP_SENSE_I2C_SCL_o),
-    .CAP_SENSE_I2C_SCL_oe(CAP_SENSE_I2C_SCL_oe),
-    .CAP_SENSE_I2C_SDA_i(CAP_SENSE_I2C_SDA),
-    .CAP_SENSE_I2C_SDA_o(CAP_SENSE_I2C_SDA_o),
-    .CAP_SENSE_I2C_SDA_oe(CAP_SENSE_I2C_SDA_oe),
-    */
+
     .LIGHT_I2C_SCL_i(LIGHT_I2C_SCL),
     .LIGHT_I2C_SCL_o(LIGHT_I2C_SCL_o),
     .LIGHT_I2C_SCL_oe(LIGHT_I2C_SCL_oe),
@@ -304,14 +286,7 @@ DecaSoc #(
     .LIGHT_I2C_SDA_oe(LIGHT_I2C_SDA_oe),
     .RH_TEMP_I2C_SCL(RH_TEMP_I2C_SCL),
     .RH_TEMP_I2C_SDA(RH_TEMP_I2C_SDA),
-    /*
-    .RH_TEMP_I2C_SCL_i(RH_TEMP_I2C_SCL),
-    .RH_TEMP_I2C_SCL_o(RH_TEMP_I2C_SCL_o),
-    .RH_TEMP_I2C_SCL_oe(RH_TEMP_I2C_SCL_oe),
-    .RH_TEMP_I2C_SDA_i(RH_TEMP_I2C_SDA),
-    .RH_TEMP_I2C_SDA_o(RH_TEMP_I2C_SDA_o),
-    .RH_TEMP_I2C_SDA_oe(RH_TEMP_I2C_SDA_oe),
-    */
+
     .RH_TEMP_DRDY_n(RH_TEMP_DRDY_n),
     .TEMP_SI(TEMP_SIO),
     .TEMP_SO(TEMP_SO),

@@ -9,7 +9,7 @@ I have added support to modify .mif file from Tom Verbeure tutorial. No need to 
 
 DDR3 with Intel IP work but implementation is not optimized. Write speed is ~12MiB/s. So no burstmode with burst size greater than one supported right now.
 Bandwidth between cpu and memory is limited by Wishbone Bus with no burst support. Theoretical write speed from cpu:  50MHz * 4 bytes /(2 cycles per write + 2 cycles to read instruction) ~= 25 MiB/s.
- 
+
 Long term goal is to use BrianNG DDR3 memory controller. It offer faster speed ddr3 at 2x400MHz, memory interface at 200 MHz vs Intel 2x300MHz and memory interface at 150 MHz.
 
 
@@ -183,6 +183,7 @@ where X is usb port number or use Arduino IDE serial monitor.
 
 
 ##  TODO 
+* Add code to clear bss memory section in startup code before main is called.
 * Add documentation on how to generate the VexRiscv.v file from Vexriscv github repository.   
 * Show .vcd file location that generated from simulation.  
 
