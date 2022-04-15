@@ -8,7 +8,7 @@ filesets:
   data:
     files:
       - data/Deca/deca.sdc 	: {file_type : SDC}
-      - data/Deca/pinmap.tcl	: {file_type: tclSource}
+      - data/Deca/DecaWishbone/pinmap.tcl	: {file_type: tclSource}
 
   rtl:
     files:

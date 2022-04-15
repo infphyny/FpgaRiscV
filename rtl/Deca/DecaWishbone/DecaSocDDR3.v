@@ -159,14 +159,7 @@ parameter ENABLE_TUSB = 0;
   //  wire clk_reset;
     wire ddr3_reset;
     if(sim ==0) begin
-/*
-   ResetBufferCC ddr3_reset_buffer(
-     .clk(i_clk),
-     .reset(1'b0),
-     .i_unstable_reset(i_rst),
-     .o_stable_reset(ddr3_reset)
-     );
-*/
+
    ResetManager reset_manager(
      .i_clock(i_clk),
      .i_reset(i_rst),
