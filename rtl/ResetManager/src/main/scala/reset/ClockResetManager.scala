@@ -22,48 +22,44 @@ import spinal.lib._
 
 
 //Hardware definition
-class ResetManager(sim : Boolean) extends Component {
+class ResetManager(cycle_delay_count : Int = 10000) extends Component {
+
+
   val io = new Bundle {
     val i_clock = in Bool()
-    val i_reset_n = in Bool()
+    val i_reset = in Bool()
+//    val i_cycle_delay = in UInt(cycle_delay_size bits) //Value must not change
     val o_global_reset = out Bool()
 
   }
 noIoPrefix()
 
-val generic = new Generic {
- val is_sim = ResetManager.this.sim
-}
+
 
 val mainClockDomain = ClockDomain(
   clock = io.i_clock,
-  reset = io.i_reset_n,
+  reset = io.i_reset,
   config = ClockDomainConfig(
     clockEdge = RISING,
-    resetActiveLevel = LOW,
+    resetActiveLevel = HIGH,
     resetKind = ASYNC
   )
 )
 
 
-
-
-
-
   val clockArea = new ClockingArea(mainClockDomain)
   {
-    if(generic.is_sim == false)
-    {
-      val RESET_DELAY = 30000;
 
-      val reset = BufferCC(!io.i_reset_n)
-      val counter = Reg(UInt(log2Up(30000) bits) ) init(0)
+
+
+      val reset = BufferCC(io.i_reset)
+      val counter = Reg(UInt( log2Up(cycle_delay_count) bits) ) init(0)
       val global_reset = Reg(Bool()) init(False)
       io.o_global_reset := global_reset
         when(reset === False)
         {
 
-          when(counter === RESET_DELAY -1)
+          when(counter === cycle_delay_count-1)
           {
             global_reset := False
           }.otherwise
@@ -78,18 +74,15 @@ val mainClockDomain = ClockDomain(
 
         }
 
-      }else
-      {
-        io.o_global_reset := !io.i_reset_n
-      }
-  }
+    }
+
 
 
 }
 
 //Generate the MyTopLevel's Verilog
-object MyTopLevelVerilog {
+object ResetManagerVerilog {
   def main(args: Array[String]) {
-    SpinalVerilog(new ResetManager(sim = false))
+    SpinalConfig().withPrivateNamespace.generateVerilog(new ResetManager(cycle_delay_count = 10000))
   }
 }

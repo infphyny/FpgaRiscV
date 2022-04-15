@@ -1,3 +1,8 @@
+/*
+ TODO Cpu should be the last module to go out of reset enable mode
+
+*/
+
 module DecaSoc
 (
 
@@ -141,7 +146,7 @@ parameter ENABLE_TUSB = 0;
    wire ddr3_local_init_done;
    wire ddr3_local_cal_success;
    wire ddr3_pll_locked;
-   reg global_reset_n = 0;
+   wire global_reset;
    wire ddr3_soft_reset_n;
 
 
@@ -151,105 +156,31 @@ parameter ENABLE_TUSB = 0;
 
    generate
 
-    wire clk_reset;
+  //  wire clk_reset;
     wire ddr3_reset;
     if(sim ==0) begin
-
-     ResetBridge clk_reset_bridge(
-      .i_clock(i_clk),
-      .i_reset(i_rst),
-      .i_input(0),
-      .o_output(clk_reset)
+/*
+   ResetBufferCC ddr3_reset_buffer(
+     .clk(i_clk),
+     .reset(1'b0),
+     .i_unstable_reset(i_rst),
+     .o_stable_reset(ddr3_reset)
+     );
+*/
+   ResetManager reset_manager(
+     .i_clock(i_clk),
+     .i_reset(i_rst),
+     .o_global_reset(global_reset)
      );
 
-     ResetBridge ddr3_reset_bridge(
-       .i_clock(DDR3_CLK_50),
-       .i_reset(i_rst),
-       .i_input(0),
-       .o_output(ddr3_reset)
-     );
-
-     // parameter RESET = 0, WAIT_DDR3_CAL = 1, SOC_RUN = 2;
-     // reg [1:0] state = RESET;
-      reg [31:0] por_counter = 32'd10000;
-      //reg [31 : 0] wait_ddr3_counter = 32'd0;
-      always @ (posedge i_clk/* or posedge i_rst*/) begin //TODO Change for synchronous reset
-
-        if(clk_reset) begin
-       //   state <= RESET;
-          por_counter <= 32'd10000;
-          global_reset_n <= 0;
-        end else begin
-
-         if (por_counter) begin
-             global_reset_n <= 0;
-             por_counter <= por_counter - 1 ;
-         end else begin
-            por_counter <= 32'd0;
-            global_reset_n <= 1;
-         end
-
-        end  // end sim = 0
 
 
 
-        // case (state)
-        //  RESET:  begin
-
-        //   if (por_counter) begin
-        //     por_counter <= por_counter - 1 ;
-        //   end else if(por_counter == 32'd0) begin
-        //   wait_ddr3_counter <= 32'd0;
-        //   state <= WAIT_DDR3_CAL;
-        //   end
-        //  end
-        // WAIT_DDR3_CAL: begin
-
-        //   if( ddr3_local_init_done & ddr3_local_cal_success ) begin
-        //      //por_counter <= 32'd0;
-        //   state <= SOC_RUN;
-        //   end else if(wait_ddr3_counter == 10000000 ) begin
-        //     por_counter <= 32'd125000;
-        //     state <= RESET;
-        //   end else begin
-        //     state <= WAIT_DDR3_CAL;
-        //       wait_ddr3_counter <= wait_ddr3_counter + 1;
-        //   end
-        // end
-        // SOC_RUN: begin
-        //   state <= SOC_RUN;
-        // end
-        //     // if ( !(ddr3_local_init_done & ddr3_local_cal_success) ) begin
-        //     //  state <= RESET;
-        //     //  por_counter <= 32'd125000;
-        //     // end else begin
-        //     // state <= SOC_RUN;
-        //     // end
-
-        // endcase
-
-      end
-
-
-   //assign global_reset_n = (por_counter == 0);
-
-  //  wire ddr3_reset_n = !i_rst;
-
-
-//     always @ (posedge i_clk) begin
- //       avl_prevburstbegin <=  o_av_read_req & o_av_write_req;
-
-//         avl_burstbegin <= (o_av_read_req && o_av_write_req) &&  (avl_prevburstbegin == 0);
-
-    //     avl_burstbegin <= 1;
-    //  end
-
-  //   end
 
 
     ddr3 ddr3_mem(
-    .pll_ref_clk(DDR3_CLK_50 /*i_clk*/),
-    .global_reset_n(!ddr3_reset/*!i_rst*//*global_reset_n*//*ddr3_reset_n*/),
+    .pll_ref_clk(DDR3_CLK_50 ),
+    .global_reset_n(!global_reset),
     .soft_reset_n(ddr3_soft_reset_n),
     .afi_clk(afi_clk),
     .afi_half_clk(afi_half_clk),
@@ -361,10 +292,11 @@ end else if (PLL=="PLL") begin  // PLL== "NONE"
 
 end else if (PLL=="DDR3") begin
 
+//Generate clock for wishbone and video clock
 wire syspll_locked;
 pll syspll(
   .inclk0(i_clk),
-  .areset(!global_reset_n),
+  .areset(global_reset),
   .c0(wb_clk),
   .c1(video_clock),
   .locked(syspll_locked)
