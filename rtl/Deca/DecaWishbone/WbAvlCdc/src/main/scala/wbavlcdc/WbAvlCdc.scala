@@ -2,9 +2,6 @@
 
 
 
-
-
-
 */
 
 
@@ -37,7 +34,9 @@ class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
 
   val FROM_WB_STREAM_FIFO_DEPTH = 8
 
+
   val io = new Bundle {
+
     val i_wb_clock = in  Bool()
     val i_wb_reset = in  Bool()
     val i_wb_adr = in UInt(32 bits)
@@ -51,8 +50,10 @@ class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
     val o_wb_err = out Bool()
     val o_wb_rty = out Bool()
 
+
     val i_avl_clock  = in Bool()
     val i_avl_reset = in Bool()
+
     val o_avl_burstbegin = out Bool()
     val o_avl_be = out Bits(8 bits)
     val o_avl_adr = out UInt( log2Up(config.mem_size/config.word_size) bits)
@@ -63,6 +64,10 @@ class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
     val i_avl_rdt = in Bits(config.word_size*8 bits)
     val i_avl_ready = in Bool()
     val i_avl_rdt_valid = in Bool()
+
+//    val o_stream = master(Stream())
+
+
   }
   noIoPrefix;
    val wbClockDomain = ClockDomain(
@@ -150,9 +155,6 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
        }
      }
 
-
-
-
      io.o_wb_ack := False
 
     val wbStateMachine = new StateMachine{
@@ -180,9 +182,7 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
             goto(Read)
           }
 
-
         }
-
 
       }
 
@@ -198,12 +198,12 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
 
     }
 
-
   }
-
 
   val avlClockArea = new ClockingArea(avlClockDomain)
   {
+
+
 
   io.o_avl_be := fromCdcToMemStream.payload.sel
   io.o_avl_dat := fromCdcToMemStream.payload.dat
@@ -230,22 +230,19 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
        Idle.whenIsActive{
          goto(Idle)
 
+         // TO try waitfor avl ready at next state see https://www.youtube.com/watch?v=8GAqT3nzHeQ
          when(fromCdcToMemStream.valid & io.i_avl_ready )
          {
-             io.o_avl_burstbegin := True
+            // io.o_avl_burstbegin := True
              when(fromCdcToMemStream.payload.we)
              {
                fromCdcToMemStream.ready := True
                io.o_avl_wr_req := True
-
              }.otherwise
              {
-               io.o_avl_rdt_req := True
-
+               io.o_avl_rdt_req := True 
                goto(Read)
              }
-
-
 
          }
 
@@ -260,17 +257,11 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
           goto(Idle)
         }
 
-
       }
-
 
      }
 
-
    }
-
-
-
 
 }
 
@@ -281,17 +272,3 @@ object WbAvlCdcVerilog {
   //  SpinalVerilog(new WbAvlCdc( WbAvlCdcConfig.default))
   }
 }
-
-
-
-
-/*
-//Define a custom SpinalHDL configuration with synchronous reset instead of the default asynchronous one. This configuration can be resued everywhere
-object MySpinalConfig extends SpinalConfig(defaultConfigForClockDomains = ClockDomainConfig(resetKind = SYNC))
-
-//Generate the MyTopLevel's Verilog using the above custom configuration.
-object MyTopLevelVerilogWithCustomConfig {
-  def main(args: Array[String]) {
-    MySpinalConfig.generateVerilog(new MyTopLevel)
-  }
-}*/

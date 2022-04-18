@@ -33,7 +33,7 @@ $(PROJECT_NAME).vh : $(PROJECT_NAME).elf
 
 
 $(PROJECT_NAME).elf : $(OBJ)
-	$(CC) $(INCLUDES_DIRECTORIES) -lgcc -mabi=ilp32 -nostartfiles $(OPT) -march=$(ARCH) -T $(LD_SCRIPT) -o $@  $^ -Wl,-Map,$(PROJECT_NAME).map,$(LDFLAGS)
+	$(CC) $(INCLUDES_DIRECTORIES) -lgcc -mabi=ilp32 -nostartfiles $(OPT) -march=$(ARCH) -T $(LD_SCRIPT) -o $@  $^ -Xlinker --gc-sections -Wl,-Map,$(PROJECT_NAME).map,$(LDFLAGS)
 
 
 .phony : objdump
