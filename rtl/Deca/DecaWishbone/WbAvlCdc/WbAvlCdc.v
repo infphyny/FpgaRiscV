@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.4    git head : 598c18959149eb18e5eee5b0aa3eef01ecaa41a1
 // Component : WbAvlCdc
-// Git hash  : c09e4718988e88149d39e867a2ac8be7a7b37b58
+// Git hash  : ce5a45adbfc99f3b00b8c412cfb8d09e565c0e03
 
 `timescale 1ns/1ps 
 
@@ -19,16 +19,17 @@ module WbAvlCdc (
   output              o_wb_rty,
   input               i_avl_clock,
   input               i_avl_reset,
-  output              o_avl_burstbegin,
-  output     [7:0]    o_avl_be,
-  output     [25:0]   o_avl_adr,
-  output     [63:0]   o_avl_dat,
-  output reg          o_avl_wr_req,
-  output reg          o_avl_rdt_req,
-  output     [2:0]    o_avl_size,
-  input      [63:0]   i_avl_rdt,
-  input               i_avl_ready,
-  input               i_avl_rdt_valid
+  input               i_stream_valid,
+  output reg          i_stream_ready,
+  input      [63:0]   i_stream_payload_rdt,
+  output reg          o_stream_valid,
+  input               o_stream_ready,
+  output              o_stream_payload_we,
+  output     [25:0]   o_stream_payload_adr,
+  output     [63:0]   o_stream_payload_dat,
+  output     [7:0]    o_stream_payload_sel,
+  output              o_stream_payload_burstbegin,
+  output     [2:0]    o_stream_payload_size
 );
   localparam wbClockArea_wbStateMachine_enumDef_BOOT = 2'd0;
   localparam wbClockArea_wbStateMachine_enumDef_Init = 2'd1;
@@ -71,7 +72,7 @@ module WbAvlCdc (
   wire                fromCdcToWbStream_valid;
   reg                 fromCdcToWbStream_ready;
   wire       [63:0]   fromCdcToWbStream_payload_rdt;
-  wire                switch_WbAvlCdc_l144;
+  wire                switch_WbAvlCdc_l184;
   wire                wbClockArea_wbStateMachine_wantExit;
   reg                 wbClockArea_wbStateMachine_wantStart;
   wire                wbClockArea_wbStateMachine_wantKill;
@@ -80,11 +81,10 @@ module WbAvlCdc (
   wire                avlClockArea_avlStateMachine_wantKill;
   reg        [1:0]    wbClockArea_wbStateMachine_stateReg;
   reg        [1:0]    wbClockArea_wbStateMachine_stateNext;
-  wire                when_WbAvlCdc_l174;
-  wire                when_WbAvlCdc_l177;
+  wire                when_WbAvlCdc_l214;
+  wire                when_WbAvlCdc_l217;
   reg        [1:0]    avlClockArea_avlStateMachine_stateReg;
   reg        [1:0]    avlClockArea_avlStateMachine_stateNext;
-  wire                when_WbAvlCdc_l235;
   `ifndef SYNTHESIS
   reg [31:0] wbClockArea_wbStateMachine_stateReg_string;
   reg [31:0] wbClockArea_wbStateMachine_stateNext_string;
@@ -172,7 +172,7 @@ module WbAvlCdc (
       wbClockArea_wbStateMachine_enumDef_Init : begin
       end
       wbClockArea_wbStateMachine_enumDef_Idle : begin
-        if(when_WbAvlCdc_l174) begin
+        if(when_WbAvlCdc_l214) begin
           fromWbToCdcStream_valid = 1'b1;
         end
       end
@@ -193,14 +193,14 @@ module WbAvlCdc (
       avlClockArea_avlStateMachine_enumDef_Init : begin
       end
       avlClockArea_avlStateMachine_enumDef_Idle : begin
-        if(when_WbAvlCdc_l235) begin
+        if(fromCdcToMemStream_valid) begin
           if(fromCdcToMemStream_payload_we) begin
             fromCdcToMemStream_ready = 1'b1;
           end
         end
       end
       avlClockArea_avlStateMachine_enumDef_Read : begin
-        if(i_avl_rdt_valid) begin
+        if(i_stream_valid) begin
           fromCdcToMemStream_ready = 1'b1;
         end
       end
@@ -223,7 +223,7 @@ module WbAvlCdc (
       avlClockArea_avlStateMachine_enumDef_Idle : begin
       end
       avlClockArea_avlStateMachine_enumDef_Read : begin
-        if(i_avl_rdt_valid) begin
+        if(i_stream_valid) begin
           fromMemToCdcStream_valid = 1'b1;
         end
       end
@@ -252,9 +252,9 @@ module WbAvlCdc (
   assign fromMemToCdcStream_ready = fromMemStreamFifoCC_io_push_ready;
   assign fromCdcToWbStream_valid = fromMemStreamFifoCC_io_pop_valid;
   assign fromCdcToWbStream_payload_rdt = fromMemStreamFifoCC_io_pop_payload_rdt;
-  assign switch_WbAvlCdc_l144 = i_wb_adr[2];
+  assign switch_WbAvlCdc_l184 = i_wb_adr[2];
   always @(*) begin
-    case(switch_WbAvlCdc_l144)
+    case(switch_WbAvlCdc_l184)
       1'b0 : begin
         sel = {4'b0000,i_wb_sel};
       end
@@ -265,7 +265,7 @@ module WbAvlCdc (
   end
 
   always @(*) begin
-    case(switch_WbAvlCdc_l144)
+    case(switch_WbAvlCdc_l184)
       1'b0 : begin
         o_wb_rdt = fromCdcToWbStream_payload_rdt[31 : 0];
       end
@@ -281,8 +281,8 @@ module WbAvlCdc (
       wbClockArea_wbStateMachine_enumDef_Init : begin
       end
       wbClockArea_wbStateMachine_enumDef_Idle : begin
-        if(when_WbAvlCdc_l174) begin
-          if(when_WbAvlCdc_l177) begin
+        if(when_WbAvlCdc_l214) begin
+          if(when_WbAvlCdc_l217) begin
             o_wb_ack = 1'b1;
           end
         end
@@ -314,21 +314,31 @@ module WbAvlCdc (
   end
 
   assign wbClockArea_wbStateMachine_wantKill = 1'b0;
-  assign o_avl_be = fromCdcToMemStream_payload_sel;
-  assign o_avl_dat = fromCdcToMemStream_payload_dat;
-  assign o_avl_adr = fromCdcToMemStream_payload_adr;
-  assign o_avl_burstbegin = 1'b0;
-  assign o_avl_size = 3'b001;
   always @(*) begin
-    o_avl_wr_req = 1'b0;
+    i_stream_ready = 1'b0;
     case(avlClockArea_avlStateMachine_stateReg)
       avlClockArea_avlStateMachine_enumDef_Init : begin
       end
       avlClockArea_avlStateMachine_enumDef_Idle : begin
-        if(when_WbAvlCdc_l235) begin
-          if(fromCdcToMemStream_payload_we) begin
-            o_avl_wr_req = 1'b1;
-          end
+      end
+      avlClockArea_avlStateMachine_enumDef_Read : begin
+        if(i_stream_valid) begin
+          i_stream_ready = 1'b1;
+        end
+      end
+      default : begin
+      end
+    endcase
+  end
+
+  always @(*) begin
+    o_stream_valid = 1'b0;
+    case(avlClockArea_avlStateMachine_stateReg)
+      avlClockArea_avlStateMachine_enumDef_Init : begin
+      end
+      avlClockArea_avlStateMachine_enumDef_Idle : begin
+        if(fromCdcToMemStream_valid) begin
+          o_stream_valid = 1'b1;
         end
       end
       avlClockArea_avlStateMachine_enumDef_Read : begin
@@ -338,26 +348,13 @@ module WbAvlCdc (
     endcase
   end
 
-  always @(*) begin
-    o_avl_rdt_req = 1'b0;
-    case(avlClockArea_avlStateMachine_stateReg)
-      avlClockArea_avlStateMachine_enumDef_Init : begin
-      end
-      avlClockArea_avlStateMachine_enumDef_Idle : begin
-        if(when_WbAvlCdc_l235) begin
-          if(!fromCdcToMemStream_payload_we) begin
-            o_avl_rdt_req = 1'b1;
-          end
-        end
-      end
-      avlClockArea_avlStateMachine_enumDef_Read : begin
-      end
-      default : begin
-      end
-    endcase
-  end
-
-  assign fromMemToCdcStream_payload_rdt = i_avl_rdt;
+  assign o_stream_payload_sel = fromCdcToMemStream_payload_sel;
+  assign o_stream_payload_dat = fromCdcToMemStream_payload_dat;
+  assign o_stream_payload_burstbegin = 1'b0;
+  assign o_stream_payload_size = 3'b001;
+  assign o_stream_payload_we = fromCdcToMemStream_payload_we;
+  assign o_stream_payload_adr = fromCdcToMemStream_payload_adr;
+  assign fromMemToCdcStream_payload_rdt = i_stream_payload_rdt;
   assign avlClockArea_avlStateMachine_wantExit = 1'b0;
   always @(*) begin
     avlClockArea_avlStateMachine_wantStart = 1'b0;
@@ -382,8 +379,8 @@ module WbAvlCdc (
         wbClockArea_wbStateMachine_stateNext = wbClockArea_wbStateMachine_enumDef_Idle;
       end
       wbClockArea_wbStateMachine_enumDef_Idle : begin
-        if(when_WbAvlCdc_l174) begin
-          if(when_WbAvlCdc_l177) begin
+        if(when_WbAvlCdc_l214) begin
+          if(when_WbAvlCdc_l217) begin
             wbClockArea_wbStateMachine_stateNext = wbClockArea_wbStateMachine_enumDef_Idle;
           end else begin
             wbClockArea_wbStateMachine_stateNext = wbClockArea_wbStateMachine_enumDef_Read;
@@ -406,8 +403,8 @@ module WbAvlCdc (
     end
   end
 
-  assign when_WbAvlCdc_l174 = ((i_wb_cyc && i_wb_stb) && (fromWbStreamFifo_io_pushOccupancy < 4'b0111));
-  assign when_WbAvlCdc_l177 = (i_wb_we == 1'b1);
+  assign when_WbAvlCdc_l214 = ((i_wb_cyc && i_wb_stb) && (fromWbStreamFifo_io_pushOccupancy < 4'b0111));
+  assign when_WbAvlCdc_l217 = (i_wb_we == 1'b1);
   always @(*) begin
     avlClockArea_avlStateMachine_stateNext = avlClockArea_avlStateMachine_stateReg;
     case(avlClockArea_avlStateMachine_stateReg)
@@ -416,14 +413,14 @@ module WbAvlCdc (
       end
       avlClockArea_avlStateMachine_enumDef_Idle : begin
         avlClockArea_avlStateMachine_stateNext = avlClockArea_avlStateMachine_enumDef_Idle;
-        if(when_WbAvlCdc_l235) begin
+        if(fromCdcToMemStream_valid) begin
           if(!fromCdcToMemStream_payload_we) begin
             avlClockArea_avlStateMachine_stateNext = avlClockArea_avlStateMachine_enumDef_Read;
           end
         end
       end
       avlClockArea_avlStateMachine_enumDef_Read : begin
-        if(i_avl_rdt_valid) begin
+        if(i_stream_valid) begin
           avlClockArea_avlStateMachine_stateNext = avlClockArea_avlStateMachine_enumDef_Idle;
         end
       end
@@ -438,7 +435,6 @@ module WbAvlCdc (
     end
   end
 
-  assign when_WbAvlCdc_l235 = (fromCdcToMemStream_valid && i_avl_ready);
   always @(posedge i_wb_clock or posedge i_wb_reset) begin
     if(i_wb_reset) begin
       wbClockArea_wbStateMachine_stateReg <= wbClockArea_wbStateMachine_enumDef_BOOT;

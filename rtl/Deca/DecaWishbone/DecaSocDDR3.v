@@ -792,7 +792,7 @@ wire pixels_ready;
     .pixels_payload_b(pixels_payload_b)
    );
 
-   WbAvlCdc wb_avl_cdc(
+   WbAvlBridge wb_avl_cdc(
      .i_wb_clock(wb_clk),
      .i_wb_reset(wb_rst),
      .i_wb_adr(wb_wb_avl_cdc_adr),

@@ -12,6 +12,7 @@ import spinal.lib._
 import spinal.lib.fsm._
 
 //Hardware definition
+//import wbavlcdc.{BusResponse,BusRequest}
 
 case class FromWb(addressWidth : Int) extends Bundle
 {
@@ -30,11 +31,29 @@ case class ToWb() extends Bundle
 }
 
 
-class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
+
+case class AvlIo(config : WbAvlCdcConfig )
+{
+  val o_avl_burstbegin = out Bool()
+  val o_avl_be = out Bits(8 bits)
+  val o_avl_adr = out UInt( log2Up(config.mem_size/config.word_size) bits)
+  val o_avl_dat = out Bits(config.word_size*8 bits)
+  val o_avl_wr_req = out Bool()
+  val o_avl_rdt_req = out Bool()
+  val o_avl_size = out UInt(3 bits)
+  val i_avl_rdt = in Bits(config.word_size*8 bits)
+  val i_avl_ready = in Bool()
+  val i_avl_rdt_valid = in Bool()
+}
+
+
+case class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
 
   val FROM_WB_STREAM_FIFO_DEPTH = 8
+  val use_avl = true
 
-
+//  if(use_avl = true)
+//  {
   val io = new Bundle {
 
     val i_wb_clock = in  Bool()
@@ -53,7 +72,13 @@ class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
 
     val i_avl_clock  = in Bool()
     val i_avl_reset = in Bool()
+    val i_stream = slave(Stream(BusResponse()))
+    val o_stream =  master(Stream(BusRequest(26)))
+  //
 
+  //val avl = AvlIo(config)
+
+  /*
     val o_avl_burstbegin = out Bool()
     val o_avl_be = out Bits(8 bits)
     val o_avl_adr = out UInt( log2Up(config.mem_size/config.word_size) bits)
@@ -64,11 +89,26 @@ class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
     val i_avl_rdt = in Bits(config.word_size*8 bits)
     val i_avl_ready = in Bool()
     val i_avl_rdt_valid = in Bool()
-
-//    val o_stream = master(Stream())
-
-
+    */
   }
+
+
+
+
+//  }
+//  else
+//  {
+//     val o_stream = Bool() // master(Stream())
+//  }
+
+
+  //}
+  // else
+  // {
+  //   io = new Bundle{
+  //     val t = out Bool()
+  //   }
+  // }
   noIoPrefix;
    val wbClockDomain = ClockDomain(
     clock = io.i_wb_clock,
@@ -203,19 +243,25 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
   val avlClockArea = new ClockingArea(avlClockDomain)
   {
 
+  io.i_stream.ready := False
+  io.o_stream.valid := False
+  io.o_stream.payload.sel := fromCdcToMemStream.payload.sel
+  io.o_stream.payload.dat := fromCdcToMemStream.payload.dat
+  io.o_stream.payload.burstbegin := False
+  io.o_stream.payload.size := 1
+
+  io.o_stream.payload.we := fromCdcToMemStream.payload.we
+  io.o_stream.payload.adr := fromCdcToMemStream.payload.adr
+//  io.avl.o_avl_be := fromCdcToMemStream.payload.sel
+//  io.avl.o_avl_dat := fromCdcToMemStream.payload.dat
+//  io.avl.o_avl_burstbegin := False
+//  io.avl.o_avl_size := 1
+//  io.avl.o_avl_wr_req := False
+//  io.avl.o_avl_rdt_req := False
 
 
-  io.o_avl_be := fromCdcToMemStream.payload.sel
-  io.o_avl_dat := fromCdcToMemStream.payload.dat
-  io.o_avl_adr := fromCdcToMemStream.payload.adr
-  io.o_avl_burstbegin := False
-  io.o_avl_size := 1
-  io.o_avl_wr_req := False
-  io.o_avl_rdt_req := False
-
-
-  fromMemToCdcStream.payload.rdt := io.i_avl_rdt
-
+  //fromMemToCdcStream.payload.rdt := io.avl.i_avl_rdt
+  fromMemToCdcStream.payload.rdt := io.i_stream.payload.rdt
 
    val avlStateMachine = new StateMachine{
        val Init = new State with EntryPoint
@@ -231,16 +277,17 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
          goto(Idle)
 
          // TO try waitfor avl ready at next state see https://www.youtube.com/watch?v=8GAqT3nzHeQ
-         when(fromCdcToMemStream.valid & io.i_avl_ready )
+         when(fromCdcToMemStream.valid /*& io.avl.i_avl_ready*/ )
          {
+             io.o_stream.valid := True
             // io.o_avl_burstbegin := True
              when(fromCdcToMemStream.payload.we)
              {
                fromCdcToMemStream.ready := True
-               io.o_avl_wr_req := True
+              // io.avl.o_avl_wr_req := True
              }.otherwise
              {
-               io.o_avl_rdt_req := True 
+              // io.avl.o_avl_rdt_req := True
                goto(Read)
              }
 
@@ -250,8 +297,9 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
 
       Read.whenIsActive{
 
-        when(io.i_avl_rdt_valid)
+        when(io.i_stream.valid/*io.avl.i_avl_rdt_valid*/ )
         {
+          io.i_stream.ready := True
           fromCdcToMemStream.ready := True
           fromMemToCdcStream.valid := True
           goto(Idle)
@@ -268,7 +316,7 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
 //Generate the MyTopLevel's Verilog
 object WbAvlCdcVerilog {
   def main(args: Array[String]) {
-     SpinalConfig().withPrivateNamespace.generateVerilog(new WbAvlCdc( WbAvlCdcConfig.default)).printPruned
+     SpinalConfig().withPrivateNamespace.generateVerilog( WbAvlCdc( WbAvlCdcConfig.default)).printPruned
   //  SpinalVerilog(new WbAvlCdc( WbAvlCdcConfig.default))
   }
 }
