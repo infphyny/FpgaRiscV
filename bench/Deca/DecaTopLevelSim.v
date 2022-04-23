@@ -142,6 +142,38 @@ parameter memfile = "";
 	$readmemh(firmware_file, dut.ram.mem);
      end
 
+     wire avl_burstbegin;
+     wire [7:0] avl_be;
+     wire [25:0] avl_adr;
+     wire [63:0] avl_dat;
+     wire avl_wr_req;
+     wire avl_rdt_req;
+     wire [2:0] avl_size;
+     wire [63:0] avl_rdt;
+     wire avl_ready;
+     wire avl_rdt_valid;
+
+     wire ddr3_local_init_done;
+     wire ddr3_local_cal_success;
+     wire ddr3_soft_reset_n;
+
+
+     DDR3Sim ddr3_sim(
+       .clk(i_clk),
+       .reset(i_rst),
+       .avl_ready(avl_ready),
+       .avl_burst_begin(avl_burstbegin),
+       .avl_addr(avl_adr),
+       .avl_rdata_valid(avl_rdt_valid),
+       .avl_rdata(avl_rdt),
+       .avl_wdata(avl_dat),
+       .avl_be(avl_be),
+       .avl_read_req(avl_rdt_req),
+       .avl_write_req(avl_wr_req),
+       .avl_size(avl_size),
+       .local_init_done(ddr3_local_init_done),
+       .local_cal_success(ddr3_local_cal_success)
+     );
 
 
 DecaSoc #(
@@ -151,8 +183,13 @@ DecaSoc #(
     .sim(sim),
     .with_csr(with_csr)
 ) dut(
-    .i_clk(i_clk),
-    .i_rst(i_rst),
+  .i_wb_clk(i_clk),
+  .i_wb_rst(i_rst),
+  .i_cpu_reset(i_rst),
+  .video_clock(i_clk),
+  .video_reset(i_rst),
+  .i_afi_clk(i_clk),
+  .i_afi_rst(i_rst),
     .key1(key1),
     .SW0(SW0),
     .SW1(SW1),
@@ -233,6 +270,21 @@ DecaSoc #(
     .USB_RESET_n(USB_RESET_n),
     .USB_STP(USB_STP),
     */
+
+    .ddr3_local_init_done(ddr3_local_init_done),
+    .ddr3_local_cal_success(ddr3_local_cal_success),
+    .ddr3_soft_reset_n(ddr3_soft_reset_n),
+    .avl_burstbegin(avl_burstbegin),
+    .avl_be(avl_be),
+    .avl_adr(avl_adr),
+    .avl_dat(avl_dat),
+    .avl_rdt(avl_rdt),
+    .avl_rdt_valid(avl_rdt_valid),
+    .avl_rdt_req(avl_rdt_req),
+    .avl_wr_req(avl_wr_req),
+    .avl_size(avl_size),
+    .avl_ready(avl_ready)
+    /*
     .DDR3_A(DDR3_A),
     .DDR3_BA(DDR3_BA),
     .DDR3_CAS_n(DDR3_CAS_n),
@@ -249,6 +301,7 @@ DecaSoc #(
     .DDR3_RAS_n(DDR3_RAS_n),
     .DDR3_RESET_n(DDR3_RESET_n),
     .DDR3_WE_n(DDR3_WE_n)
+    */
 );
 
 

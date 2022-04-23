@@ -1,10 +1,10 @@
-// Generator : SpinalHDL v1.6.4    git head : 598c18959149eb18e5eee5b0aa3eef01ecaa41a1
+ // Generator : SpinalHDL v1.6.4    git head : 598c18959149eb18e5eee5b0aa3eef01ecaa41a1
 // Component : WbAvlCdc
-// Git hash  : ce5a45adbfc99f3b00b8c412cfb8d09e565c0e03
+// Git hash  : 0d73750da08867d712ad142e7a44c2b5ab44ff1b
 
-`timescale 1ns/1ps 
+`timescale 1ns/1ps
 
-module WbAvlCdc (
+module WbSCdc (
   input               i_wb_clock,
   input               i_wb_reset,
   input      [31:0]   i_wb_adr,

@@ -27,7 +27,7 @@ case class AvlStreamAdapter(config : WbAvlCdcConfig) extends Component
 
 
   }
-
+ noIoPrefix()
 
  val avlClockDomain = ClockDomain(
    clock = io.i_avl_clock,
@@ -58,13 +58,17 @@ case class AvlStreamAdapter(config : WbAvlCdcConfig) extends Component
 
   when(io.i_avl_rdt_valid)
   {
+    io.i_stream.ready := True
     io.o_stream.valid := True
   }
 
 
   when(io.i_stream.valid & io.i_avl_ready)
   {
-     io.i_stream.ready := True
+     when(io.i_stream.payload.we)
+     {
+       io.i_stream.ready := True
+     }
      io.o_avl_wr_req := io.i_stream.payload.we
      io.o_avl_rdt_req :=  !io.i_stream.payload.we
   }

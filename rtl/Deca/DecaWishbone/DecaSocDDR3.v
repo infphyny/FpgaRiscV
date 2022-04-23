@@ -4,10 +4,23 @@
 */
 
 module DecaSoc
+#(
+  parameter memfile = "blinky.hex",
+  parameter memsize = 8192,
+  parameter PLL = "NONE",
+  parameter sim = 0,
+  parameter with_csr = 1
+  )
 (
+  input wire i_wb_clk,
+  input wire i_wb_rst,
+  input wire i_cpu_reset,
+  input wire video_clock,
+  input wire video_reset,
 
-  input wire i_clk,
-  input wire i_rst,
+  input wire i_afi_clk,
+  input wire i_afi_rst,
+
   input wire key1,
   input wire SW0,
   input wire SW1,
@@ -88,6 +101,25 @@ output wire HDMI_TX_VS,
  output	wire	          		USB_STP,        //ULPI STP input signal
  */
  //////////// SDRAM //////////
+
+
+ input wire ddr3_local_init_done,
+ input wire ddr3_local_cal_success,
+ output wire ddr3_soft_reset_n,
+ // DDR3 Avalon bus
+ output wire avl_burstbegin,
+ output wire [7:0] avl_be,
+ output wire [25:0] avl_adr,
+ output wire [63:0] avl_dat,
+ input wire [63:0] avl_rdt,
+ input wire avl_rdt_valid,
+ output wire avl_rdt_req,
+ output wire avl_wr_req,
+ output wire [2:0] avl_size,
+ input wire avl_ready
+
+
+ /*
 	output		    [14:0]		DDR3_A,
 	output		     [2:0]		DDR3_BA,
 	output		          		DDR3_CAS_n,
@@ -104,219 +136,27 @@ output wire HDMI_TX_VS,
 	output		          		DDR3_RAS_n,
 	output		          		DDR3_RESET_n,
 	output		          		DDR3_WE_n
+  */
 
 );
-
+/*
 parameter memfile = "blinky.hex";
 parameter memsize = 8192;
 parameter PLL = "NONE";
 parameter sim = 0;
 parameter with_csr = 1;
+*/
 parameter ICONTROL_IUSED = 15;
-parameter with_bus_mem_cdc = 1;
 parameter ENABLE_DDR3 = 0;
 parameter ENABLE_TUSB = 0;
 
-  wire        wb_rst;
-  wire        wb_clk;
+
   wire        usb_clk;
-  wire video_clock;
-  wire video_reset;
 
-  wire afi_clk;
-  wire afi_half_clk;
-  wire afi_rst_n;
-  wire afi_rst;
-  assign afi_rst = !afi_rst_n;
-
-
- wire avl_burstbegin;
- wire [7:0] avl_be;
- wire [25:0] avl_adr;
- wire [63:0] avl_dat;
- wire avl_wr_req;
- wire avl_rdt_req;
- wire [2:0] avl_size;
- wire [63:0] avl_rdt;
- wire avl_ready;
- wire avl_rdt_valid;
-
-
-
-   wire ddr3_local_init_done;
-   wire ddr3_local_cal_success;
-   wire ddr3_pll_locked;
-   wire global_reset;
-   wire ddr3_soft_reset_n;
-
-
-
-   //assign ddr3_reset = !i_rst;
-
-
-   generate
-
-  //  wire clk_reset;
-    wire ddr3_reset;
-    if(sim ==0) begin
-
-   ResetManager reset_manager(
-     .i_clock(i_clk),
-     .i_reset(i_rst),
-     .o_global_reset(global_reset)
-     );
-
-
-
-
-
-
-    ddr3 ddr3_mem(
-    .pll_ref_clk(DDR3_CLK_50 ),
-    .global_reset_n(!global_reset),
-    .soft_reset_n(ddr3_soft_reset_n),
-    .afi_clk(afi_clk),
-    .afi_half_clk(afi_half_clk),
-    .afi_reset_n(afi_rst_n),
-    .mem_a(DDR3_A),
-    .mem_ba(DDR3_BA),
-    .mem_ck(DDR3_CK_p),
-    .mem_ck_n(DDR3_CK_n),
-    .mem_cke(DDR3_CKE),
-    .mem_cs_n(DDR3_CS_n),
-    .mem_dm(DDR3_DM),
-    .mem_ras_n(DDR3_RAS_n),
-    .mem_cas_n(DDR3_CAS_n),
-    .mem_we_n(DDR3_WE_n),
-    .mem_reset_n(DDR3_RESET_n),
-    .mem_dq(DDR3_DQ),
-    .mem_dqs(DDR3_DQS_p),
-    .mem_dqs_n(DDR3_DQS_n),
-    .mem_odt(DDR3_ODT),
-    .avl_ready(avl_ready),
-    .avl_burstbegin(avl_burstbegin),
-    .avl_addr(avl_adr),
-    .avl_rdata_valid(avl_rdt_valid),
-    .avl_rdata(avl_rdt),
-    .avl_wdata(avl_dat),
-    .avl_be(avl_be),
-    .avl_read_req(avl_rdt_req),
-    .avl_write_req(avl_wr_req),
-    .avl_size(avl_size),
-    //.pll_mem_clk(DDR3_)
-    .pll_locked(ddr3_pll_locked),
-    .local_init_done(ddr3_local_init_done),
-    .local_cal_success(ddr3_local_cal_success)
-  );
-
-
-    end else if(sim == 1) begin
-
-    DDR3Sim ddr3_sim(
-      .clk(DDR3_CLK_50),
-      .reset(wb_rst),
-      .avl_ready(avl_ready),
-      .avl_burst_begin(avl_burstbegin),
-      .avl_addr(avl_adr),
-      .avl_rdata_valid(avl_rdt_valid),
-      .avl_rdata(avl_rdt),
-      .avl_wdata(avl_dat),
-      .avl_be(avl_be),
-      .avl_read_req(avl_rdt_req),
-      .avl_write_req(avl_wr_req),
-      .avl_size(avl_size),
-      .local_init_done(ddr3_local_init_done),
-      .local_cal_success(ddr3_local_cal_success)
-    );
-
-    end
-
-
-   endgenerate
-
-
-
-
-
-generate
-
-if(PLL=="NONE") begin
-assign      	wb_clk = i_clk;
-//assign        usb_clk = USB_CLKIN;
-assign wb_rst = i_rst;
-assign afi_clk = i_clk;
-assign afi_rst_n = !i_rst;
-
-assign video_clock = i_clk;
-assign video_reset = i_rst;
-
-
-
-end else if (PLL=="PLL") begin  // PLL== "NONE"
-  //  wire wb_rst;
-
-
-
-    wire locked_1;
-    wire pll_usb_locked;
-    //wire locked_2;
-    //wire sdram_clk;
-    assign wb_rst = !locked_1 && !pll_usb_locked;
-    //wire reset = 0;
-    pll clockgen(
-    .inclk0(i_clk),
-    .areset(i_rst),
-    .c0(wb_clk),
-    //.c1(sdram_clk),
-    .locked(locked_1)
-    );
-
-   //Create an 60 Mhz USB pll with -120 degree phase shift from  60 MHz USB_CLKIN
-/*
-    usbpll usbclock(
-      .inclk0(USB_CLKIN),
-      .areset(i_rst),
-      .c0(usb_clk),
-      .locked(pll_usb_locked)
-    );
-
-  */
-
-
-end else if (PLL=="DDR3") begin
-
-//Generate clock for wishbone and video clock
-wire syspll_locked;
-pll syspll(
-  .inclk0(i_clk),
-  .areset(global_reset),
-  .c0(wb_clk),
-  .c1(video_clock),
-  .locked(syspll_locked)
-  );
-
- assign wb_rst = !syspll_locked;
- assign video_reset = !syspll_locked;
-
- // wire pll_usb_locked;
- //
- //  assign wb_rst = /*i_rst*/ /*!afi_rst_n*/!global_reset_n; //  !afi_rst_n/*!ddr3_pll_locked*/ /*&& !pll_usb_locked*/; //&& ddr3_local_cal_success && ddr3_local_init_done;
- //  assign wb_clk = /* DDR3_CLK_50*/ i_clk /*afi_half_clk*/;
-
-  /*
-  usbpll usbclock(
-      .inclk0(USB_CLKIN),
-      .areset(!ddr3_reset_n),
-      .c0(usb_clk),
-      .locked(pll_usb_locked)
-    );
-*/
-
-end
-
-
-
-endgenerate
+wire wb_clk = i_wb_clk;
+wire wb_rst = i_wb_rst;
+wire afi_clk = i_afi_clk;
+wire afi_rst = i_afi_rst;
 
 
 wire 	timer_irq;
@@ -506,7 +346,7 @@ i2c_master_top light
 (
  .wb_clk_i(wb_clk),
  .wb_rst_i(wb_rst),
- .arst_i(i_rst),
+ .arst_i(1'b0),
  .wb_adr_i(wb_light_adr[2:0]),
  .wb_dat_i(wb_light_dat),
  .wb_dat_o(wb_light_rdt),
@@ -587,7 +427,7 @@ wire pmonitor_i2c_inta;
 i2c_master_top pmonitor(
   .wb_clk_i(wb_clk),
   .wb_rst_i(wb_rst),
-  .arst_i(i_rst),
+  .arst_i(1'b0),
   .wb_adr_i(wb_pmonitor_adr[2:0]),
   .wb_dat_i(wb_pmonitor_dat),
   .wb_dat_o(wb_pmonitor_rdt),
@@ -792,6 +632,148 @@ wire pixels_ready;
     .pixels_payload_b(pixels_payload_b)
    );
 
+   wire o_ddr3_stream_valid;
+   wire o_ddr3_stream_ready;
+   wire [63:0] o_ddr3_stream_payload_rdt;
+
+   wire i_ddr3_stream_valid;
+   wire i_ddr3_stream_ready;
+   wire i_ddr3_stream_payload_we;
+   wire [25:0] i_ddr3_stream_payload_adr;
+   wire [63:0] i_ddr3_stream_payload_dat;
+   wire [7:0] i_ddr3_stream_payload_sel;
+   wire i_ddr3_stream_payload_burstbegin;
+   wire [2:0] i_ddr3_stream_payload_size;
+
+   AvlStreamAdapter stream_adapter(
+      .i_avl_clock(afi_clk),
+      .i_avl_reset(afi_rst),
+      .o_avl_burstbegin(avl_burstbegin),
+      .o_avl_be(avl_be),
+      .o_avl_adr(avl_adr),
+      .o_avl_dat(avl_dat),
+      .o_avl_wr_req(avl_wr_req),
+      .o_avl_rdt_req(avl_rdt_req),
+      .o_avl_size(avl_size),
+      .i_avl_rdt(avl_rdt),
+      .i_avl_ready(avl_ready),
+      .i_avl_rdt_valid(avl_rdt_valid),
+      .o_stream_valid(o_ddr3_stream_valid),
+      .o_stream_ready(o_ddr3_stream_ready),
+      .o_stream_payload_rdt(o_ddr3_stream_payload_rdt),
+      .i_stream_valid(i_ddr3_stream_valid),
+      .i_stream_ready(i_ddr3_stream_ready),
+      .i_stream_payload_we(i_ddr3_stream_payload_we),
+      .i_stream_payload_adr(i_ddr3_stream_payload_adr),
+      .i_stream_payload_dat(i_ddr3_stream_payload_dat),
+      .i_stream_payload_sel(i_ddr3_stream_payload_sel),
+      .i_stream_payload_burstbegin(i_ddr3_stream_payload_burstbegin),
+      .i_stream_payload_size(i_ddr3_stream_payload_size)
+     );
+
+
+   wire i_wb_stream_valid;
+   wire i_wb_stream_ready;
+   wire [63:0] i_wb_stream_payload_rdt;
+   wire o_wb_stream_valid;
+   wire o_wb_stream_ready;
+   wire o_wb_stream_payload_we;
+   wire [25:0] o_wb_stream_payload_adr;
+   wire [63:0] o_wb_stream_payload_dat;
+   wire [7:0] o_wb_stream_payload_sel;
+   wire o_wb_stream_payload_burstbegin;
+   wire [2:0] o_wb_stream_payload_size;
+
+  WbStreamCdc wb_stream_cdc(
+     .i_wb_clock(wb_clk),
+     .i_wb_reset(wb_rst),
+     .i_wb_adr(wb_wb_avl_cdc_adr),
+     .i_wb_sel(wb_wb_avl_cdc_sel),
+     .i_wb_dat(wb_wb_avl_cdc_dat),
+     .o_wb_rdt(wb_wb_avl_cdc_rdt),
+     .i_wb_we(wb_wb_avl_cdc_we),
+     .i_wb_cyc(wb_wb_avl_cdc_cyc),
+     .i_wb_stb(wb_wb_avl_cdc_stb),
+     .o_wb_ack(wb_wb_avl_cdc_ack),
+     .o_wb_err(wb_wb_avl_cdc_err),
+     .o_wb_rty(wb_wb_avl_cdc_rty),
+     .i_avl_clock(afi_clk),
+     .i_avl_reset(afi_rst),
+     .i_stream_valid(i_wb_stream_valid),
+     .i_stream_ready(i_wb_stream_ready),
+     .i_stream_payload_rdt(i_wb_stream_payload_rdt),
+     .o_stream_valid(o_wb_stream_valid),
+     .o_stream_ready(o_wb_stream_ready),
+     .o_stream_payload_we(o_wb_stream_payload_we),
+     .o_stream_payload_adr(o_wb_stream_payload_adr),
+     .o_stream_payload_dat(o_wb_stream_payload_dat),
+     .o_stream_payload_sel(o_wb_stream_payload_sel),
+     .o_stream_payload_burstbegin(o_wb_stream_payload_burstbegin),
+     .o_stream_payload_size(o_wb_stream_payload_size)
+    );
+
+  wire i_video_stream_valid;
+  wire i_video_stream_ready = 1'b0;
+  wire i_video_stream_payload_rdt;
+
+  wire o_video_stream_valid = 1'b0;
+  wire o_video_stream_ready;
+  wire o_video_stream_payload_we = 1'b0;
+  wire [25:0] o_video_stream_payload_adr = 26'd0;
+  wire [63:0] o_video_stream_payload_dat = 64'd0;
+  wire [7:0] o_video_stream_payload_sel = 8'd0;
+  wire o_video_stream_payload_burstbegin = 1'b0;
+  wire [2:0] o_video_stream_payload_size = 3'd0;
+
+   MemoryStreamArbiter memory_stream_arbiter(
+     .clk(afi_clk),
+     .reset(afi_rst),
+     //Request from Video module
+     .input_request_0_valid(o_video_stream_valid),
+     .input_request_0_ready(o_video_stream_ready),
+     .input_request_0_payload_we(o_video_stream_payload_we),
+     .input_request_0_payload_adr(o_video_stream_payload_adr),
+     .input_request_0_payload_dat(o_video_stream_payload_dat),
+     .input_request_0_payload_sel(o_video_stream_payload_sel),
+     .input_request_0_payload_burstbegin(o_video_stream_payload_burstbegin),
+     .input_request_0_payload_size(o_video_stream_payload_size),
+
+    //Request from Wishbone bus
+     .input_request_1_valid(o_wb_stream_valid),
+     .input_request_1_ready(o_wb_stream_ready),
+     .input_request_1_payload_we(o_wb_stream_payload_we),
+     .input_request_1_payload_adr(o_wb_stream_payload_adr),
+     .input_request_1_payload_dat(o_wb_stream_payload_dat),
+     .input_request_1_payload_sel(o_wb_stream_payload_sel),
+     .input_request_1_payload_burstbegin(o_wb_stream_payload_burstbegin),
+     .input_request_1_payload_size(o_wb_stream_payload_size),
+
+     //Request send to AvlStreamAdapter
+     .output_request_valid(i_ddr3_stream_valid),
+     .output_request_ready(i_ddr3_stream_ready),
+     .output_request_payload_we(i_ddr3_stream_payload_we),
+     .output_request_payload_adr(i_ddr3_stream_payload_adr),
+     .output_request_payload_dat(i_ddr3_stream_payload_dat),
+     .output_request_payload_sel(i_ddr3_stream_payload_sel),
+     .output_request_payload_burstbegin(i_ddr3_stream_payload_burstbegin),
+     .output_request_payload_size(i_ddr3_stream_payload_size),
+
+     //Response receive from AvlStreamAdapter
+     .input_response_valid(o_ddr3_stream_valid),
+     .input_response_ready(o_ddr3_stream_ready),
+     .input_response_payload_rdt(o_ddr3_stream_payload_rdt),
+
+     //Response routed to Video module
+     .output_response_0_valid(i_video_stream_valid),
+     .output_response_0_ready(i_video_stream_ready),
+     .output_response_0_payload_rdt(i_video_stream_payload_rdt),
+
+     //Response routed to Wishbone bus
+     .output_response_1_valid(i_wb_stream_valid),
+     .output_response_1_ready(i_wb_stream_ready),
+     .output_response_1_payload_rdt(i_wb_stream_payload_rdt)
+     );
+/*
    WbAvlBridge wb_avl_cdc(
      .i_wb_clock(wb_clk),
      .i_wb_reset(wb_rst),
@@ -806,7 +788,7 @@ wire pixels_ready;
      .o_wb_err(wb_wb_avl_cdc_err),
      .o_wb_rty(wb_wb_avl_cdc_rty),
      .i_avl_clock(afi_clk),
-     .i_avl_reset(!afi_rst_n),
+     .i_avl_reset(afi_rst),
      .o_avl_burstbegin(avl_burstbegin),
      .o_avl_be(avl_be),
      .o_avl_adr(avl_adr),
@@ -818,7 +800,7 @@ wire pixels_ready;
      .i_avl_ready(avl_ready),
      .i_avl_rdt_valid(avl_rdt_valid)
      );
-
+*/
 
 
    wire externalInterrupt;
@@ -890,7 +872,7 @@ wire pixels_ready;
      .dBusWishbone_CTI(wb_cpu_dbus_cti),
      .dBusWishbone_BTE(wb_cpu_dbus_bte),
      .clk(wb_clk),
-     .reset(wb_rst)
+     .reset(i_cpu_reset)
    );
 
 

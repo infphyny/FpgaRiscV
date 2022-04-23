@@ -1,6 +1,15 @@
 //`default_nettype none
 
-module DecaTopLevel(
+module DecaTopLevel
+#(
+  parameter memfile = "blinky.hex",
+  parameter memsize = 8192,
+  parameter PLL = "NONE",
+  parameter sim = 0,
+  parameter with_csr = 1
+  )
+
+(
 input wire i_clk,
 input wire i_rst_n,
 input wire key1,
@@ -107,12 +116,13 @@ output		          		DDR3_WE_n
 
 );
 
+/*
 parameter memfile = "blinky.hex";
 parameter memsize = 8192;
 parameter PLL = "NONE";
 parameter sim = 0;
 parameter with_csr = 1;
-
+*/
 
 wire [7:0] o_gpioA;
 wire [7:0] o_gpioA_oe;
@@ -245,6 +255,102 @@ genvar usb_data_index;
 endgenerate
 */
 
+wire global_reset;//TODO rename main_reset
+//TODO Should leave reset state only when reset button is released
+ResetManager reset_manager(
+  .i_clock(i_clk),
+  .i_reset(!i_rst_n),
+  .o_global_reset(global_reset)
+  );
+
+
+wire cpu_reset;
+wire        wb_rst;
+wire        wb_clk;
+wire video_clock;
+wire video_reset;
+wire syspll_locked;
+
+pll syspll(
+  .inclk0(i_clk),
+  .areset(global_reset),
+  .c0(wb_clk),
+  .c1(video_clock),
+  .locked(syspll_locked)
+  );
+wire ddr3_pll_locked;
+
+//CPU is the last component to leave reset state
+ResetManager cpu_reset_manager(
+  .i_clock(wb_clk),
+  .i_reset(syspll_locked),
+  .o_global_reset(cpu_reset)
+  );
+
+  assign wb_rst = !syspll_locked ; /*& !ddr3_pll_locked*/
+  assign video_reset = !syspll_locked ; /*& !ddr3_pll_locked*/
+
+
+
+
+
+ wire avl_burstbegin;
+ wire [7:0] avl_be;
+ wire [25:0] avl_adr;
+ wire [63:0] avl_dat;
+ wire avl_wr_req;
+ wire avl_rdt_req;
+ wire [2:0] avl_size;
+ wire [63:0] avl_rdt;
+ wire avl_ready;
+ wire avl_rdt_valid;
+
+
+ wire ddr3_local_init_done;
+ wire ddr3_local_cal_success;
+ wire ddr3_soft_reset_n;
+ wire afi_clk;
+ wire afi_rst;
+ wire afi_rst_n;
+wire afi_half_clk;
+ddr3 ddr3_mem(
+.pll_ref_clk(DDR3_CLK_50 ),
+.global_reset_n(!global_reset),
+.soft_reset_n(/*ddr3_soft_reset_n*/!global_reset),
+.afi_clk(afi_clk),
+.afi_half_clk(afi_half_clk),
+.afi_reset_n(afi_rst_n),
+.mem_a(DDR3_A),
+.mem_ba(DDR3_BA),
+.mem_ck(DDR3_CK_p),
+.mem_ck_n(DDR3_CK_n),
+.mem_cke(DDR3_CKE),
+.mem_cs_n(DDR3_CS_n),
+.mem_dm(DDR3_DM),
+.mem_ras_n(DDR3_RAS_n),
+.mem_cas_n(DDR3_CAS_n),
+.mem_we_n(DDR3_WE_n),
+.mem_reset_n(DDR3_RESET_n),
+.mem_dq(DDR3_DQ),
+.mem_dqs(DDR3_DQS_p),
+.mem_dqs_n(DDR3_DQS_n),
+.mem_odt(DDR3_ODT),
+.avl_ready(avl_ready),
+.avl_burstbegin(avl_burstbegin),
+.avl_addr(avl_adr),
+.avl_rdata_valid(avl_rdt_valid),
+.avl_rdata(avl_rdt),
+.avl_wdata(avl_dat),
+.avl_be(avl_be),
+.avl_read_req(avl_rdt_req),
+.avl_write_req(avl_wr_req),
+.avl_size(avl_size),
+//.pll_mem_clk(DDR3_)
+.pll_locked(ddr3_pll_locked),
+.local_init_done(ddr3_local_init_done),
+.local_cal_success(ddr3_local_cal_success)
+);
+
 
 DecaSoc #(
     .memfile(memfile),
@@ -253,9 +359,14 @@ DecaSoc #(
     .sim(0),
     .with_csr(with_csr)
 ) soc(
-   // .DDR3_CLK_50(DDR3_CLK_50),
-    .i_clk(/*DDR3_CLK_50*/ i_clk),
-    .i_rst(!i_rst_n),
+
+    .i_wb_clk(wb_clk),
+    .i_wb_rst(wb_rst),
+    .i_cpu_reset(cpu_reset),
+    .video_clock(video_clock),
+    .video_reset(video_reset),
+    .i_afi_clk(afi_clk),
+    .i_afi_rst(!afi_rst_n),
     .key1(key1),
     .SW0(SW0),
     .SW1(SW1),
@@ -331,23 +442,20 @@ DecaSoc #(
     .USB_RESET_n(USB_RESET_n),
     .USB_STP(USB_STP),
     */
+    .ddr3_local_init_done(ddr3_local_init_done),
+    .ddr3_local_cal_success(ddr3_local_cal_success),
+    .ddr3_soft_reset_n(ddr3_soft_reset_n),
+    .avl_burstbegin(avl_burstbegin),
+    .avl_be(avl_be),
+    .avl_adr(avl_adr),
+    .avl_dat(avl_dat),
+    .avl_rdt(avl_rdt),
+    .avl_rdt_valid(avl_rdt_valid),
+    .avl_rdt_req(avl_rdt_req),
+    .avl_wr_req(avl_wr_req),
+    .avl_size(avl_size),
+    .avl_ready(avl_ready)
 
-    .DDR3_A(DDR3_A),
-    .DDR3_BA(DDR3_BA),
-    .DDR3_CAS_n(DDR3_CAS_n),
-    .DDR3_CK_n(DDR3_CK_n),
-    .DDR3_CK_p(DDR3_CK_p),
-    .DDR3_CKE(DDR3_CKE),
-    .DDR3_CLK_50(DDR3_CLK_50),
-    .DDR3_CS_n(DDR3_CS_n),
-    .DDR3_DM(DDR3_DM),
-    .DDR3_DQ(DDR3_DQ),
-    .DDR3_DQS_n(DDR3_DQS_n),
-    .DDR3_DQS_p(DDR3_DQS_p),
-    .DDR3_ODT(DDR3_ODT),
-    .DDR3_RAS_n(DDR3_RAS_n),
-    .DDR3_RESET_n(DDR3_RESET_n),
-    .DDR3_WE_n(DDR3_WE_n)
 );
 
 

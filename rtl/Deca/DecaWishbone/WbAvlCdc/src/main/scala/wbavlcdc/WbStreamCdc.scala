@@ -47,7 +47,7 @@ case class AvlIo(config : WbAvlCdcConfig )
 }
 
 
-case class WbAvlCdc(config : WbAvlCdcConfig ) extends Component {
+case class WbStreamCdc(config : WbAvlCdcConfig ) extends Component {
 
   val FROM_WB_STREAM_FIFO_DEPTH = 8
   val use_avl = true
@@ -136,7 +136,7 @@ val avlClockDomain = ClockDomain(
 
  val fromWbToCdcStream = Stream(FromWb(addressWidth = log2Up(config.mem_size/config.word_size)))
  fromWbToCdcStream.valid := False
- fromWbToCdcStream.payload.adr := io.i_wb_adr( log2Up(config.mem_size/config.word_size)-1 downto 0)
+ fromWbToCdcStream.payload.adr := io.i_wb_adr( log2Up(config.mem_size/config.word_size)-1 + 3  downto 3)
  fromWbToCdcStream.payload.dat := io.i_wb_dat ## io.i_wb_dat
  fromWbToCdcStream.payload.we := io.i_wb_we
  fromWbToCdcStream.payload.sel := sel
@@ -314,9 +314,9 @@ fromMemStreamFifoCC.io.pop >> fromCdcToWbStream
 }
 
 //Generate the MyTopLevel's Verilog
-object WbAvlCdcVerilog {
+object WbStreamCdcVerilog {
   def main(args: Array[String]) {
-     SpinalConfig().withPrivateNamespace.generateVerilog( WbAvlCdc( WbAvlCdcConfig.default)).printPruned
+     SpinalConfig().withPrivateNamespace.generateVerilog( WbStreamCdc( WbAvlCdcConfig.default)).printPruned
   //  SpinalVerilog(new WbAvlCdc( WbAvlCdcConfig.default))
   }
 }

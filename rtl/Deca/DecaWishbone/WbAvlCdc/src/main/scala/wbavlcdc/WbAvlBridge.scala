@@ -40,7 +40,7 @@ case class WbAvlBridge(config : WbAvlCdcConfig ) extends Component
  noIoPrefix()
 
 
-   val wb_stream = WbAvlCdc( WbAvlCdcConfig.default)
+   val wb_stream = WbStreamCdc( WbAvlCdcConfig.default)
 
    val avl_stream_adapter = AvlStreamAdapter(WbAvlCdcConfig.default)
 
