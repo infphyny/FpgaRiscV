@@ -65,7 +65,10 @@ void main(void)
        spinal_uart_print_line(uart,"DDR3 read");
        for(uint32_t j = 0 ; j < MAX_LOOP ; j++ )
        {
-
+         #ifdef SIM
+         utoa(mem[j],sint,10);
+         spinal_uart_print_line(uart,sint);
+         #else
          if(mem[j] != j)
          {
 
@@ -78,6 +81,7 @@ void main(void)
            utoa(mem[j],sint,10);
            spinal_uart_print_line(uart,sint);
          }
+         #endif
 
        // spinal_uart_print(uart,"DDR3 mem value ");
 

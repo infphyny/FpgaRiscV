@@ -12,7 +12,10 @@ filesets:
 
   rtl:
     files:
-      - rtl/Deca/DecaWishbone/WbAvlCdc/WbAvlCdc.v : { file_type : verilogSource}
+      - rtl/Deca/DecaWishbone/WbAvlCdc/AvlStreamAdapter.v : {file_type : verilogSource}
+      - rtl/Deca/DecaWishbone/WbAvlCdc/MemoryStreamArbiter.v : { file_type : verilogSource}
+      - rtl/Deca/DecaWishbone/WbAvlCdc/WbStreamCdc.v : { file_type : verilogSource}
+      - rtl/Deca/DecaWishbone/WbAvlCdc/WbAvlBridge.v : { file_type : verilogSource}
       - rtl/RisingEdgePulse/RisingEdgePulse.v : { file_type : verilogSource }
       - rtl/Deca/DecaWishbone/VexRiscv.v : {file_type : verilogSource}
       - rtl/Deca/DecaWishbone/TUSB1210/WishboneTUSB1210.v : {file_type : verilogSource}

@@ -21,4 +21,4 @@ object WbAvlCdcConfig{
    config
   }
 
-}    
+}
