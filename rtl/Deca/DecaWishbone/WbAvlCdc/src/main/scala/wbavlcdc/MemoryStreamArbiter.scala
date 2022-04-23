@@ -36,7 +36,7 @@ class MemoryStreamArbiter(portCount : Int ) extends Component
   val arbiter_stream_output = Stream(BusRequest(26))
 
   //Put output of the arbiter in a fifo
-  //NOTE: depth of the fifo should be deep enough to handle all inputs 
+  //NOTE: depth of the fifo should be deep enough to handle all inputs
   val arbiter_chosen_fifo = StreamFifo(
     dataType = UInt( log2Up(portCount) bits  ),
     depth = 8)
@@ -95,37 +95,37 @@ class MemoryStreamArbiter(portCount : Int ) extends Component
    val Read = new State
 
 
-  Init.whenIsActive{
-    goto(Idle)
-  }
+    Init.whenIsActive{
+      goto(Idle)
+    }
 
-  Idle.whenIsActive{
-    when(arbiter_stream_output.valid)
-    {
-      io.output_request.valid := True
-      arbiter_chosen_output.ready := True
-      when(!arbiter_stream_output.payload.we)
-      {
-       goto(Read)
-      }
+    Idle.whenIsActive{
+        when(arbiter_stream_output.valid)
+        {
+          io.output_request.valid := True
+          arbiter_chosen_output.ready := True
+          when(!arbiter_stream_output.payload.we)
+          {
+           goto(Read)
+          }
+
+          }
 
     }
 
-  }
+    Read.whenIsActive{
 
-  Read.whenIsActive{
+       when(io.input_response.valid)
+       {
+         arbiter_chosen_output.ready := True
+         arbiter_stream_output.ready := True
+         io.input_response.ready := True
+         io.output_response(arbiter_chosen_output.payload).valid := True
 
-   when(io.input_response.valid)
-   {
-     arbiter_chosen_output.ready := True
-     arbiter_stream_output.ready := True
-     io.input_response.ready := True
-     io.output_response(arbiter_chosen_output.payload).valid := True
+         goto(Idle)
+       }
 
-     goto(Idle)
-   }
-
-  }
+    }
 
 
 
